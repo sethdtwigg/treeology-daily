@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 """
-Treeology Catechism Scraper
-Downloads all 91 catechism PDFs and extracts content into catechisms.json
-Run: pip install requests pypdf && python scraper.py
+Treeology Catechism Scraper — improved parser
+Run: pip install pypdf requests && python scraper.py
 """
 
-import json
-import re
-import sys
-import urllib.request
-import io
+import json, re, sys, io, urllib.request
 
-# Exact URLs from the church website, in order
 PDF_URLS = [
     (1,  "https://www.mountcalvarybaptist.org/site/user/files/49/Final-Number-1_2.pdf"),
     (2,  "https://www.mountcalvarybaptist.org/site/user/files/49/Final-Number-2_2.pdf"),
@@ -97,224 +91,161 @@ PDF_URLS = [
     (82, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-82.pdf"),
     (83, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-83.pdf"),
     (84, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-84.pdf"),
-    (85, "https://www.mountcalvarybaptist.org/site/user/files/46/Final-number-85-_002_.pdf"),  # note: /46/ not /49/
+    (85, "https://www.mountcalvarybaptist.org/site/user/files/46/Final-number-85-_002_.pdf"),
     (86, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-86.pdf"),
     (87, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-87.pdf"),
     (88, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-88.pdf"),
     (89, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-89.pdf"),
     (90, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-90b.pdf"),
     (91, "https://www.mountcalvarybaptist.org/site/user/files/49/Final-number-91b.pdf"),
-    # Thanksgiving bonus
     ("thanksgiving", "https://www.mountcalvarybaptist.org/site/user/files/49/Thanksgiving.pdf"),
 ]
 
+TRANS_PAT = re.compile(r'\((NASB|KJV|ESV|NKJV|NIV)[;,\s]')
 
 def fetch_pdf_text(url):
-    """Download a PDF from a URL and extract its text."""
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=15) as response:
-            pdf_bytes = response.read()
+    import pypdf
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        data = r.read()
+    reader = pypdf.PdfReader(io.BytesIO(data))
+    return "\n".join(page.extract_text() or "" for page in reader.pages).strip()
 
-        # Try pypdf first
-        try:
-            import pypdf
-            reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
-            text = "\n".join(page.extract_text() or "" for page in reader.pages)
-            return text.strip()
-        except ImportError:
-            pass
+def clean(t):
+    fixes = [
+        ('/f_i  ','fi'),('/f_i','fi'),('/f_l','fl'),
+        ('oﬀ  ','off'),('oﬀ','off'),
+        ('ofﬁ  ce','office'),('ﬁ  ','fi'),('ﬁ','fi'),('ﬂ','fl'),
+        ('sacri/f_i  ces','sacrifices'),('sacri/f_i  ce','sacrifice'),
+        ('/f_i  rst','first'),('justi/f_i  ','justifi'),
+        ('sancti/f_i  ','sanctifi'),('cruci/f_i  ','crucifi'),
+        ('con/f_i  rmed','confirmed'),('beneﬁ  ts','benefits'),
+        ('beneﬁts','benefits'),('Justiﬁ  cation','Justification'),
+        ('Sanctiﬁ  cation','Sanctification'),('justiﬁ  ed','justified'),
+        ('sancti/f_i  cation','sanctification'),('justi/f_i  es','justifies'),
+        ('glori/f_i  ed','glorified'),('sacriﬁ  ce','sacrifice'),
+    ]
+    for old, new in fixes:
+        t = t.replace(old, new)
+    t = re.sub(r'(\w)-\n(\w)', r'\1\2', t)
+    return t
 
-        # Fallback: pdfminer
-        try:
-            from pdfminer.high_level import extract_text_to_fp
-            from pdfminer.layout import LAParams
-            output = io.StringIO()
-            extract_text_to_fp(io.BytesIO(pdf_bytes), output, laparams=LAParams())
-            return output.getvalue().strip()
-        except ImportError:
-            pass
+def parse(raw, num):
+    raw = clean(raw)
+    lines = [l.strip() for l in raw.splitlines() if l.strip()]
 
-        raise RuntimeError("No PDF library found. Run: pip install pypdf")
-
-    except Exception as e:
-        return None, str(e)
-
-
-def parse_catechism(text, number):
-    """
-    Parse raw PDF text into structured catechism data.
-    
-    The PDF cards follow a rough structure:
-      - Question text (first line / sentence ending in ?)
-      - Scripture passages with references
-      - A number (the catechism number)
-      - The answer (bold/prominent text)
-      - Attribution (Westminster Shorter Catechism, etc.)
-    
-    Because PDF extraction order varies, we use heuristics.
-    """
-    if not text:
-        return None
-
-    lines = [l.strip() for l in text.splitlines() if l.strip()]
-    full_text = " ".join(lines)
-
-    # --- Extract question ---
-    # Usually the first sentence ending in ?
-    question = ""
-    for line in lines:
-        if line.endswith("?"):
-            question = line
+    # Question = everything up to first scripture verse
+    q_end = len(lines)
+    for i, line in enumerate(lines):
+        if TRANS_PAT.search(line):
+            q_end = i
             break
-    if not question:
-        # Try finding a ? anywhere in early lines
-        for line in lines[:5]:
-            if "?" in line:
-                question = line[:line.index("?") + 1].strip()
-                break
+    question_raw = ' '.join(lines[:q_end])
+    # Trim to actual question (up to first ?)
+    m = re.match(r'^(.+?\?)', question_raw)
+    question = m.group(1).strip() if m else question_raw.strip()
 
-    # --- Extract attribution ---
-    attribution = ""
-    attr_match = re.search(r'\(([^)]*Catechism[^)]*|[^)]*Q\.\s*\d+[^)]*)\)', full_text, re.IGNORECASE)
-    if attr_match:
-        attribution = attr_match.group(0)
+    # Find the number marker line that precedes the answer
+    num_str = str(num)
+    answer_start = None
+    for i, line in enumerate(lines):
+        if re.match(r'^\s*' + re.escape(num_str) + r'\s*$', line):
+            answer_start = i + 1
+            break
+        if re.match(r'^\s*' + re.escape(num_str) + r'\s+\S', line):
+            lines[i] = re.sub(r'^\s*' + re.escape(num_str) + r'\s+', '', line).strip()
+            answer_start = i
+            break
 
-    # --- Extract answer ---
-    # The answer is typically the last substantive block before the attribution,
-    # often starting with "The" or matching a catechism-answer pattern.
-    # Strategy: find the text after the last scripture reference and before attribution.
-    answer = ""
-    
-    # Scripture references often look like (NASB; Rom. 11:36) or (KJV; I Cor. 10:31)
-    # Find the last scripture reference position
-    scripture_pattern = r'\([A-Z]+;\s*[A-Za-z0-9\s.:,;-]+\)'
-    scripture_matches = list(re.finditer(scripture_pattern, full_text))
-    
-    if scripture_matches:
-        last_scripture_end = scripture_matches[-1].end()
-        after_scripture = full_text[last_scripture_end:].strip()
-        # Remove the catechism number and attribution
-        after_scripture = re.sub(r'^\d+\s*', '', after_scripture)
-        after_scripture = re.sub(r'\([^)]*Catechism[^)]*\)', '', after_scripture, flags=re.IGNORECASE)
-        after_scripture = re.sub(r'\([^)]*Q\.\s*\d+[^)]*\)', '', after_scripture, flags=re.IGNORECASE)
-        answer = after_scripture.strip()
-
-    # Fallback: look for lines that seem like an answer (don't contain scripture refs)
-    if not answer:
-        candidate_lines = []
-        for line in reversed(lines):
-            if re.search(scripture_pattern, line):
-                break
-            if line and not line.isdigit() and "Catechism" not in line:
-                candidate_lines.insert(0, line)
-        answer = " ".join(candidate_lines).strip()
-
-    # --- Extract scripture passages ---
+    # Scriptures: between question end and answer start
+    scr_lines = lines[q_end : answer_start] if answer_start else lines[q_end:]
+    scr_text  = ' '.join(scr_lines)
     scriptures = []
-    # Each scripture block: text + (TRANSLATION; REF)
-    scripture_blocks = re.findall(
-        r'((?:[^(]|\([^A-Z][^)]*\))+)\(([A-Z]+);\s*([^)]+)\)',
-        full_text
-    )
-    for passage_text, translation, reference in scripture_blocks:
-        passage_text = passage_text.strip()
-        # Skip if it looks like the question or answer
-        if "?" in passage_text:
-            passage_text = passage_text[passage_text.index("?") + 1:].strip()
-        if passage_text:
-            scriptures.append({
-                "reference": reference.strip(),
-                "translation": translation.strip(),
-                "text": passage_text
-            })
+    parts = re.split(r'(\((?:NASB|KJV|ESV|NKJV|NIV)[^)]+\))', scr_text)
+    i = 0
+    while i < len(parts) - 1:
+        verse = parts[i].strip()
+        ref   = parts[i+1].strip()
+        if ref and TRANS_PAT.match(ref):
+            inner = ref[1:-1]
+            m2 = re.match(r'(NASB|KJV|ESV|NKJV|NIV)[;,]\s*(.+)', inner)
+            if m2 and verse and len(verse) > 10:
+                scriptures.append({
+                    'reference':   m2.group(2).strip(),
+                    'translation': m2.group(1).strip(),
+                    'text':        re.sub(r'\s+', ' ', verse).strip()
+                })
+            i += 2
+        else:
+            i += 1
+
+    # Answer + attribution
+    ans_lines = lines[answer_start:] if answer_start is not None else []
+    attr_pat = re.compile(r'^\((?:Westminster|Adapted|C\.H\.|Belgic|Second Hel)', re.IGNORECASE)
+    note_pat = re.compile(r'^\(Note:', re.IGNORECASE)
+    attr_parts, ans_parts = [], []
+    in_attr = False
+    for line in ans_lines:
+        if attr_pat.match(line) or in_attr:
+            attr_parts.append(line)
+            in_attr = True
+        elif note_pat.match(line):
+            pass
+        else:
+            ans_parts.append(line)
+
+    answer      = re.sub(r'\s+', ' ', ' '.join(ans_parts)).strip()
+    attribution = re.sub(r'\s+', ' ', ' '.join(attr_parts)).strip()
 
     return {
-        "number": number,
-        "question": question,
-        "answer": answer,
-        "scriptures": scriptures,
-        "attribution": attribution,
-        "raw_text": text  # keep raw so you can manually fix edge cases
+        'number':      num,
+        'question':    question,
+        'answer':      answer,
+        'scriptures':  scriptures,
+        'attribution': attribution,
+        'raw_text':    raw,
     }
-
 
 def main():
-    print(f"Treeology Catechism Scraper")
-    print(f"Downloading {len(PDF_URLS)} PDFs...\n")
-
-    catechisms = []
-    errors = []
-
-    for i, (number, url) in enumerate(PDF_URLS):
-        label = f"Q{number}" if number != "thanksgiving" else "Thanksgiving"
-        print(f"[{i+1:3}/{len(PDF_URLS)}] {label}: ", end="", flush=True)
-
-        text = fetch_pdf_text(url)
-
-        if text is None or (isinstance(text, tuple)):
-            error_msg = text[1] if isinstance(text, tuple) else "Unknown error"
-            print(f"❌ FAILED — {error_msg}")
-            errors.append({"number": number, "url": url, "error": error_msg})
-            # Add a placeholder so the array stays complete
-            catechisms.append({
-                "number": number,
-                "question": f"[Question {number} — download failed]",
-                "answer": "",
-                "scriptures": [],
-                "attribution": "",
-                "raw_text": "",
-                "error": error_msg
-            })
-            continue
-
-        parsed = parse_catechism(text, number)
-        if parsed:
-            catechisms.append(parsed)
-            q_preview = parsed["question"][:60] + "..." if len(parsed["question"]) > 60 else parsed["question"]
-            print(f"✅ {q_preview}")
-        else:
-            print(f"⚠️  Parsed but empty")
-            catechisms.append({
-                "number": number,
-                "question": "",
-                "answer": "",
-                "scriptures": [],
-                "attribution": "",
-                "raw_text": text
-            })
-
-    # Write output
-    output = {
-        "total": len(catechisms),
-        "catechisms": catechisms
-    }
-
-    with open("catechisms.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
-
-    print(f"\n{'='*50}")
-    print(f"Done! {len(catechisms) - len(errors)} succeeded, {len(errors)} failed.")
-    print(f"Output written to: catechisms.json")
-
-    if errors:
-        print(f"\nFailed downloads:")
-        for e in errors:
-            print(f"  Q{e['number']}: {e['url']}")
-            print(f"    Error: {e['error']}")
-        print(f"\nYou can re-run the script or manually fill in failed entries in catechisms.json")
-
-    print(f"\nNext step: copy catechisms.json into your app folder and open index.html")
-
-
-if __name__ == "__main__":
-    # Check for pypdf
     try:
         import pypdf
     except ImportError:
-        print("Installing pypdf...")
         import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pypdf"])
-        print("pypdf installed.\n")
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pypdf'])
+        import pypdf
 
+    print(f"Downloading {len(PDF_URLS)} PDFs...\n")
+    results = []
+    errors  = []
+
+    for idx, (num, url) in enumerate(PDF_URLS):
+        label = f"Q{num}" if num != 'thanksgiving' else 'Thanksgiving'
+        print(f"[{idx+1:3}/{len(PDF_URLS)}] {label}: ", end='', flush=True)
+        try:
+            raw  = fetch_pdf_text(url)
+            entry = parse(raw, num)
+            results.append(entry)
+            print(f"✅  {entry['question'][:55]}")
+        except Exception as e:
+            print(f"❌  {e}")
+            errors.append({'number': num, 'url': url, 'error': str(e)})
+            results.append({
+                'number': num, 'question': f'[Q{num} — failed]',
+                'answer': '', 'scriptures': [], 'attribution': '',
+                'raw_text': '', 'error': str(e)
+            })
+
+    out = {'total': len(results), 'catechisms': results}
+    with open('catechisms.json', 'w', encoding='utf-8') as f:
+        json.dump(out, f, indent=2, ensure_ascii=False)
+
+    print(f"\n{'='*55}")
+    print(f"Done — {len(results)-len(errors)} OK, {len(errors)} failed")
+    print(f"Output: catechisms.json")
+    if errors:
+        print("\nFailed:")
+        for e in errors:
+            print(f"  Q{e['number']}: {e['error']}")
+
+if __name__ == '__main__':
     main()
