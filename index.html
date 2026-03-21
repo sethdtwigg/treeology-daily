@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Catechism">
+<meta name="apple-mobile-web-app-title" content="Treeology Daily">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#1a1208">
-<title>Treeology Catechism</title>
+<meta name="theme-color" content="#152a18">
+<title>Treeology Daily</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,30 +16,40 @@
 
 <style>
   :root {
-    --bg:        #1a1208;
-    --bg2:       #231a0d;
-    --bg3:       #2e2212;
-    --gold:      #c9a84c;
-    --gold-dim:  #8a6e32;
-    --gold-pale: #e8d5a3;
-    --cream:     #f5ead8;
-    --text:      #e8d5b0;
-    --text-dim:  #9e8a6a;
-    --text-mute: #6a5a42;
-    --accent:    #7a3b1e;
-    --green:     #3a5c3a;
-    --red:       #7a2020;
-    --radius:    12px;
-    --safe-top:  env(safe-area-inset-top, 0px);
-    --safe-bot:  env(safe-area-inset-bottom, 0px);
+    /* ── Treeology green palette — from the PDF cards ── */
+    --forest:      #1e3d22;   /* deep background green */
+    --forest2:     #264d2a;   /* card/surface green */
+    --forest3:     #2f5c34;   /* border / elevated surface */
+    --forest-dark: #152a18;   /* nav, header bg */
+    --leaf:        #5a9e60;   /* mid accent */
+    --leaf-bright: #8dcf8a;   /* active / highlight */
+    --leaf-pale:   #c6e8c2;   /* muted text on green */
+
+    /* ── Cream panel — top half of PDF cards ── */
+    --cream-bg:    #f5f0e6;   /* question panel background */
+    --cream-border:#d6ccb4;   /* cream panel border */
+    --ink:         #1e3d22;   /* dark green text on cream */
+    --ink-mid:     #3d6642;   /* body text on cream */
+    --ink-mute:    #7a9e7e;   /* muted text on cream */
+
+    /* ── Answer panel — bottom half of PDF cards ── */
+    --answer-bg:   #1e3d22;   /* deep green answer bg */
+    --answer-text: #f0f7ee;   /* white-ish answer text */
+    --answer-attr: #8dcf8a;   /* attribution text */
+
+    /* ── Utility ── */
+    --danger:      #7a2020;
+    --radius:      12px;
+    --safe-top:    env(safe-area-inset-top, 0px);
+    --safe-bot:    env(safe-area-inset-bottom, 0px);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
   html, body {
     height: 100%;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--forest);
+    color: var(--leaf-pale);
     font-family: 'EB Garamond', Georgia, serif;
     font-size: 18px;
     line-height: 1.6;
@@ -58,8 +68,8 @@
   /* ── Nav bar ── */
   nav {
     display: flex;
-    background: var(--bg2);
-    border-bottom: 1px solid #3a2e1a;
+    background: var(--forest-dark);
+    border-bottom: 1px solid var(--forest3);
     padding-top: var(--safe-top);
     flex-shrink: 0;
     position: relative;
@@ -70,7 +80,7 @@
     flex: 1;
     background: none;
     border: none;
-    color: var(--text-mute);
+    color: var(--leaf);
     font-family: 'EB Garamond', serif;
     font-size: 13px;
     letter-spacing: 0.1em;
@@ -81,23 +91,21 @@
     position: relative;
   }
 
-  nav button.active {
-    color: var(--gold);
-  }
+  nav button.active { color: var(--leaf-bright); }
 
   nav button.active::after {
     content: '';
     position: absolute;
     bottom: 0; left: 20%; right: 20%;
     height: 2px;
-    background: var(--gold);
+    background: var(--leaf-bright);
     border-radius: 2px 2px 0 0;
   }
 
   nav button svg {
     display: block;
     margin: 0 auto 3px;
-    opacity: 0.6;
+    opacity: 0.5;
     width: 20px; height: 20px;
   }
 
@@ -116,15 +124,26 @@
   .screen.active { display: flex; flex-direction: column; }
 
   /* ── TODAY screen ── */
-  #screen-today {
-    padding: 0;
+  #screen-today { padding: 0; }
+
+  /* Header strip — cream coloured like the top panel of the PDF */
+  .today-header {
+    background: var(--cream-bg);
+    padding: 18px 20px 14px;
+    border-bottom: 2px solid var(--forest3);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
   }
 
-  .today-header {
-    background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
-    padding: 20px 24px 16px;
-    border-bottom: 1px solid #3a2e1a;
-    flex-shrink: 0;
+  /* Subtle leaf watermark in header */
+  .today-header::after {
+    content: '';
+    position: absolute;
+    top: -10px; right: -10px;
+    width: 90px; height: 90px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231e3d22' opacity='0.08'/%3E%3Cpath d='M50 80 Q30 60 35 40 Q50 20 65 40 Q70 60 50 80Z' fill='%231e3d22' opacity='0.1'/%3E%3C/svg%3E") center/contain no-repeat;
+    pointer-events: none;
   }
 
   .today-meta {
@@ -135,25 +154,46 @@
   }
 
   .today-date {
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--text-mute);
+    color: var(--ink-mute);
   }
 
   .today-progress-label {
-    font-size: 12px;
-    color: var(--gold-dim);
+    font-size: 11px;
+    color: var(--leaf);
     letter-spacing: 0.06em;
   }
 
+  /* Question number badge — dark green circle like the PDF */
   .today-q-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: 'Playfair Display', serif;
     font-size: 13px;
-    letter-spacing: 0.15em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--ink);
     margin-bottom: 2px;
+  }
+
+  .today-q-number::before {
+    content: attr(data-num);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--forest);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'EB Garamond', serif;
+    letter-spacing: 0;
   }
 
   /* Progress dots */
@@ -167,27 +207,28 @@
     height: 4px;
     flex: 1;
     border-radius: 2px;
-    background: var(--bg3);
+    background: var(--cream-border);
     transition: background 0.3s;
   }
 
-  .dot.done { background: var(--gold); }
-  .dot.today { background: var(--gold-dim); }
+  .dot.done  { background: var(--forest); }
+  .dot.today { background: var(--leaf); }
 
-  /* Card */
+  /* ── Card area ── */
   .card-area {
     flex: 1;
-    padding: 20px 20px 0;
+    padding: 16px 16px 0;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
 
+  /* Question card — cream top panel */
   .card {
-    background: var(--bg2);
-    border: 1px solid #3a2e1a;
+    background: var(--cream-bg);
+    border: 1px solid var(--cream-border);
     border-radius: var(--radius);
-    padding: 22px 20px;
+    padding: 20px 20px 20px;
     position: relative;
     overflow: hidden;
   }
@@ -197,29 +238,30 @@
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+    background: var(--forest);
   }
 
   .card-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 12px;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
   }
 
   .question-text {
     font-family: 'Playfair Display', serif;
     font-size: 22px;
-    font-weight: 600;
-    line-height: 1.35;
-    color: var(--cream);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
   }
 
   /* Mode toggle */
   .mode-toggle {
     display: flex;
-    background: var(--bg3);
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
     border-radius: 8px;
     padding: 3px;
     gap: 2px;
@@ -232,7 +274,7 @@
     border: none;
     border-radius: 6px;
     background: none;
-    color: var(--text-mute);
+    color: var(--leaf);
     font-family: 'EB Garamond', serif;
     font-size: 14px;
     letter-spacing: 0.06em;
@@ -241,22 +283,32 @@
   }
 
   .mode-btn.active {
-    background: var(--bg2);
-    color: var(--gold);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    background: var(--forest-dark);
+    color: var(--leaf-bright);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
 
-  /* Answer card */
+  /* Answer card — deep green bottom panel, like the PDF */
   .answer-card {
-    background: var(--bg2);
-    border: 1px solid #3a2e1a;
+    background: var(--answer-bg);
+    border: 1px solid var(--forest3);
     border-radius: var(--radius);
     overflow: hidden;
-    transition: all 0.3s;
+    position: relative;
+  }
+
+  /* Tree silhouette along the bottom of the answer card */
+  .answer-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 56' preserveAspectRatio='xMidYMax slice'%3E%3Cg fill='white' opacity='0.07'%3E%3Crect x='30' y='36' width='6' height='20' rx='2'/%3E%3Cpath d='M33 36 Q20 26 18 16 Q33 8 48 16 Q46 26 33 36Z'/%3E%3Crect x='90' y='30' width='7' height='26' rx='2'/%3E%3Cpath d='M93 30 Q78 18 76 6 Q93 -4 110 6 Q108 18 93 30Z'/%3E%3Cpath d='M93 22 Q84 14 83 6 Q93 0 103 6 Q102 14 93 22Z'/%3E%3Crect x='170' y='20' width='9' height='36' rx='3'/%3E%3Cpath d='M174 20 Q155 6 153 -8 Q174 -20 196 -8 Q194 6 174 20Z'/%3E%3Cpath d='M174 10 Q160 0 159 -10 Q174 -18 190 -10 Q189 0 174 10Z'/%3E%3Cpath d='M165 -6 Q158 -14 162 -22 Q174 -26 180 -18 Q178 -10 165 -6Z'/%3E%3Cpath d='M184 -6 Q190 -14 187 -22 Q174 -26 168 -18 Q170 -10 184 -6Z'/%3E%3Crect x='265' y='28' width='8' height='28' rx='2'/%3E%3Cpath d='M269 28 Q252 16 250 4 Q269 -6 288 4 Q286 16 269 28Z'/%3E%3Cpath d='M269 18 Q257 8 256 -2 Q269 -10 282 -2 Q281 8 269 18Z'/%3E%3Crect x='340' y='34' width='6' height='22' rx='2'/%3E%3Cpath d='M343 34 Q330 24 329 14 Q343 6 357 14 Q356 24 343 34Z'/%3E%3Cpath d='M174 56 Q160 50 150 42' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.07'/%3E%3Cpath d='M174 56 Q188 50 198 42' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.07'/%3E%3C/g%3E%3C/svg%3E") bottom center / cover no-repeat;
+    pointer-events: none;
   }
 
   .answer-tap {
-    padding: 22px 20px;
+    padding: 20px 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -266,20 +318,22 @@
   }
 
   .answer-tap-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--gold-dim);
+    color: var(--leaf-pale);
+    opacity: 0.7;
   }
 
   .answer-reveal-hint {
     font-size: 13px;
-    color: var(--text-mute);
+    color: var(--leaf);
     font-style: italic;
+    margin-top: 2px;
   }
 
   .answer-chevron {
-    color: var(--gold-dim);
+    color: var(--leaf);
     transition: transform 0.3s;
     flex-shrink: 0;
   }
@@ -288,37 +342,57 @@
 
   .answer-body {
     display: none;
-    padding: 0 20px 20px;
-    border-top: 1px solid #3a2e1a;
+    padding: 0 22px 70px;
+    border-top: 1px solid var(--forest3);
     animation: fadeIn 0.25s ease;
   }
 
   .answer-body.visible { display: block; }
 
+  /* The answer text — large italic white serif, like the PDF bottom panel */
   .answer-text {
     font-family: 'Playfair Display', serif;
     font-size: 20px;
     font-style: italic;
-    line-height: 1.4;
-    color: var(--gold-pale);
-    padding-top: 16px;
-    margin-bottom: 10px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--answer-text);
+    padding-top: 18px;
+    margin-bottom: 12px;
   }
 
   .answer-attribution {
     font-size: 13px;
-    color: var(--text-mute);
+    font-style: italic;
+    color: var(--answer-attr);
   }
 
-  /* Reading mode answer */
-  .reading-answer {
-    padding-top: 16px;
+  /* Reading mode — answer shown inside its own green card */
+  #answer-reading {
+    background: var(--answer-bg) !important;
+    border-color: var(--forest3) !important;
+    position: relative;
+    overflow: hidden;
   }
+
+  #answer-reading::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 56' preserveAspectRatio='xMidYMax slice'%3E%3Cg fill='white' opacity='0.07'%3E%3Crect x='30' y='36' width='6' height='20' rx='2'/%3E%3Cpath d='M33 36 Q20 26 18 16 Q33 8 48 16 Q46 26 33 36Z'/%3E%3Crect x='90' y='30' width='7' height='26' rx='2'/%3E%3Cpath d='M93 30 Q78 18 76 6 Q93 -4 110 6 Q108 18 93 30Z'/%3E%3Crect x='170' y='20' width='9' height='36' rx='3'/%3E%3Cpath d='M174 20 Q155 6 153 -8 Q174 -20 196 -8 Q194 6 174 20Z'/%3E%3Crect x='265' y='28' width='8' height='28' rx='2'/%3E%3Cpath d='M269 28 Q252 16 250 4 Q269 -6 288 4 Q286 16 269 28Z'/%3E%3Crect x='340' y='34' width='6' height='22' rx='2'/%3E%3Cpath d='M343 34 Q330 24 329 14 Q343 6 357 14 Q356 24 343 34Z'/%3E%3C/g%3E%3C/svg%3E") bottom center / cover no-repeat;
+    pointer-events: none;
+  }
+
+  #answer-reading .card-label { color: var(--leaf-pale); opacity: 0.6; }
+  #answer-reading .reading-answer { padding-bottom: 60px; }
+
+  .reading-answer { padding-top: 4px; }
 
   /* Scripture section */
   .scripture-section {
-    background: var(--bg2);
-    border: 1px solid #3a2e1a;
+    background: var(--cream-bg);
+    border: 1px solid var(--cream-border);
     border-radius: var(--radius);
     overflow: hidden;
   }
@@ -333,46 +407,49 @@
   }
 
   .scripture-header-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--gold-dim);
+    color: var(--ink-mute);
   }
+
+  .scripture-section .answer-chevron { color: var(--ink-mute); }
 
   .scripture-list {
     display: none;
     padding: 0 20px 16px;
-    border-top: 1px solid #3a2e1a;
+    border-top: 1px solid var(--cream-border);
   }
 
   .scripture-list.visible { display: block; }
 
   .scripture-item {
-    padding: 14px 0;
-    border-bottom: 1px solid #2e2212;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cream-border);
   }
 
   .scripture-item:last-child { border-bottom: none; }
 
   .scripture-ref {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 5px;
     text-transform: uppercase;
   }
 
   .scripture-text {
     font-style: italic;
-    color: var(--text-dim);
+    color: var(--ink-mid);
     font-size: 16px;
     line-height: 1.5;
   }
 
   /* Mark reviewed button */
   .mark-btn {
-    margin: 4px 20px;
-    padding: 15px;
+    margin: 8px 16px;
+    padding: 14px;
     border: none;
     border-radius: var(--radius);
     font-family: 'EB Garamond', serif;
@@ -380,148 +457,153 @@
     letter-spacing: 0.08em;
     cursor: pointer;
     transition: all 0.2s;
-    width: calc(100% - 40px);
+    width: calc(100% - 32px);
   }
 
   .mark-btn.unreviewed {
-    background: var(--gold);
-    color: var(--bg);
+    background: var(--forest);
+    color: #fff;
   }
 
   .mark-btn.unreviewed:active { opacity: 0.8; }
 
   .mark-btn.reviewed {
-    background: var(--bg3);
-    color: var(--green);
-    border: 1px solid var(--green);
+    background: var(--cream-bg);
+    color: var(--leaf);
+    border: 1px solid var(--leaf);
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: var(--leaf);
+    font-size: 18px;
+    padding: 4px 0;
+    letter-spacing: 0.3em;
+    opacity: 0.4;
   }
 
   /* ── BROWSE screen ── */
-  #screen-browse {
-    padding: 0;
-  }
+  #screen-browse { padding: 0; }
 
   .browse-header {
-    padding: 20px 20px 12px;
-    border-bottom: 1px solid #3a2e1a;
+    padding: 18px 20px 12px;
+    background: var(--cream-bg);
+    border-bottom: 2px solid var(--forest3);
     flex-shrink: 0;
   }
 
   .browse-title {
     font-family: 'Playfair Display', serif;
     font-size: 22px;
-    color: var(--cream);
-    margin-bottom: 4px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
   }
 
   .browse-subtitle {
     font-size: 13px;
-    color: var(--text-mute);
+    color: var(--ink-mute);
   }
 
-  .browse-list {
-    flex: 1;
-    overflow-y: auto;
-  }
+  .browse-list { flex: 1; overflow-y: auto; }
 
   .browse-item {
     display: flex;
     align-items: flex-start;
     gap: 14px;
     padding: 14px 20px;
-    border-bottom: 1px solid #2a2010;
+    border-bottom: 1px solid var(--forest2);
     cursor: pointer;
     transition: background 0.15s;
     position: relative;
   }
 
-  .browse-item:active { background: var(--bg2); }
-
-  .browse-item.is-today { background: rgba(201,168,76,0.05); }
+  .browse-item:active { background: var(--forest2); }
+  .browse-item.is-today { background: rgba(93,158,96,0.08); }
 
   .browse-num {
     font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--text-mute);
-    min-width: 30px;
+    font-size: 17px;
+    color: var(--leaf);
+    min-width: 28px;
     text-align: right;
     flex-shrink: 0;
     padding-top: 1px;
   }
 
-  .browse-item.is-today .browse-num { color: var(--gold); }
-  .browse-item.is-done .browse-num { color: var(--gold-dim); }
+  .browse-item.is-today .browse-num { color: var(--leaf-bright); font-weight: 700; }
+  .browse-item.is-done .browse-num  { color: var(--forest3); }
 
   .browse-content { flex: 1; min-width: 0; }
 
   .browse-q {
     font-size: 16px;
-    color: var(--text);
+    color: var(--leaf-pale);
     line-height: 1.35;
     margin-bottom: 2px;
   }
 
-  .browse-item.is-today .browse-q { color: var(--cream); }
+  .browse-item.is-today .browse-q { color: #fff; }
 
   .browse-badge {
     font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--text-mute);
+    letter-spacing: 0.06em;
+    color: var(--leaf);
+    opacity: 0.7;
   }
 
-  .browse-item.is-today .browse-badge { color: var(--gold-dim); }
+  .browse-item.is-today .browse-badge { color: var(--leaf-bright); opacity: 1; }
 
   .today-indicator {
     position: absolute;
     left: 0; top: 0; bottom: 0;
     width: 3px;
-    background: var(--gold);
+    background: var(--leaf-bright);
     border-radius: 0 2px 2px 0;
   }
 
   /* ── SETTINGS screen ── */
-  #screen-settings {
-    padding: 0;
-  }
+  #screen-settings { padding: 0; }
 
   .settings-header {
-    padding: 20px 20px 12px;
-    border-bottom: 1px solid #3a2e1a;
+    padding: 18px 20px 12px;
+    background: var(--cream-bg);
+    border-bottom: 2px solid var(--forest3);
     flex-shrink: 0;
   }
 
   .settings-title {
     font-family: 'Playfair Display', serif;
     font-size: 22px;
-    color: var(--cream);
+    font-weight: 700;
+    color: var(--ink);
   }
 
-  .settings-section {
-    padding: 20px 20px 0;
-  }
+  .settings-section { padding: 18px 16px 0; }
 
   .settings-section-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 12px;
+    color: var(--leaf);
+    margin-bottom: 10px;
   }
 
   .settings-group {
-    background: var(--bg2);
-    border: 1px solid #3a2e1a;
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
     border-radius: var(--radius);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   .settings-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 18px;
-    border-bottom: 1px solid #2a2010;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--forest3);
     gap: 12px;
   }
 
@@ -529,13 +611,14 @@
 
   .settings-row-label {
     font-size: 16px;
-    color: var(--text);
+    color: var(--leaf-pale);
     flex: 1;
   }
 
   .settings-row-sub {
     font-size: 13px;
-    color: var(--text-mute);
+    color: var(--leaf);
+    opacity: 0.7;
     margin-top: 2px;
   }
 
@@ -548,10 +631,10 @@
 
   .stepper-btn {
     width: 34px; height: 34px;
-    border: 1px solid #3a2e1a;
+    border: 1px solid var(--forest3);
     border-radius: 8px;
-    background: var(--bg3);
-    color: var(--gold);
+    background: var(--forest-dark);
+    color: var(--leaf-bright);
     font-size: 20px;
     line-height: 1;
     cursor: pointer;
@@ -561,21 +644,21 @@
     transition: all 0.15s;
   }
 
-  .stepper-btn:active { background: var(--bg); }
+  .stepper-btn:active { background: var(--forest); }
 
   .stepper-val {
     font-family: 'Playfair Display', serif;
     font-size: 20px;
-    color: var(--cream);
+    color: #fff;
     min-width: 28px;
     text-align: center;
   }
 
   input[type="date"], input[type="number"] {
-    background: var(--bg3);
-    border: 1px solid #3a2e1a;
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
     border-radius: 8px;
-    color: var(--cream);
+    color: #fff;
     font-family: 'EB Garamond', serif;
     font-size: 16px;
     padding: 6px 10px;
@@ -588,10 +671,10 @@
   input[type="number"] { width: 70px; text-align: center; }
 
   select {
-    background: var(--bg3);
-    border: 1px solid #3a2e1a;
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
     border-radius: 8px;
-    color: var(--cream);
+    color: #fff;
     font-family: 'EB Garamond', serif;
     font-size: 16px;
     padding: 6px 10px;
@@ -612,9 +695,9 @@
   .toggle-slider {
     position: absolute;
     inset: 0;
-    background: var(--bg3);
+    background: var(--forest-dark);
     border-radius: 13px;
-    border: 1px solid #3a2e1a;
+    border: 1px solid var(--forest3);
     cursor: pointer;
     transition: background 0.2s;
   }
@@ -624,24 +707,24 @@
     position: absolute;
     width: 18px; height: 18px;
     left: 3px; top: 3px;
-    background: var(--text-mute);
+    background: var(--leaf);
     border-radius: 50%;
     transition: all 0.2s;
   }
 
-  .toggle input:checked + .toggle-slider { background: var(--gold-dim); }
+  .toggle input:checked + .toggle-slider { background: var(--forest3); }
   .toggle input:checked + .toggle-slider::before {
     transform: translateX(20px);
-    background: var(--gold);
+    background: var(--leaf-bright);
   }
 
   .danger-btn {
     width: 100%;
     padding: 14px;
-    border: 1px solid var(--red);
+    border: 1px solid var(--danger);
     border-radius: var(--radius);
     background: transparent;
-    color: #c04040;
+    color: #e06060;
     font-family: 'EB Garamond', serif;
     font-size: 16px;
     letter-spacing: 0.06em;
@@ -654,19 +737,10 @@
 
   .settings-info {
     font-size: 13px;
-    color: var(--text-mute);
+    color: var(--leaf);
+    opacity: 0.7;
     line-height: 1.5;
-    padding: 0 20px 20px;
-  }
-
-  /* ── Ornament ── */
-  .ornament {
-    text-align: center;
-    color: var(--gold-dim);
-    font-size: 20px;
-    padding: 4px 0;
-    letter-spacing: 0.3em;
-    opacity: 0.5;
+    padding: 0 16px 20px;
   }
 
   /* ── Loading / Empty states ── */
@@ -684,19 +758,19 @@
   .loading-title {
     font-family: 'Playfair Display', serif;
     font-size: 24px;
-    color: var(--cream);
+    color: var(--leaf-pale);
   }
 
   .loading-sub {
     font-size: 15px;
-    color: var(--text-mute);
+    color: var(--leaf);
     line-height: 1.5;
   }
 
   .spinner {
     width: 36px; height: 36px;
-    border: 3px solid var(--bg3);
-    border-top-color: var(--gold);
+    border: 3px solid var(--forest2);
+    border-top-color: var(--leaf-bright);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -706,10 +780,10 @@
 
   /* ── Thanksgiving banner ── */
   .thanksgiving-banner {
-    margin: 0 20px;
+    margin: 0 16px;
     padding: 14px 16px;
-    background: linear-gradient(135deg, #2a1f0a, #1e2a0e);
-    border: 1px solid #4a6a2a;
+    background: var(--forest2);
+    border: 1px solid #5a7a3a;
     border-radius: var(--radius);
     cursor: pointer;
     transition: opacity 0.2s;
@@ -718,16 +792,16 @@
   .thanksgiving-banner:active { opacity: 0.7; }
 
   .thanksgiving-label {
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #7aaa5a;
+    color: #8abf5a;
     margin-bottom: 4px;
   }
 
   .thanksgiving-text {
     font-size: 15px;
-    color: var(--text-dim);
+    color: var(--leaf-pale);
   }
 
   /* ── Notification status pill ── */
@@ -742,9 +816,9 @@
     flex-shrink: 0;
   }
 
-  .notif-status.on  { background: rgba(58,92,58,0.35); color: #7aaa6a; border: 1px solid #3a5c3a; }
-  .notif-status.off { background: var(--bg3); color: var(--text-mute); border: 1px solid #3a2e1a; }
-  .notif-status.blocked { background: rgba(122,32,32,0.2); color: #c04040; border: 1px solid #7a2020; }
+  .notif-status.on      { background: rgba(90,158,96,0.25); color: var(--leaf-bright); border: 1px solid var(--leaf); }
+  .notif-status.off     { background: var(--forest-dark); color: var(--leaf); border: 1px solid var(--forest3); }
+  .notif-status.blocked { background: rgba(122,32,32,0.2); color: #e06060; border: 1px solid var(--danger); }
 
   .notif-status-dot {
     width: 6px; height: 6px;
@@ -753,10 +827,10 @@
   }
 
   input[type="time"] {
-    background: var(--bg3);
-    border: 1px solid #3a2e1a;
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
     border-radius: 8px;
-    color: var(--cream);
+    color: #fff;
     font-family: 'EB Garamond', serif;
     font-size: 16px;
     padding: 6px 10px;
@@ -1170,7 +1244,9 @@ function renderToday(cat) {
   const numLabel = cat.number === 'thanksgiving'
     ? 'Thanksgiving Special'
     : `Question ${cat.number}`;
-  document.getElementById('today-q-number').textContent = numLabel;
+  const qNumEl = document.getElementById('today-q-number');
+  qNumEl.textContent = numLabel;
+  qNumEl.setAttribute('data-num', cat.number === 'thanksgiving' ? '🍂' : cat.number);
 
   // Progress dots
   const dots = document.getElementById('progress-dots');
@@ -1290,7 +1366,9 @@ function openThanksgiving() {
   if (!t) return;
   renderToday(t);
   // Override header label
-  document.getElementById('today-q-number').textContent = '🍂 Thanksgiving Special';
+  const el = document.getElementById('today-q-number');
+  el.textContent = '🍂 Thanksgiving Special';
+  el.setAttribute('data-num', '🍂');
 }
 
 // ══════════════════════════════════════════════════
