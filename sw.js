@@ -1,9 +1,9 @@
 const CACHE_NAME = 'catechism-v1';
 const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './catechisms.json'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/catechisms.json'
 ];
 
 self.addEventListener('install', e => {
@@ -32,7 +32,7 @@ self.addEventListener('fetch', e => {
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
         }
         return response;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(() => caches.match('/index.html'));
     })
   );
 });
