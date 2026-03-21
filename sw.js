@@ -36,3 +36,25 @@ self.addEventListener('fetch', e => {
     })
   );
 });
+
+// ── Notification click: open/focus the app ──
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+
+  const urlToOpen = e.notification.data?.url || self.registration.scope;
+
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      // If app is already open, focus it
+      for (const client of windowClients) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Otherwise open a new window
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
