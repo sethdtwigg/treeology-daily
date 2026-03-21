@@ -728,6 +728,42 @@
     font-size: 15px;
     color: var(--text-dim);
   }
+
+  /* ── Notification status pill ── */
+  .notif-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .notif-status.on  { background: rgba(58,92,58,0.35); color: #7aaa6a; border: 1px solid #3a5c3a; }
+  .notif-status.off { background: var(--bg3); color: var(--text-mute); border: 1px solid #3a2e1a; }
+  .notif-status.blocked { background: rgba(122,32,32,0.2); color: #c04040; border: 1px solid #7a2020; }
+
+  .notif-status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  input[type="time"] {
+    background: var(--bg3);
+    border: 1px solid #3a2e1a;
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    padding: 6px 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    min-width: 110px;
+  }
 </style>
 </head>
 <body>
@@ -936,6 +972,40 @@
     </div>
 
     <div class="settings-section">
+      <div class="settings-section-label">Reminders</div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Daily reminder</div>
+            <div class="settings-row-sub">Notify me to review each day</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+            <span class="notif-status off" id="notif-status-pill">
+              <span class="notif-status-dot"></span>
+              <span id="notif-status-text">Off</span>
+            </span>
+            <label class="toggle">
+              <input type="checkbox" id="notif-toggle" onchange="toggleNotifications()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-row" id="notif-time-row" style="display:none;">
+          <div>
+            <div class="settings-row-label">Reminder time</div>
+            <div class="settings-row-sub">What time should we remind you?</div>
+          </div>
+          <div class="settings-control">
+            <input type="time" id="notif-time-input" value="07:00" onchange="saveNotifTime()">
+          </div>
+        </div>
+        <div class="settings-row" id="notif-info-row" style="display:none; flex-direction:column; align-items:flex-start; gap:4px;">
+          <div class="settings-row-sub" id="notif-info-text" style="font-style:italic;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
       <div class="settings-section-label">Progress</div>
       <div class="settings-group">
         <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:6px;">
@@ -983,6 +1053,8 @@ function loadSettings() {
     defaultMode:      STORE.get('defaultMode') ?? 'quiz',
     scriptureOpen:    STORE.get('scriptureOpen') ?? false,
     reviewedDates:    STORE.get('reviewedDates') ?? {},
+    notifEnabled:     STORE.get('notifEnabled') ?? false,
+    notifTime:        STORE.get('notifTime') ?? '07:00',
   };
 }
 
@@ -993,6 +1065,8 @@ function saveSettings() {
   STORE.set('defaultMode', settings.defaultMode);
   STORE.set('scriptureOpen', settings.scriptureOpen);
   STORE.set('reviewedDates', settings.reviewedDates);
+  STORE.set('notifEnabled', settings.notifEnabled);
+  STORE.set('notifTime', settings.notifTime);
 }
 
 // ══════════════════════════════════════════════════
@@ -1314,6 +1388,9 @@ function renderSettings() {
 
   document.getElementById('settings-info').textContent =
     `Currently on Question ${todaysCatechism()?.number ?? '?'} · Day ${dayOfCycle()} of ${settings.daysPerCatechism}`;
+
+  // Notifications
+  renderNotifStatus();
 }
 
 function changeDays(delta) {
@@ -1364,6 +1441,184 @@ function resetAll() {
 }
 
 // ══════════════════════════════════════════════════
+//  NOTIFICATIONS
+// ══════════════════════════════════════════════════
+
+function notifSupported() {
+  return 'Notification' in window && 'serviceWorker' in navigator;
+}
+
+function notifPermission() {
+  if (!notifSupported()) return 'unsupported';
+  return Notification.permission; // 'default' | 'granted' | 'denied'
+}
+
+function renderNotifStatus() {
+  const pill     = document.getElementById('notif-status-pill');
+  const pillText = document.getElementById('notif-status-text');
+  const toggle   = document.getElementById('notif-toggle');
+  const timeRow  = document.getElementById('notif-time-row');
+  const infoRow  = document.getElementById('notif-info-row');
+  const infoText = document.getElementById('notif-info-text');
+  const timeInput = document.getElementById('notif-time-input');
+
+  timeInput.value = settings.notifTime || '07:00';
+
+  if (!notifSupported()) {
+    pill.className = 'notif-status blocked';
+    pillText.textContent = 'Not supported';
+    toggle.disabled = true;
+    toggle.checked = false;
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'Notifications are not supported in this browser. Try installing the app to your home screen first.';
+    return;
+  }
+
+  const perm = notifPermission();
+
+  if (perm === 'denied') {
+    pill.className = 'notif-status blocked';
+    pillText.textContent = 'Blocked';
+    toggle.disabled = true;
+    toggle.checked = false;
+    timeRow.style.display = 'none';
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'Notifications are blocked. To enable them, go to your browser or phone Settings → Notifications and allow this site.';
+    return;
+  }
+
+  if (settings.notifEnabled && perm === 'granted') {
+    pill.className = 'notif-status on';
+    pillText.textContent = 'On · ' + formatNotifTime(settings.notifTime);
+    toggle.checked = true;
+    toggle.disabled = false;
+    timeRow.style.display = 'flex';
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'A reminder will appear each day at ' + formatNotifTime(settings.notifTime) + '. The app must be installed to your home screen for reliable delivery on iPhone.';
+    return;
+  }
+
+  // Off / default
+  pill.className = 'notif-status off';
+  pillText.textContent = 'Off';
+  toggle.checked = false;
+  toggle.disabled = false;
+  timeRow.style.display = 'none';
+  infoRow.style.display = 'none';
+}
+
+function formatNotifTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
+async function toggleNotifications() {
+  const toggle = document.getElementById('notif-toggle');
+
+  if (!toggle.checked) {
+    // Turning off
+    settings.notifEnabled = false;
+    saveSettings();
+    cancelScheduledNotification();
+    renderNotifStatus();
+    return;
+  }
+
+  // Turning on — request permission if needed
+  if (Notification.permission === 'default') {
+    const result = await Notification.requestPermission();
+    if (result !== 'granted') {
+      toggle.checked = false;
+      renderNotifStatus();
+      return;
+    }
+  }
+
+  if (Notification.permission === 'granted') {
+    settings.notifEnabled = true;
+    saveSettings();
+    scheduleNotification();
+    renderNotifStatus();
+  } else {
+    toggle.checked = false;
+    renderNotifStatus();
+  }
+}
+
+function saveNotifTime() {
+  settings.notifTime = document.getElementById('notif-time-input').value;
+  saveSettings();
+  if (settings.notifEnabled) scheduleNotification();
+  renderNotifStatus();
+}
+
+// Store the scheduled timeout ID
+let notifTimeoutId = null;
+
+function scheduleNotification() {
+  // Cancel any existing scheduled notification
+  cancelScheduledNotification();
+
+  if (!settings.notifEnabled || Notification.permission !== 'granted') return;
+
+  const now = new Date();
+  const [targetH, targetM] = (settings.notifTime || '07:00').split(':').map(Number);
+
+  // Build target time for today
+  const target = new Date(now);
+  target.setHours(targetH, targetM, 0, 0);
+
+  // If target time already passed today, schedule for tomorrow
+  if (target <= now) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  const msUntilNotif = target - now;
+
+  notifTimeoutId = setTimeout(async () => {
+    await fireNotification();
+    // After firing, schedule the next one for tomorrow
+    scheduleNotification();
+  }, msUntilNotif);
+
+  console.log(`[Catechism] Notification scheduled in ${Math.round(msUntilNotif / 60000)} minutes`);
+}
+
+function cancelScheduledNotification() {
+  if (notifTimeoutId !== null) {
+    clearTimeout(notifTimeoutId);
+    notifTimeoutId = null;
+  }
+}
+
+async function fireNotification() {
+  if (Notification.permission !== 'granted') return;
+
+  const cat = todaysCatechism();
+  const qNum = cat ? `Question ${cat.number}` : 'Daily Catechism';
+  const qText = cat ? cat.question : 'Time for your daily catechism review.';
+
+  // Prefer service worker showNotification (works when app is backgrounded)
+  if ('serviceWorker' in navigator) {
+    const reg = await navigator.serviceWorker.ready;
+    await reg.showNotification('📖 ' + qNum, {
+      body: qText,
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      tag: 'daily-catechism',       // replaces previous notification
+      renotify: true,
+      data: { url: self.location ? self.location.href : '/' }
+    });
+  } else {
+    // Fallback to basic Notification API
+    new Notification('📖 ' + qNum, { body: qText });
+  }
+}
+
+// ══════════════════════════════════════════════════
 //  Boot
 // ══════════════════════════════════════════════════
 async function boot() {
@@ -1382,6 +1637,11 @@ async function boot() {
   // Register service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  // Re-schedule notification if it was previously enabled
+  if (settings.notifEnabled && Notification.permission === 'granted') {
+    scheduleNotification();
   }
 }
 
