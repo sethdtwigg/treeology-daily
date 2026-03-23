@@ -839,10 +839,145 @@
     cursor: pointer;
     min-width: 110px;
   }
+
+  /* ── Install banner ── */
+  #install-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: var(--forest-dark);
+    border-bottom: 1px solid var(--forest3);
+    padding: 10px 16px;
+    flex-shrink: 0;
+  }
+
+  #install-banner.visible { display: flex; }
+
+  .install-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--leaf-pale);
+    line-height: 1.35;
+  }
+
+  .install-text strong { color: #fff; font-weight: 500; }
+
+  .install-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: var(--leaf-bright);
+    color: var(--forest-dark);
+    border: none;
+    border-radius: 8px;
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .install-btn:active { opacity: 0.8; }
+
+  .install-dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--leaf);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 0 0 4px;
+    line-height: 1;
+  }
+
+  #ios-sheet {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  #ios-sheet.visible { display: flex; }
+
+  .ios-sheet-inner {
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
+    border-radius: 16px 16px 0 0;
+    padding: 24px 24px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .ios-sheet-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .ios-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+
+  .ios-step-num {
+    width: 26px; height: 26px;
+    background: var(--leaf-bright);
+    color: var(--forest-dark);
+    border-radius: 50%;
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .ios-step-text { font-size: 16px; color: var(--leaf-pale); line-height: 1.4; }
+  .ios-step-text strong { color: #fff; }
+
+  .ios-close {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+    background: var(--forest3);
+    border: none;
+    border-radius: 10px;
+    color: var(--leaf-pale);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
 <div id="app">
+  <!-- INSTALL BANNER -->
+  <div id="install-banner">
+    <div class="install-text"><strong>Treeology Daily</strong><br>Add to your home screen</div>
+    <button class="install-btn" onclick="triggerInstall()">Install</button>
+    <button class="install-dismiss" onclick="dismissInstall()" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- iOS INSTALL SHEET -->
+  <div id="ios-sheet" onclick="closeIosSheet()">
+    <div class="ios-sheet-inner" onclick="event.stopPropagation()">
+      <div class="ios-sheet-title">Add to Home Screen</div>
+      <div class="ios-step">
+        <div class="ios-step-num">1</div>
+        <div class="ios-step-text">Tap the <strong>Share button</strong> at the bottom of Safari (the box with an arrow pointing up)</div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">2</div>
+        <div class="ios-step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">3</div>
+        <div class="ios-step-text">Tap <strong>"Add"</strong> in the top right — done!</div>
+      </div>
+      <button class="ios-close" onclick="closeIosSheet()">Got it</button>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav>
@@ -1697,6 +1832,77 @@ async function fireNotification() {
   }
 }
 
+
+// ══════════════════════════════════════════════════
+//  INSTALL PROMPT
+// ══════════════════════════════════════════════════
+let deferredInstallPrompt = null;
+
+function isInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+}
+
+function isIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent)
+      && !/crios/i.test(navigator.userAgent);  // exclude Chrome on iOS
+}
+
+function setupInstallBanner() {
+  // Never show if already installed
+  if (isInstalled()) return;
+  // Never show if user dismissed this session
+  if (sessionStorage.getItem('install-dismissed')) return;
+
+  if (isIOS()) {
+    // iOS: show banner with tap to open instructions
+    const banner = document.getElementById('install-banner');
+    const btn = banner.querySelector('.install-btn');
+    btn.textContent = 'How to install';
+    btn.onclick = () => { closeInstallBanner(); openIosSheet(); };
+    banner.classList.add('visible');
+  }
+  // Android: banner shown when beforeinstallprompt fires (see event listener below)
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if (!isInstalled() && !sessionStorage.getItem('install-dismissed')) {
+    document.getElementById('install-banner').classList.add('visible');
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  closeInstallBanner();
+  deferredInstallPrompt = null;
+});
+
+async function triggerInstall() {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  if (outcome === 'accepted') closeInstallBanner();
+  deferredInstallPrompt = null;
+}
+
+function dismissInstall() {
+  sessionStorage.setItem('install-dismissed', '1');
+  closeInstallBanner();
+}
+
+function closeInstallBanner() {
+  document.getElementById('install-banner').classList.remove('visible');
+}
+
+function openIosSheet() {
+  document.getElementById('ios-sheet').classList.add('visible');
+}
+
+function closeIosSheet() {
+  document.getElementById('ios-sheet').classList.remove('visible');
+}
+
 // ══════════════════════════════════════════════════
 //  Boot
 // ══════════════════════════════════════════════════
@@ -1712,6 +1918,7 @@ async function boot() {
   }
 
   renderToday(todaysCatechism());
+  setupInstallBanner();
 
   // Register service worker
   if ('serviceWorker' in navigator) {
