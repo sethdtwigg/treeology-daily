@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treeology Daily">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="theme-color" content="#152a18">
+<title>Treeology Daily</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* ── Treeology green palette — from the PDF cards ── */
+    --forest:      #1e3d22;   /* deep background green */
+    --forest2:     #264d2a;   /* card/surface green */
+    --forest3:     #2f5c34;   /* border / elevated surface */
+    --forest-dark: #152a18;   /* nav, header bg */
+    --leaf:        #5a9e60;   /* mid accent */
+    --leaf-bright: #8dcf8a;   /* active / highlight */
+    --leaf-pale:   #c6e8c2;   /* muted text on green */
+
+    /* ── Cream panel — top half of PDF cards ── */
+    --cream-bg:    #f5f0e6;   /* question panel background */
+    --cream-border:#d6ccb4;   /* cream panel border */
+    --ink:         #1e3d22;   /* dark green text on cream */
+    --ink-mid:     #3d6642;   /* body text on cream */
+    --ink-mute:    #7a9e7e;   /* muted text on cream */
+
+    /* ── Answer panel — bottom half of PDF cards ── */
+    --answer-bg:   #1e3d22;   /* deep green answer bg */
+    --answer-text: #f0f7ee;   /* white-ish answer text */
+    --answer-attr: #8dcf8a;   /* attribution text */
+
+    /* ── Utility ── */
+    --danger:      #7a2020;
+    --radius:      12px;
+    --safe-top:    env(safe-area-inset-top, 0px);
+    --safe-bot:    env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--forest);
+    color: var(--leaf-pale);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    overscroll-behavior: none;
+  }
+
+  /* ── App shell ── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── Nav bar ── */
+  nav {
+    display: flex;
+    background: var(--forest-dark);
+    border-bottom: 1px solid var(--forest3);
+    padding-top: var(--safe-top);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  nav button {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--leaf);
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 4px 10px;
+    cursor: pointer;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  nav button.active { color: var(--leaf-bright); }
+
+  nav button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 20%; right: 20%;
+    height: 2px;
+    background: var(--leaf-bright);
+    border-radius: 2px 2px 0 0;
+  }
+
+  nav button svg {
+    display: block;
+    margin: 0 auto 3px;
+    opacity: 0.5;
+    width: 20px; height: 20px;
+  }
+
+  nav button.active svg { opacity: 1; }
+
+  /* ── Screens ── */
+  .screen {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(16px + var(--safe-bot));
+  }
+
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ── TODAY screen ── */
+  #screen-today { padding: 0; }
+
+  /* Header strip — cream coloured like the top panel of the PDF */
+  .today-header {
+    background: var(--cream-bg);
+    padding: 18px 20px 14px;
+    border-bottom: 2px solid var(--forest3);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle leaf watermark in header */
+  .today-header::after {
+    content: '';
+    position: absolute;
+    top: -10px; right: -10px;
+    width: 90px; height: 90px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%231e3d22' opacity='0.08'/%3E%3Cpath d='M50 80 Q30 60 35 40 Q50 20 65 40 Q70 60 50 80Z' fill='%231e3d22' opacity='0.1'/%3E%3C/svg%3E") center/contain no-repeat;
+    pointer-events: none;
+  }
+
+  .today-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .today-date {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .today-progress-label {
+    font-size: 11px;
+    color: var(--leaf);
+    letter-spacing: 0.06em;
+  }
+
+  /* Question number badge — dark green circle like the PDF */
+  .today-q-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .today-q-number::before {
+    content: attr(data-num);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--forest);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'EB Garamond', serif;
+    letter-spacing: 0;
+  }
+
+  /* Progress dots */
+  .progress-dots {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .dot {
+    height: 4px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--cream-border);
+    transition: background 0.3s;
+  }
+
+  .dot.done  { background: var(--forest); }
+  .dot.today { background: var(--leaf); }
+
+  /* ── Card area ── */
+  .card-area {
+    flex: 1;
+    padding: 16px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Question card — cream top panel */
+  .card {
+    background: var(--cream-bg);
+    border: 1px solid var(--cream-border);
+    border-radius: var(--radius);
+    padding: 20px 20px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--forest);
+  }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  /* Mode toggle */
+  .mode-toggle {
+    display: flex;
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 7px 10px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--leaf);
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-btn.active {
+    background: var(--forest-dark);
+    color: var(--leaf-bright);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
+  /* Answer card — deep green bottom panel, like the PDF */
+  .answer-card {
+    background: var(--answer-bg);
+    border: 1px solid var(--forest3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Tree silhouette along the bottom of the answer card */
+  .answer-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 56' preserveAspectRatio='xMidYMax slice'%3E%3Cg fill='white' opacity='0.07'%3E%3Crect x='30' y='36' width='6' height='20' rx='2'/%3E%3Cpath d='M33 36 Q20 26 18 16 Q33 8 48 16 Q46 26 33 36Z'/%3E%3Crect x='90' y='30' width='7' height='26' rx='2'/%3E%3Cpath d='M93 30 Q78 18 76 6 Q93 -4 110 6 Q108 18 93 30Z'/%3E%3Cpath d='M93 22 Q84 14 83 6 Q93 0 103 6 Q102 14 93 22Z'/%3E%3Crect x='170' y='20' width='9' height='36' rx='3'/%3E%3Cpath d='M174 20 Q155 6 153 -8 Q174 -20 196 -8 Q194 6 174 20Z'/%3E%3Cpath d='M174 10 Q160 0 159 -10 Q174 -18 190 -10 Q189 0 174 10Z'/%3E%3Cpath d='M165 -6 Q158 -14 162 -22 Q174 -26 180 -18 Q178 -10 165 -6Z'/%3E%3Cpath d='M184 -6 Q190 -14 187 -22 Q174 -26 168 -18 Q170 -10 184 -6Z'/%3E%3Crect x='265' y='28' width='8' height='28' rx='2'/%3E%3Cpath d='M269 28 Q252 16 250 4 Q269 -6 288 4 Q286 16 269 28Z'/%3E%3Cpath d='M269 18 Q257 8 256 -2 Q269 -10 282 -2 Q281 8 269 18Z'/%3E%3Crect x='340' y='34' width='6' height='22' rx='2'/%3E%3Cpath d='M343 34 Q330 24 329 14 Q343 6 357 14 Q356 24 343 34Z'/%3E%3Cpath d='M174 56 Q160 50 150 42' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.07'/%3E%3Cpath d='M174 56 Q188 50 198 42' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' opacity='0.07'/%3E%3C/g%3E%3C/svg%3E") bottom center / cover no-repeat;
+    pointer-events: none;
+  }
+
+  .answer-tap {
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    user-select: none;
+    width: 100%;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+  }
+
+  .answer-tap-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--leaf-pale);
+    opacity: 0.7;
+  }
+
+  .answer-reveal-hint {
+    font-size: 13px;
+    color: var(--leaf);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .answer-chevron {
+    color: var(--leaf);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .answer-chevron.open { transform: rotate(180deg); }
+
+  .answer-body {
+    display: none;
+    padding: 0 22px 70px;
+    border-top: 1px solid var(--forest3);
+    animation: fadeIn 0.25s ease;
+  }
+
+  .answer-body.visible { display: block; }
+
+  /* The answer text — large italic white serif, like the PDF bottom panel */
+  .answer-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--answer-text);
+    padding-top: 18px;
+    margin-bottom: 12px;
+  }
+
+  .answer-attribution {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--answer-attr);
+  }
+
+  /* Reading mode — answer shown inside its own green card */
+  #answer-reading {
+    background: var(--answer-bg) !important;
+    border-color: var(--forest3) !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #answer-reading::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 56' preserveAspectRatio='xMidYMax slice'%3E%3Cg fill='white' opacity='0.07'%3E%3Crect x='30' y='36' width='6' height='20' rx='2'/%3E%3Cpath d='M33 36 Q20 26 18 16 Q33 8 48 16 Q46 26 33 36Z'/%3E%3Crect x='90' y='30' width='7' height='26' rx='2'/%3E%3Cpath d='M93 30 Q78 18 76 6 Q93 -4 110 6 Q108 18 93 30Z'/%3E%3Crect x='170' y='20' width='9' height='36' rx='3'/%3E%3Cpath d='M174 20 Q155 6 153 -8 Q174 -20 196 -8 Q194 6 174 20Z'/%3E%3Crect x='265' y='28' width='8' height='28' rx='2'/%3E%3Cpath d='M269 28 Q252 16 250 4 Q269 -6 288 4 Q286 16 269 28Z'/%3E%3Crect x='340' y='34' width='6' height='22' rx='2'/%3E%3Cpath d='M343 34 Q330 24 329 14 Q343 6 357 14 Q356 24 343 34Z'/%3E%3C/g%3E%3C/svg%3E") bottom center / cover no-repeat;
+    pointer-events: none;
+  }
+
+  #answer-reading .card-label { color: var(--leaf-pale); opacity: 0.6; }
+  #answer-reading .reading-answer { padding-bottom: 60px; }
+
+  .reading-answer { padding-top: 4px; }
+
+  /* Scripture section */
+  .scripture-section {
+    background: var(--cream-bg);
+    border: 1px solid var(--cream-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .scripture-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+  }
+
+  .scripture-header-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  .scripture-section .answer-chevron { color: var(--ink-mute); }
+
+  .scripture-list {
+    display: none;
+    padding: 0 20px 16px;
+    border-top: 1px solid var(--cream-border);
+  }
+
+  .scripture-list.visible { display: block; }
+
+  .scripture-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cream-border);
+  }
+
+  .scripture-item:last-child { border-bottom: none; }
+
+  .scripture-ref {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .scripture-text {
+    font-style: italic;
+    color: var(--ink-mid);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Mark reviewed button */
+  .mark-btn {
+    margin: 8px 16px;
+    padding: 14px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: calc(100% - 32px);
+  }
+
+  .mark-btn.unreviewed {
+    background: var(--forest);
+    color: #fff;
+  }
+
+  .mark-btn.unreviewed:active { opacity: 0.8; }
+
+  .mark-btn.reviewed {
+    background: var(--cream-bg);
+    color: var(--leaf);
+    border: 1px solid var(--leaf);
+  }
+
+  .mark-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── Viewing override banner ── */
+  .viewing-banner {
+    margin: 8px 16px 0;
+    padding: 10px 14px;
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--leaf-pale);
+  }
+
+  .viewing-banner button {
+    background: none;
+    border: none;
+    color: var(--leaf-bright);
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    padding: 4px 6px;
+    white-space: nowrap;
+  }
+
+  /* ── Ornament ── */
+  .ornament {
+    text-align: center;
+    color: var(--leaf);
+    font-size: 18px;
+    padding: 4px 0;
+    letter-spacing: 0.3em;
+    opacity: 0.4;
+  }
+
+  /* ── BROWSE screen ── */
+  #screen-browse { padding: 0; }
+
+  .browse-header {
+    padding: 18px 20px 12px;
+    background: var(--cream-bg);
+    border-bottom: 2px solid var(--forest3);
+    flex-shrink: 0;
+  }
+
+  .browse-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .browse-subtitle {
+    font-size: 13px;
+    color: var(--ink-mute);
+  }
+
+  .browse-list { flex: 1; overflow-y: auto; }
+
+  .browse-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--forest2);
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+    width: 100%;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+  }
+
+  .browse-item:active { background: var(--forest2); }
+  .browse-item.is-today { background: rgba(93,158,96,0.08); }
+
+  .browse-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--leaf);
+    min-width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  .browse-item.is-today .browse-num { color: var(--leaf-bright); font-weight: 700; }
+  .browse-item.is-done .browse-num  { color: var(--forest3); }
+
+  .browse-content { flex: 1; min-width: 0; }
+
+  .browse-q {
+    font-size: 16px;
+    color: var(--leaf-pale);
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+
+  .browse-item.is-today .browse-q { color: #fff; }
+
+  .browse-badge {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--leaf);
+    opacity: 0.7;
+  }
+
+  .browse-item.is-today .browse-badge { color: var(--leaf-bright); opacity: 1; }
+
+  .today-indicator {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--leaf-bright);
+    border-radius: 0 2px 2px 0;
+  }
+
+  /* ── SETTINGS screen ── */
+  #screen-settings { padding: 0; }
+
+  .settings-header {
+    padding: 18px 20px 12px;
+    background: var(--cream-bg);
+    border-bottom: 2px solid var(--forest3);
+    flex-shrink: 0;
+  }
+
+  .settings-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .settings-section { padding: 18px 16px 0; }
+
+  .settings-section-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    margin-bottom: 10px;
+  }
+
+  .settings-group {
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+
+  .settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--forest3);
+    gap: 12px;
+  }
+
+  .settings-row:last-child { border-bottom: none; }
+
+  .settings-row-label {
+    font-size: 16px;
+    color: var(--leaf-pale);
+    flex: 1;
+  }
+
+  .settings-row-sub {
+    font-size: 13px;
+    color: var(--leaf);
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .settings-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .stepper-btn {
+    width: 34px; height: 34px;
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    background: var(--forest-dark);
+    color: var(--leaf-bright);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .stepper-btn:active { background: var(--forest); }
+
+  .stepper-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  input[type="date"], input[type="number"] {
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    padding: 6px 10px;
+    width: 150px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  input[type="number"] { width: 70px; text-align: center; }
+
+  select {
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    padding: 6px 10px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Toggle switch */
+  .toggle {
+    position: relative;
+    width: 46px; height: 26px;
+    flex-shrink: 0;
+  }
+
+  .toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--forest-dark);
+    border-radius: 13px;
+    border: 1px solid var(--forest3);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; top: 3px;
+    background: var(--leaf);
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  .toggle input:checked + .toggle-slider { background: var(--forest3); }
+  .toggle input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+    background: var(--leaf-bright);
+  }
+
+  .danger-btn {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    background: transparent;
+    color: #e06060;
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+
+  .danger-btn:active { background: rgba(120,32,32,0.2); }
+
+  .settings-info {
+    font-size: 13px;
+    color: var(--leaf);
+    opacity: 0.7;
+    line-height: 1.5;
+    padding: 0 16px 20px;
+  }
+
+  /* ── Loading / Empty states ── */
+  .loading, .empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .loading-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--leaf-pale);
+  }
+
+  .loading-sub {
+    font-size: 15px;
+    color: var(--leaf);
+    line-height: 1.5;
+  }
+
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--forest2);
+    border-top-color: var(--leaf-bright);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Thanksgiving banner ── */
+  .thanksgiving-banner {
+    margin: 0 16px;
+    padding: 14px 16px;
+    background: var(--forest2);
+    border: 1px solid #5a7a3a;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .thanksgiving-banner:active { opacity: 0.7; }
+
+  .thanksgiving-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8abf5a;
+    margin-bottom: 4px;
+  }
+
+  .thanksgiving-text {
+    font-size: 15px;
+    color: var(--leaf-pale);
+  }
+
+  /* ── Notification status pill ── */
+  .notif-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .notif-status.on      { background: rgba(90,158,96,0.25); color: var(--leaf-bright); border: 1px solid var(--leaf); }
+  .notif-status.off     { background: var(--forest-dark); color: var(--leaf); border: 1px solid var(--forest3); }
+  .notif-status.blocked { background: rgba(122,32,32,0.2); color: #e06060; border: 1px solid var(--danger); }
+
+  .notif-status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  input[type="time"] {
+    background: var(--forest-dark);
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    padding: 6px 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    min-width: 110px;
+  }
+
+  /* ── Install banner ── */
+  #install-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: var(--forest-dark);
+    border-bottom: 1px solid var(--forest3);
+    padding: 10px 16px;
+    flex-shrink: 0;
+  }
+
+  #install-banner.visible { display: flex; }
+
+  .install-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--leaf-pale);
+    line-height: 1.35;
+  }
+
+  .install-text strong { color: #fff; font-weight: 500; }
+
+  .install-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: var(--leaf-bright);
+    color: var(--forest-dark);
+    border: none;
+    border-radius: 8px;
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .install-btn:active { opacity: 0.8; }
+
+  .install-dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--leaf);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 0 0 4px;
+    line-height: 1;
+  }
+
+  #ios-sheet {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  #ios-sheet.visible { display: flex; }
+
+  .ios-sheet-inner {
+    background: var(--forest2);
+    border: 1px solid var(--forest3);
+    border-radius: 16px 16px 0 0;
+    padding: 24px 24px 40px;
+    width: 100%;
+    max-width: 480px;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .ios-sheet-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .ios-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+
+  .ios-step-num {
+    width: 26px; height: 26px;
+    background: var(--leaf-bright);
+    color: var(--forest-dark);
+    border-radius: 50%;
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .ios-step-text { font-size: 16px; color: var(--leaf-pale); line-height: 1.4; }
+  .ios-step-text strong { color: #fff; }
+
+  .ios-close {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+    background: var(--forest3);
+    border: none;
+    border-radius: 10px;
+    color: var(--leaf-pale);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- INSTALL BANNER -->
+  <div id="install-banner">
+    <div class="install-text"><strong>Treeology Daily</strong><br>Add to your home screen</div>
+    <button class="install-btn" id="install-btn" type="button">Install</button>
+    <button class="install-dismiss" id="dismiss-install" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <!-- iOS INSTALL SHEET -->
+  <div id="ios-sheet">
+    <div class="ios-sheet-inner">
+      <div class="ios-sheet-title">Add to Home Screen</div>
+      <div class="ios-step">
+        <div class="ios-step-num">1</div>
+        <div class="ios-step-text">Tap the <strong>Share button</strong> at the bottom of Safari (the box with an arrow pointing up)</div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">2</div>
+        <div class="ios-step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+      </div>
+      <div class="ios-step">
+        <div class="ios-step-num">3</div>
+        <div class="ios-step-text">Tap <strong>"Add"</strong> in the top right — done!</div>
+      </div>
+      <button class="ios-close" id="ios-close" type="button">Got it</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <button class="active" data-screen="today" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Today
+    </button>
+    <button data-screen="browse" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/>
+        <circle cx="3" cy="18" r="1" fill="currentColor"/>
+      </svg>
+      Browse
+    </button>
+    <button data-screen="settings" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      Settings
+    </button>
+  </nav>
+
+  <!-- TODAY -->
+  <div id="screen-today" class="screen active">
+    <div id="today-loading" class="loading">
+      <div class="spinner"></div>
+      <div class="loading-title">Loading…</div>
+      <div class="loading-sub">Fetching catechisms.json</div>
+    </div>
+    <div id="today-content" style="display:none; flex-direction:column; gap:0;">
+      <div class="today-header">
+        <div class="today-meta">
+          <span class="today-date" id="today-date-label"></span>
+          <span class="today-progress-label" id="today-day-label"></span>
+        </div>
+        <div class="today-q-number" id="today-q-number"></div>
+        <div class="progress-dots" id="progress-dots"></div>
+      </div>
+
+      <!-- Mode toggle -->
+      <div style="padding: 14px 20px 0;">
+        <div class="mode-toggle">
+          <button class="mode-btn" id="mode-quiz" type="button">Quiz Mode</button>
+          <button class="mode-btn" id="mode-read" type="button">Reading Mode</button>
+        </div>
+      </div>
+
+      <div class="card-area" id="card-area">
+        <!-- Question card -->
+        <div class="card">
+          <div class="card-label">Question</div>
+          <div class="question-text" id="q-text"></div>
+        </div>
+
+        <!-- Answer (quiz mode) -->
+        <div class="answer-card" id="answer-quiz">
+          <button type="button" class="answer-tap" id="answer-tap" aria-expanded="false" aria-controls="answer-body">
+            <div>
+              <div class="answer-tap-label">Answer</div>
+              <div class="answer-reveal-hint">Tap to reveal</div>
+            </div>
+            <svg class="answer-chevron" id="answer-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="answer-body" id="answer-body">
+            <div class="answer-text" id="answer-text-quiz"></div>
+            <div class="answer-attribution" id="answer-attr-quiz"></div>
+          </div>
+        </div>
+
+        <!-- Answer (reading mode) -->
+        <div class="card" id="answer-reading" style="display:none;">
+          <div class="card-label">Answer</div>
+          <div class="answer-text reading-answer" id="answer-text-read"></div>
+          <div class="answer-attribution" id="answer-attr-read"></div>
+        </div>
+
+        <!-- Scripture -->
+        <div class="scripture-section">
+          <button type="button" class="scripture-header" id="scripture-toggle" aria-expanded="false" aria-controls="scripture-list">
+            <span class="scripture-header-label">Scripture References</span>
+            <svg class="answer-chevron" id="scripture-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="scripture-list" id="scripture-list"></div>
+        </div>
+
+        <div class="ornament">✦ ✦ ✦</div>
+      </div>
+
+      <!-- Viewing override banner -->
+      <div id="viewing-banner" class="viewing-banner" style="display:none;">
+        <span id="viewing-label"></span>
+        <button type="button" id="back-to-today-btn">Back to Today</button>
+      </div>
+
+      <!-- Mark reviewed -->
+      <button class="mark-btn unreviewed" id="mark-btn" type="button">
+        ✓ Mark as Reviewed Today
+      </button>
+
+      <!-- Thanksgiving -->
+      <div id="thanksgiving-banner" class="thanksgiving-banner" style="display:none; margin-top:4px;">
+        <div class="thanksgiving-label">🍂 Thanksgiving</div>
+        <div class="thanksgiving-text">View the special Thanksgiving catechism</div>
+      </div>
+
+      <div style="height:8px;"></div>
+    </div>
+
+    <div id="today-error" class="loading" style="display:none;">
+      <div style="font-size:32px;">📄</div>
+      <div class="loading-title">catechisms.json not found</div>
+      <div class="loading-sub">
+        Run the Python scraper first:<br><br>
+        <code style="background:var(--bg3);padding:4px 8px;border-radius:6px;font-size:14px;">python scraper.py</code><br><br>
+        Then place <strong>catechisms.json</strong> in the same folder as <strong>index.html</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- BROWSE -->
+  <div id="screen-browse" class="screen">
+    <div class="browse-header">
+      <div class="browse-title">All Catechisms</div>
+      <div class="browse-subtitle" id="browse-subtitle">91 questions</div>
+    </div>
+    <div class="browse-list" id="browse-list"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="screen-settings" class="screen">
+    <div class="settings-header">
+      <div class="settings-title">Settings</div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Schedule</div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Days per catechism</div>
+            <div class="settings-row-sub">How many days before advancing</div>
+          </div>
+          <div class="settings-control">
+            <button type="button" class="stepper-btn" id="days-minus">−</button>
+            <span class="stepper-val" id="days-val">3</span>
+            <button type="button" class="stepper-btn" id="days-plus">+</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Start date</div>
+            <div class="settings-row-sub">When did you begin?</div>
+          </div>
+          <div class="settings-control">
+            <input type="date" id="start-date-input">
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Start from catechism #</div>
+            <div class="settings-row-sub">Skip ahead if needed</div>
+          </div>
+          <div class="settings-control">
+            <button type="button" class="stepper-btn" id="startq-minus">−</button>
+            <span class="stepper-val" id="start-q-val">1</span>
+            <button type="button" class="stepper-btn" id="startq-plus">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Display</div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Default to reading mode</div>
+            <div class="settings-row-sub">Show answer immediately</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="default-read-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Show scriptures expanded</div>
+            <div class="settings-row-sub">Open scripture list by default</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="show-scripture-toggle">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Reminders</div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Daily reminder</div>
+            <div class="settings-row-sub">Notify me to review each day</div>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+            <span class="notif-status off" id="notif-status-pill">
+              <span class="notif-status-dot"></span>
+              <span id="notif-status-text">Off</span>
+            </span>
+            <label class="toggle">
+              <input type="checkbox" id="notif-toggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="settings-row" id="notif-time-row" style="display:none;">
+          <div>
+            <div class="settings-row-label">Reminder time</div>
+            <div class="settings-row-sub">What time should we remind you?</div>
+          </div>
+          <div class="settings-control">
+            <input type="time" id="notif-time-input" value="07:00">
+          </div>
+        </div>
+        <div class="settings-row" id="notif-info-row" style="display:none; flex-direction:column; align-items:flex-start; gap:4px;">
+          <div class="settings-row-sub" id="notif-info-text" style="font-style:italic;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Progress</div>
+      <div class="settings-group">
+        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:6px;">
+          <div class="settings-row-label">Completion estimate</div>
+          <div class="settings-row-sub" id="completion-estimate">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Reset</div>
+      <div class="settings-group" style="overflow:visible; background:none; border:none;">
+        <button class="danger-btn" id="reset-progress" type="button">Reset All Progress</button>
+        <button class="danger-btn" id="reset-all" type="button">Reset Everything (factory reset)</button>
+      </div>
+    </div>
+
+    <div class="settings-info" id="settings-info"></div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  State & Storage
+// ══════════════════════════════════════════════════
+const STORE = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  del: k => localStorage.removeItem(k)
+};
+
+let catechisms = [];   // loaded from catechisms.json
+let settings = {};
+let todayKey = '';     // YYYY-MM-DD (local)
+let viewingOverride = null;  // set while the user views a non-today card
+
+function localDateKey(d) {
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+function loadSettings() {
+  todayKey = localDateKey(new Date());
+
+  const cutoff = localDateKey(new Date(Date.now() - 400 * 86400000));
+  const reviewed = STORE.get('reviewedDates') ?? {};
+
+  settings = {
+    daysPerCatechism: STORE.get('daysPerCatechism') ?? 3,
+    startDate:        STORE.get('startDate') ?? todayKey,
+    startFromQ:       STORE.get('startFromQ') ?? 1,
+    defaultMode:      STORE.get('defaultMode') ?? 'quiz',
+    scriptureOpen:    STORE.get('scriptureOpen') ?? false,
+    reviewedDates:    Object.fromEntries(
+      Object.entries(reviewed).filter(([k]) => k >= cutoff)),
+    notifEnabled:     STORE.get('notifEnabled') ?? false,
+    notifTime:        STORE.get('notifTime') ?? '07:00',
+  };
+}
+
+function saveSettings() {
+  STORE.set('daysPerCatechism', settings.daysPerCatechism);
+  STORE.set('startDate', settings.startDate);
+  STORE.set('startFromQ', settings.startFromQ);
+  STORE.set('defaultMode', settings.defaultMode);
+  STORE.set('scriptureOpen', settings.scriptureOpen);
+  STORE.set('reviewedDates', settings.reviewedDates);
+  STORE.set('notifEnabled', settings.notifEnabled);
+  STORE.set('notifTime', settings.notifTime);
+}
+
+// ══════════════════════════════════════════════════
+//  Data loading
+// ══════════════════════════════════════════════════
+async function loadData() {
+  try {
+    const res = await fetch('catechisms.json');
+    if (!res.ok) throw new Error('not found');
+    const data = await res.json();
+    catechisms = data.catechisms || data;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  Schedule logic
+// ══════════════════════════════════════════════════
+function daysSinceStart() {
+  const start = new Date(settings.startDate + 'T00:00:00');
+  const now   = new Date(todayKey + 'T00:00:00');
+  return Math.max(0, Math.floor((now - start) / 86400000));
+}
+
+function todaysCatechismIndex() {
+  const days  = daysSinceStart();
+  const dpq   = Math.max(1, settings.daysPerCatechism);
+  const startQ = Math.max(1, settings.startFromQ) - 1; // 0-indexed
+  const regular = catechisms.filter(c => c.number !== 'thanksgiving');
+  const idx = startQ + Math.floor(days / dpq);
+  return Math.min(idx, regular.length - 1);
+}
+
+function todaysCatechism() {
+  const regular = catechisms.filter(c => c.number !== 'thanksgiving');
+  return regular[todaysCatechismIndex()];
+}
+
+function dayOfCycle() {
+  const days = daysSinceStart();
+  const dpq  = Math.max(1, settings.daysPerCatechism);
+  return (days % dpq) + 1;
+}
+
+function isReviewedToday() {
+  return !!settings.reviewedDates[todayKey];
+}
+
+function regularCatechisms() {
+  return catechisms.filter(c => c.number !== 'thanksgiving');
+}
+
+function thanksgivingCatechism() {
+  return catechisms.find(c => c.number === 'thanksgiving');
+}
+
+// ══════════════════════════════════════════════════
+//  Screens
+// ══════════════════════════════════════════════════
+let currentScreen = 'today';
+
+function showScreen(name) {
+  currentScreen = name;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelector(`nav button[data-screen="${name}"]`).classList.add('active');
+
+  if (name === 'browse') renderBrowse();
+  if (name === 'settings') renderSettings();
+}
+
+// ══════════════════════════════════════════════════
+//  TODAY screen
+// ══════════════════════════════════════════════════
+let answerVisible = false;
+let scripturesVisible = false;
+let currentMode = 'quiz';
+
+function renderToday(cat) {
+  if (!cat) return;
+
+  currentMode = settings.defaultMode || 'quiz';
+  scripturesVisible = settings.scriptureOpen || false;
+  answerVisible = false;
+
+  // Header
+  const dateLabel = new Date(todayKey + 'T12:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric'
+  });
+  document.getElementById('today-date-label').textContent = dateLabel;
+
+  const dpq = settings.daysPerCatechism;
+  const dayN = dayOfCycle();
+  document.getElementById('today-day-label').textContent =
+    dpq > 1 ? `Day ${dayN} of ${dpq}` : '';
+
+  const numLabel = cat.number === 'thanksgiving'
+    ? 'Thanksgiving Special'
+    : `Question ${cat.number}`;
+  const qNumEl = document.getElementById('today-q-number');
+  qNumEl.textContent = numLabel;
+  qNumEl.setAttribute('data-num', cat.number === 'thanksgiving' ? '🍂' : cat.number);
+
+  // Progress dots
+  const dots = document.getElementById('progress-dots');
+  dots.textContent = '';
+  if (dpq > 1 && dpq <= 30) {
+    for (let i = 1; i <= dpq; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i < dayN ? ' done' : i === dayN ? ' today' : '');
+      dots.appendChild(d);
+    }
+  }
+
+  // Question
+  document.getElementById('q-text').textContent = cat.question || '(Question not parsed)';
+
+  // Answer
+  const answerHtml = cat.answer || '(Answer not parsed — check catechisms.json)';
+  document.getElementById('answer-text-quiz').textContent = answerHtml;
+  document.getElementById('answer-text-read').textContent = answerHtml;
+  document.getElementById('answer-attr-quiz').textContent = cat.attribution || '';
+  document.getElementById('answer-attr-read').textContent = cat.attribution || '';
+
+  // Scriptures
+  const list = document.getElementById('scripture-list');
+  list.textContent = '';
+  if (cat.scriptures && cat.scriptures.length > 0) {
+    cat.scriptures.forEach(s => {
+      const item = document.createElement('div');
+      item.className = 'scripture-item';
+
+      const refEl = document.createElement('div');
+      refEl.className = 'scripture-ref';
+      refEl.textContent = s.reference || '';
+      if (s.translation) {
+        const trEl = document.createElement('span');
+        trEl.style.opacity = '.5';
+        trEl.style.fontSize = '10px';
+        trEl.textContent = s.translation;
+        refEl.appendChild(trEl);
+      }
+
+      const textEl = document.createElement('div');
+      textEl.className = 'scripture-text';
+      textEl.textContent = s.text || '';
+
+      item.append(refEl, textEl);
+      list.appendChild(item);
+    });
+  } else {
+    const empty = document.createElement('div');
+    empty.className = 'scripture-item';
+    empty.style.color = 'var(--ink-mute)';
+    empty.style.fontStyle = 'italic';
+    empty.textContent = 'Scripture references will appear here after parsing.';
+    list.appendChild(empty);
+  }
+
+  // Viewing override banner
+  const vBanner = document.getElementById('viewing-banner');
+  if (viewingOverride) {
+    document.getElementById('viewing-label').textContent =
+      `Viewing Question ${cat.number} · scheduled for another day`;
+    vBanner.style.display = 'flex';
+  } else {
+    vBanner.style.display = 'none';
+  }
+
+  // Mark reviewed button
+  updateMarkBtn();
+
+  // Thanksgiving banner
+  const tBanner = document.getElementById('thanksgiving-banner');
+  const isThanksgiving = isThanksgivingPeriod();
+  tBanner.style.display = isThanksgiving && thanksgivingCatechism() ? 'block' : 'none';
+
+  // Apply mode
+  setMode(currentMode);
+
+  // Apply scripture state
+  updateScriptures();
+
+  document.getElementById('today-loading').style.display = 'none';
+  document.getElementById('today-content').style.display = 'flex';
+}
+
+function isThanksgivingPeriod() {
+  return new Date(todayKey + 'T12:00:00').getMonth() === 10; // November
+}
+
+function setMode(mode) {
+  currentMode = mode;
+
+  document.getElementById('mode-quiz').classList.toggle('active', mode === 'quiz');
+  document.getElementById('mode-read').classList.toggle('active', mode === 'read');
+
+  document.getElementById('answer-quiz').style.display    = mode === 'quiz' ? '' : 'none';
+  document.getElementById('answer-reading').style.display = mode === 'read' ? '' : 'none';
+}
+
+function toggleAnswer() {
+  answerVisible = !answerVisible;
+  document.getElementById('answer-body').classList.toggle('visible', answerVisible);
+  document.getElementById('answer-chevron').classList.toggle('open', answerVisible);
+  document.getElementById('answer-tap').setAttribute('aria-expanded', String(answerVisible));
+  document.querySelector('.answer-reveal-hint').textContent =
+    answerVisible ? 'Tap to hide' : 'Tap to reveal';
+}
+
+function toggleScriptures() {
+  scripturesVisible = !scripturesVisible;
+  updateScriptures();
+}
+
+function updateScriptures() {
+  document.getElementById('scripture-list').classList.toggle('visible', scripturesVisible);
+  document.getElementById('scripture-chevron').classList.toggle('open', scripturesVisible);
+  document.getElementById('scripture-toggle').setAttribute('aria-expanded', String(scripturesVisible));
+}
+
+function updateMarkBtn() {
+  const btn = document.getElementById('mark-btn');
+  const reviewed = isReviewedToday();
+  btn.className = 'mark-btn ' + (reviewed ? 'reviewed' : 'unreviewed');
+  btn.textContent = reviewed ? '✓ Reviewed Today' : '✓ Mark as Reviewed Today';
+  btn.disabled = !!viewingOverride;
+}
+
+function toggleReviewed() {
+  if (isReviewedToday()) {
+    delete settings.reviewedDates[todayKey];
+  } else {
+    settings.reviewedDates[todayKey] = true;
+  }
+  saveSettings();
+  updateMarkBtn();
+  if (currentScreen === 'browse') renderBrowse();
+}
+
+function openThanksgiving() {
+  const t = thanksgivingCatechism();
+  if (!t) return;
+  viewingOverride = t;
+  renderToday(t);
+}
+
+// ══════════════════════════════════════════════════
+//  BROWSE screen
+// ══════════════════════════════════════════════════
+function renderBrowse() {
+  const list = document.getElementById('browse-list');
+  list.textContent = '';
+
+  const todayIdx = todaysCatechismIndex();
+  const regular  = regularCatechisms();
+  const startQ   = Math.max(1, settings.startFromQ) - 1;
+
+  document.getElementById('browse-subtitle').textContent =
+    `${regular.length} questions · ${settings.daysPerCatechism} day${settings.daysPerCatechism > 1 ? 's' : ''} each`;
+
+  regular.forEach((cat, i) => {
+    const isToday = i === todayIdx;
+    const isDone  = i < todayIdx;
+    const isAhead = i > todayIdx;
+
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'browse-item' + (isToday ? ' is-today' : '') + (isDone ? ' is-done' : '');
+    item.addEventListener('click', () => {
+      renderTodayWithCat(cat);
+      showScreen('today');
+    });
+
+    const q = cat.question || `Question ${cat.number}`;
+    const preview = q.length > 80 ? q.slice(0, 80) + '…' : q;
+
+    let badge = '';
+    if (isToday) badge = '📖 Today';
+    else if (isDone) badge = '✓ Completed';
+    else {
+      // estimate when
+      const daysUntil = (i - todayIdx) * settings.daysPerCatechism;
+      const future = new Date(todayKey + 'T12:00:00');
+      future.setDate(future.getDate() + daysUntil);
+      badge = 'Coming ' + future.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    if (isToday) {
+      const ind = document.createElement('div');
+      ind.className = 'today-indicator';
+      item.appendChild(ind);
+    }
+
+    const numEl = document.createElement('div');
+    numEl.className = 'browse-num';
+    numEl.textContent = cat.number;
+
+    const content = document.createElement('div');
+    content.className = 'browse-content';
+
+    const qEl = document.createElement('div');
+    qEl.className = 'browse-q';
+    qEl.textContent = preview;
+
+    const badgeEl = document.createElement('div');
+    badgeEl.className = 'browse-badge';
+    badgeEl.textContent = badge;
+
+    content.append(qEl, badgeEl);
+    item.append(numEl, content);
+    list.appendChild(item);
+  });
+
+  // Thanksgiving entry
+  const t = thanksgivingCatechism();
+  if (t) {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'browse-item';
+    item.addEventListener('click', () => { renderTodayWithCat(t); showScreen('today'); });
+
+    const numEl = document.createElement('div');
+    numEl.className = 'browse-num';
+    numEl.textContent = '🍂';
+
+    const content = document.createElement('div');
+    content.className = 'browse-content';
+
+    const qEl = document.createElement('div');
+    qEl.className = 'browse-q';
+    qEl.textContent = t.question || 'Thanksgiving Special';
+
+    const badgeEl = document.createElement('div');
+    badgeEl.className = 'browse-badge';
+    badgeEl.textContent = 'Seasonal — November';
+
+    content.append(qEl, badgeEl);
+    item.append(numEl, content);
+    list.appendChild(item);
+  }
+}
+
+function renderTodayWithCat(cat) {
+  viewingOverride = cat;
+  answerVisible = false;
+  scripturesVisible = settings.scriptureOpen || false;
+  renderToday(cat);
+}
+
+function backToToday() {
+  viewingOverride = null;
+  answerVisible = false;
+  scripturesVisible = settings.scriptureOpen || false;
+  renderToday(todaysCatechism());
+}
+
+// ══════════════════════════════════════════════════
+//  SETTINGS screen
+// ══════════════════════════════════════════════════
+function renderSettings() {
+  document.getElementById('days-val').textContent = settings.daysPerCatechism;
+  document.getElementById('start-date-input').value = settings.startDate;
+  document.getElementById('start-q-val').textContent = settings.startFromQ;
+  document.getElementById('default-read-toggle').checked = settings.defaultMode === 'read';
+  document.getElementById('show-scripture-toggle').checked = settings.scriptureOpen;
+
+  // Completion estimate
+  const regular = regularCatechisms();
+  const remaining = regular.length - todaysCatechismIndex();
+  const daysLeft = remaining * settings.daysPerCatechism;
+  const endDate = new Date(todayKey + 'T12:00:00');
+  endDate.setDate(endDate.getDate() + daysLeft);
+  const endStr = endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  document.getElementById('completion-estimate').textContent =
+    `At ${settings.daysPerCatechism} day${settings.daysPerCatechism > 1 ? 's' : ''} each, you'll finish all ${regular.length} catechisms around ${endStr}.`;
+
+  document.getElementById('settings-info').textContent =
+    `Currently on Question ${todaysCatechism()?.number ?? '?'} · Day ${dayOfCycle()} of ${settings.daysPerCatechism}`;
+
+  // Notifications
+  renderNotifStatus();
+}
+
+function changeDays(delta) {
+  settings.daysPerCatechism = Math.max(1, Math.min(30, settings.daysPerCatechism + delta));
+  saveSettings();
+  renderSettings();
+}
+
+function changeStartQ(delta) {
+  const regular = regularCatechisms();
+  settings.startFromQ = Math.max(1, Math.min(regular.length, settings.startFromQ + delta));
+  saveSettings();
+  renderSettings();
+}
+
+function saveStartDate() {
+  const val = document.getElementById('start-date-input').value;
+  if (val) {
+    settings.startDate = val;
+    saveSettings();
+    renderSettings();
+    renderToday(todaysCatechism());
+  }
+}
+
+function saveDefaultMode() {
+  settings.defaultMode = document.getElementById('default-read-toggle').checked ? 'read' : 'quiz';
+  saveSettings();
+}
+
+function saveScriptureDefault() {
+  settings.scriptureOpen = document.getElementById('show-scripture-toggle').checked;
+  saveSettings();
+}
+
+function resetProgress() {
+  if (!confirm('Reset all review history? Your settings will be kept.')) return;
+  settings.reviewedDates = {};
+  saveSettings();
+  renderSettings();
+  if (currentScreen === 'today') updateMarkBtn();
+}
+
+function resetAll() {
+  if (!confirm('Reset EVERYTHING including settings and start date?')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+// ══════════════════════════════════════════════════
+//  NOTIFICATIONS
+// ══════════════════════════════════════════════════
+
+function notifSupported() {
+  return 'Notification' in window && 'serviceWorker' in navigator;
+}
+
+function notifPermission() {
+  if (!notifSupported()) return 'unsupported';
+  return Notification.permission; // 'default' | 'granted' | 'denied'
+}
+
+function renderNotifStatus() {
+  const pill     = document.getElementById('notif-status-pill');
+  const pillText = document.getElementById('notif-status-text');
+  const toggle   = document.getElementById('notif-toggle');
+  const timeRow  = document.getElementById('notif-time-row');
+  const infoRow  = document.getElementById('notif-info-row');
+  const infoText = document.getElementById('notif-info-text');
+  const timeInput = document.getElementById('notif-time-input');
+
+  timeInput.value = settings.notifTime || '07:00';
+
+  if (!notifSupported()) {
+    pill.className = 'notif-status blocked';
+    pillText.textContent = 'Not supported';
+    toggle.disabled = true;
+    toggle.checked = false;
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'Notifications are not supported in this browser. Try installing the app to your home screen first.';
+    return;
+  }
+
+  const perm = notifPermission();
+
+  if (perm === 'denied') {
+    pill.className = 'notif-status blocked';
+    pillText.textContent = 'Blocked';
+    toggle.disabled = true;
+    toggle.checked = false;
+    timeRow.style.display = 'none';
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'Notifications are blocked. To enable them, go to your browser or phone Settings → Notifications and allow this site.';
+    return;
+  }
+
+  if (settings.notifEnabled && perm === 'granted') {
+    pill.className = 'notif-status on';
+    pillText.textContent = 'On · ' + formatNotifTime(settings.notifTime);
+    toggle.checked = true;
+    toggle.disabled = false;
+    timeRow.style.display = 'flex';
+    infoRow.style.display = 'flex';
+    infoText.textContent = 'Best-effort reminder around ' + formatNotifTime(settings.notifTime) + '. It fires when the app is open or recently active — phones may delay or drop background reminders, especially on iPhone.';
+    return;
+  }
+
+  // Off / default
+  pill.className = 'notif-status off';
+  pillText.textContent = 'Off';
+  toggle.checked = false;
+  toggle.disabled = false;
+  timeRow.style.display = 'none';
+  infoRow.style.display = 'none';
+}
+
+function formatNotifTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, '0')} ${ampm}`;
+}
+
+async function toggleNotifications() {
+  const toggle = document.getElementById('notif-toggle');
+
+  if (!toggle.checked) {
+    // Turning off
+    settings.notifEnabled = false;
+    saveSettings();
+    cancelScheduledNotification();
+    renderNotifStatus();
+    return;
+  }
+
+  // Turning on — request permission if needed
+  if (Notification.permission === 'default') {
+    const result = await Notification.requestPermission();
+    if (result !== 'granted') {
+      toggle.checked = false;
+      renderNotifStatus();
+      return;
+    }
+  }
+
+  if (Notification.permission === 'granted') {
+    settings.notifEnabled = true;
+    saveSettings();
+    scheduleNotification();
+    renderNotifStatus();
+  } else {
+    toggle.checked = false;
+    renderNotifStatus();
+  }
+}
+
+function saveNotifTime() {
+  settings.notifTime = document.getElementById('notif-time-input').value;
+  saveSettings();
+  if (settings.notifEnabled) scheduleNotification();
+  renderNotifStatus();
+}
+
+// Store the scheduled timeout ID
+let notifTimeoutId = null;
+
+function scheduleNotification() {
+  // Cancel any existing scheduled notification
+  cancelScheduledNotification();
+
+  if (!settings.notifEnabled || Notification.permission !== 'granted') return;
+
+  const now = new Date();
+  const [targetH, targetM] = (settings.notifTime || '07:00').split(':').map(Number);
+
+  // Build target time for today
+  const target = new Date(now);
+  target.setHours(targetH, targetM, 0, 0);
+
+  // If target time already passed today, schedule for tomorrow
+  if (target <= now) {
+    target.setDate(target.getDate() + 1);
+  }
+
+  const msUntilNotif = target - now;
+
+  notifTimeoutId = setTimeout(async () => {
+    await fireNotification();
+    scheduleNotification();
+  }, msUntilNotif);
+}
+
+function cancelScheduledNotification() {
+  if (notifTimeoutId !== null) {
+    clearTimeout(notifTimeoutId);
+    notifTimeoutId = null;
+  }
+}
+
+async function fireNotification() {
+  if (Notification.permission !== 'granted') return;
+
+  const cat = todaysCatechism();
+  const qNum = cat ? `Question ${cat.number}` : 'Daily Catechism';
+  const qText = cat ? cat.question : 'Time for your daily catechism review.';
+
+  // Prefer service worker showNotification (works when app is backgrounded)
+  if ('serviceWorker' in navigator) {
+    const reg = await navigator.serviceWorker.ready;
+    await reg.showNotification('📖 ' + qNum, {
+      body: qText,
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      tag: 'daily-catechism',       // replaces previous notification
+      renotify: true,
+      data: { url: location.href }
+    });
+  } else {
+    // Fallback to basic Notification API
+    new Notification('📖 ' + qNum, { body: qText });
+  }
+}
+
+
+function refreshOnResume() {
+  if (!catechisms.length) return;
+
+  const newKey = localDateKey(new Date());
+  if (newKey !== todayKey) {
+    todayKey = newKey;
+    viewingOverride = null;
+    renderToday(todaysCatechism());
+  }
+  if (settings.notifEnabled && notifPermission() === 'granted') {
+    scheduleNotification();
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) refreshOnResume();
+});
+window.addEventListener('pageshow', refreshOnResume);
+
+
+// ══════════════════════════════════════════════════
+//  INSTALL PROMPT
+// ══════════════════════════════════════════════════
+let deferredInstallPrompt = null;
+
+function isInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+}
+
+function isIOS() {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent)
+      && !/crios/i.test(navigator.userAgent);  // exclude Chrome on iOS
+}
+
+function setupInstallBanner() {
+  // Never show if already installed
+  if (isInstalled()) return;
+  // Never show if user dismissed this session
+  if (sessionStorage.getItem('install-dismissed')) return;
+
+  if (isIOS()) {
+    document.getElementById('install-btn').textContent = 'How to install';
+    document.getElementById('install-banner').classList.add('visible');
+  }
+  // Android: banner shown when beforeinstallprompt fires (see event listener below)
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if (!isInstalled() && !sessionStorage.getItem('install-dismissed')) {
+    document.getElementById('install-banner').classList.add('visible');
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  closeInstallBanner();
+  deferredInstallPrompt = null;
+});
+
+async function triggerInstall() {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  if (outcome === 'accepted') closeInstallBanner();
+  deferredInstallPrompt = null;
+}
+
+function dismissInstall() {
+  sessionStorage.setItem('install-dismissed', '1');
+  closeInstallBanner();
+}
+
+function closeInstallBanner() {
+  document.getElementById('install-banner').classList.remove('visible');
+}
+
+function openIosSheet() {
+  document.getElementById('ios-sheet').classList.add('visible');
+}
+
+function closeIosSheet() {
+  document.getElementById('ios-sheet').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════════
+//  Event wiring
+// ══════════════════════════════════════════════════
+function wireEvents() {
+  document.querySelectorAll('nav button[data-screen]').forEach(b =>
+    b.addEventListener('click', () => showScreen(b.dataset.screen)));
+
+  document.getElementById('install-btn').addEventListener('click', () => {
+    if (isIOS()) {
+      closeInstallBanner();
+      openIosSheet();
+    } else {
+      triggerInstall();
+    }
+  });
+  document.getElementById('dismiss-install').addEventListener('click', dismissInstall);
+
+  document.getElementById('ios-sheet').addEventListener('click', closeIosSheet);
+  document.querySelector('#ios-sheet .ios-sheet-inner')
+    .addEventListener('click', e => e.stopPropagation());
+  document.getElementById('ios-close').addEventListener('click', closeIosSheet);
+
+  document.getElementById('mode-quiz').addEventListener('click', () => setMode('quiz'));
+  document.getElementById('mode-read').addEventListener('click', () => setMode('read'));
+
+  document.getElementById('answer-tap').addEventListener('click', toggleAnswer);
+  document.getElementById('scripture-toggle').addEventListener('click', toggleScriptures);
+  document.getElementById('mark-btn').addEventListener('click', toggleReviewed);
+  document.getElementById('thanksgiving-banner').addEventListener('click', openThanksgiving);
+  document.getElementById('back-to-today-btn').addEventListener('click', backToToday);
+
+  document.getElementById('days-minus').addEventListener('click', () => changeDays(-1));
+  document.getElementById('days-plus').addEventListener('click', () => changeDays(1));
+  document.getElementById('startq-minus').addEventListener('click', () => changeStartQ(-1));
+  document.getElementById('startq-plus').addEventListener('click', () => changeStartQ(1));
+
+  document.getElementById('start-date-input').addEventListener('change', saveStartDate);
+  document.getElementById('default-read-toggle').addEventListener('change', saveDefaultMode);
+  document.getElementById('show-scripture-toggle').addEventListener('change', saveScriptureDefault);
+  document.getElementById('notif-toggle').addEventListener('change', toggleNotifications);
+  document.getElementById('notif-time-input').addEventListener('change', saveNotifTime);
+
+  document.getElementById('reset-progress').addEventListener('click', resetProgress);
+  document.getElementById('reset-all').addEventListener('click', resetAll);
+}
+
+// ══════════════════════════════════════════════════
+//  Boot
+// ══════════════════════════════════════════════════
+async function boot() {
+  loadSettings();
+  wireEvents();
+
+  const ok = await loadData();
+
+  if (!ok || catechisms.length === 0) {
+    document.getElementById('today-loading').style.display = 'none';
+    document.getElementById('today-error').style.display   = 'flex';
+    return;
+  }
+
+  renderToday(todaysCatechism());
+  setupInstallBanner();
+
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // Re-schedule notification if it was previously enabled
+  if (settings.notifEnabled && Notification.permission === 'granted') {
+    scheduleNotification();
+  }
+}
+
+boot();
+</script>
+</body>
+</html>

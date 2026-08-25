@@ -1,0 +1,37 @@
+{
+  "name": "Treeology Daily",
+  "short_name": "Treeology Daily",
+  "description": "Daily catechism review from Mount Calvary Baptist",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#152a18",
+  "theme_color": "#152a18",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

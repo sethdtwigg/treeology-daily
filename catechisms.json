@@ -1,0 +1,1986 @@
+{
+  "total": 92,
+  "catechisms": [
+    {
+      "number": 1,
+      "question": "What is the chief end of man?",
+      "answer": "The chief end of man is to glorify God and to enjoy Him forever.",
+      "scriptures": [
+        {
+          "reference": "Rom. 11:36",
+          "translation": "NASB",
+          "text": "For from Him [as their origin] and through Him [as their effectual means] and to Him [as their ultimate end] are all things. To Him be the glory forever. Amen"
+        },
+        {
+          "reference": "I Cor. 10:31",
+          "translation": "KJV",
+          "text": "Whether therefore ye eat, or drink, or whatsoever ye do, do all to the glory of God"
+        },
+        {
+          "reference": "Ps. 73:25-26",
+          "translation": "NASB",
+          "text": "Whom have I in heaven but You? And besides You, I desire nothing on earth. My flesh and my heart fail, but God is the strength of my heart and my portion forever"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 1)"
+    },
+    {
+      "number": 2,
+      "question": "What must I do in order to glorify God and to enjoy Him forever?",
+      "answer": "In order to glorify God and to enjoy Him forever, I must know and worship Him in spirit and in truth.",
+      "scriptures": [
+        {
+          "reference": "I Chron. 28:9",
+          "translation": "NASB",
+          "text": "know the God of your father, and serve [or, worship] Him with a whole heart and a willing mind . . ."
+        },
+        {
+          "reference": "Prov. 3:6",
+          "translation": "NASB",
+          "text": "In all your ways acknowledge [know] Him . . ."
+        },
+        {
+          "reference": "John 4:23",
+          "translation": "NASB",
+          "text": "the true worshipers will worship the Father in spirit [my innermost being] and truth [His revealed will]; for such people the Father seeks to worship Him"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 3,
+      "question": "How can I know about God?",
+      "answer": "I can know about God by His creation, preservation, and government of the universe; which are before my eyes as a most elegant book, wherein all creatures, great and small, are as so many characters leading us to contemplate “the invisible things of God. ”",
+      "scriptures": [
+        {
+          "reference": "Ps. 19:1-2",
+          "translation": "NASB",
+          "text": "By His creation: The heavens are telling the glory of God; and their expanse is declaring the works of His hands. Day to day pours forth speech, and night to night reveals knowledge"
+        },
+        {
+          "reference": "Ps. 145:15-16",
+          "translation": "NASB",
+          "text": "By His preservation: The eyes of all look to You, and You give them their food in due time. You open Your hand and satisfy the desire of every living thing"
+        },
+        {
+          "reference": "Ps. 107:43",
+          "translation": "NASB",
+          "text": "By His government: Who is wise? Let him give heed to these things [see Psalm 107:1-42], and consider the lovinkindnesses of the LORD"
+        }
+      ],
+      "attribution": "(Belgic Confession, Article 2, quoting Rom. 1:20)"
+    },
+    {
+      "number": 4,
+      "question": "How can I know about God most completely?",
+      "answer": "I can know about God most completely by the holy scriptures.",
+      "scriptures": [
+        {
+          "reference": "Ex. 33:20; 34:6-7",
+          "translation": "NASB",
+          "text": "But He said, “You cannot see My face, for no man can see Me and live!” . . . Then the LORD passed by in front of him and proclaimed. . . ”"
+        },
+        {
+          "reference": "Ps. 119:2",
+          "translation": "NASB",
+          "text": "How blessed are those who observe His testimonies, who seek Him with all their heart"
+        },
+        {
+          "reference": "John 5:39",
+          "translation": "KJV",
+          "text": "[Observing His testimonies is to seek and find Him.] Search the scriptures . . . they are they which testify of me"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 5,
+      "question": "What are the holy scriptures?",
+      "answer": "The holy scriptures are the inerrant Word of God, the Old and New Testaments, the only rule of my faith and obedience, the only rule to direct me how I may glorify God and enjoy Him forever.",
+      "scriptures": [
+        {
+          "reference": "Rom. 1:1b-2",
+          "translation": "NASB",
+          "text": "the gospel of God, which He promised beforehand through His prophets in the holy Scriptures"
+        },
+        {
+          "reference": "Matt. 26:56",
+          "translation": "NASB",
+          "text": "the Scriptures of the prophets . . ."
+        },
+        {
+          "reference": "II Pet. 3:15-16",
+          "translation": "NASB",
+          "text": "Paul, according to the wisdom given him, wrote to you, as also in all his letters, . . . which the untaught and unstable distort, as they do also the rest of the Scriptures"
+        },
+        {
+          "reference": "II Tim. 3:16-17",
+          "translation": "KJV",
+          "text": "All Scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness: That the man of God may be perfect, thoroughly furnished unto all good works"
+        }
+      ],
+      "attribution": "(Adapted from Westminster Shorter Catechism, Q. 2)"
+    },
+    {
+      "number": 6,
+      "question": "How do we know that the holy scriptures are inerrant?",
+      "answer": "We know that the holy scriptures are inerrant because they claim to be, and because the Spirit of God bears witness with them in our hearts.",
+      "scriptures": [
+        {
+          "reference": "Matt. 5:18",
+          "translation": "NASB",
+          "text": "For truly I say to you, until heaven and earth pass away, not the smallest letter or stroke shall pass from the Law until all is accomplished"
+        },
+        {
+          "reference": "John 10:35",
+          "translation": "NASB",
+          "text": "the Scripture cannot be broken [by being proved false]"
+        },
+        {
+          "reference": "I Cor. 2:12",
+          "translation": "NASB",
+          "text": "Now we have received, not the spirit of the world, but the Spirit who is from God, so that we may know the things freely given to us by God"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 7,
+      "question": "How did God give us the holy scriptures?",
+      "answer": "God gave us the holy scriptures as “men moved by the Holy Spirit spoke from God.”",
+      "scriptures": [
+        {
+          "reference": "II Tim. 3:16",
+          "translation": "KJV",
+          "text": "All scripture is given by inspiration of God . . ."
+        },
+        {
+          "reference": "II Pet. 1:20-21",
+          "translation": "NASB",
+          "text": "But know this first of all, that no prophecy of Scripture is [came into being] a matter of one’s own interpretation, for no prophecy was ever made by an act of human will, but men moved by the Holy Spirit spoke from God"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 8,
+      "question": "How are we to interpret the holy scriptures?",
+      "answer": "We are to interpret the holy scriptures by the infallible scriptures themselves; and therefore, when there is a question about the true and full sense of any Scripture (which is not manifold, but one), it must be searched and known by other places that speak more clearly.",
+      "scriptures": [
+        {
+          "reference": "Acts 15:15",
+          "translation": "NASB",
+          "text": "Simeon has related . . . With this the words of the Prophets agree, just as it is written. . ."
+        },
+        {
+          "reference": "I Cor. 2:13",
+          "translation": "NASB",
+          "text": "Which things we also speak, not in words taught by human wisdom, but in those taught by the Spirit, combining spiritual thoughts with spiritual words"
+        }
+      ],
+      "attribution": "(Westminster Confession of Faith, I. 9)"
+    },
+    {
+      "number": 9,
+      "question": "According to the holy scriptures, what is the only way for me to know and worship God in spirit and in truth?",
+      "answer": "According to the holy scriptures, the only way for me to know and worship God in spirit and in truth is through Jesus Christ, His only begotten Son.",
+      "scriptures": [
+        {
+          "reference": "John 1:18",
+          "translation": "KJV",
+          "text": "No man hath seen God at any time: the only begotten Son, which is in the bosom of the Father, he hath declared [exegeted] him"
+        },
+        {
+          "reference": "I John 5:20",
+          "translation": "NASB",
+          "text": "And we know that the Son of God has come, and has given us understanding so that we may know Him who is true. . ."
+        },
+        {
+          "reference": "John 14:6",
+          "translation": "KJV",
+          "text": "Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 10,
+      "question": "According to the holy scriptures, who is God?",
+      "answer": "According to the holy scriptures, God is, “I AM WHO I AM,” “the LORD,” “the LORD God.”",
+      "scriptures": [
+        {
+          "reference": "Exod. 3:13-14",
+          "translation": "NASB",
+          "text": "Then Moses said to God . . . “Now they may say to me, ‘What is His name?’ What shall I say to them?” God said to Moses, “I AM WHO I AM. . . ”"
+        },
+        {
+          "reference": "Exod. 3:15. Also see Isaiah 42:8.",
+          "translation": "NASB",
+          "text": "God, furthermore, said to Moses, “Thus you shall say to the sons of Israel, ‘The LORD, the God of your fathers, the God of Abraham, the God of Isaac, and the God of Jacob, has sent me to you. ’ This is My name forever, and this is My memorial-name to all generations"
+        },
+        {
+          "reference": "Gen. 2:4",
+          "translation": "KJV",
+          "text": "The LORD God made the earth and the heavens"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 11,
+      "question": "According to the holy scriptures, what is God?",
+      "answer": "According to the holy scriptures, God is a Spirit, infinite, eternal, and unchangeable, in His being, wisdom, power, holiness, justice, goodness, and truth.",
+      "scriptures": [
+        {
+          "reference": "John 4:24",
+          "translation": "NASB",
+          "text": "God is spirit [or, Spirit] . . ."
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 4)"
+    },
+    {
+      "number": 12,
+      "question": "How many Gods are there?",
+      "answer": "We all believe with the heart, and confess with the mouth, that there is only one living and true God. And we detest the multitude of gods, because it is expressly written, “The LORD our God is one LORD” (KJV; Deut. 6:4), and, “There is no other God besides Me” (NASB; Is. 45:21).",
+      "scriptures": [
+        {
+          "reference": "Deut. 6:4",
+          "translation": "KJV",
+          "text": "The LORD our God is one LORD"
+        },
+        {
+          "reference": "Is. 43:10-11",
+          "translation": "NASB",
+          "text": "“You are My witnesses, ” declares the LORD, “And My servant whom I have chosen, so that you may know and believe Me and understand that I am He. Before Me there was no God formed, and there will be none after Me. I, even I, am the LORD, and there is no savior besides Me”"
+        },
+        {
+          "reference": "Is. 45:22-23",
+          "translation": "NASB",
+          "text": "“Turn to Me and be saved, all the ends of the earth; For I am God, and there is no other. I have sworn by Myself, the word has gone forth from My mouth in righteousness and will not turn back, that to Me every knee will bow, every tongue will swear allegiance”"
+        }
+      ],
+      "attribution": "(Belgic Confession (1561) Article 1; Second Helvetic Confession III. 2. (1566))"
+    },
+    {
+      "number": 13,
+      "question": "How do we know that God exists in three persons?",
+      "answer": "We know that God exists in three persons because they are distinguished in Scripture by their personal relations with one another and by their distinctive works. Question: What are two of the distinctive works of each of the persons of the Godhead?",
+      "scriptures": [
+        {
+          "reference": "Matt. 28:19",
+          "translation": "NASB",
+          "text": "baptizing them in the name of the Father and the Son and the Holy Spirit"
+        },
+        {
+          "reference": "Gal. 4:4-6; compare Rom. 8:15",
+          "translation": "NASB",
+          "text": "God sent forth His Son, born of a woman, born under the Law, so that He might redeem those who were under the Law, that we might receive the adoption as sons. Because you are sons, God has sent forth the Spirit of His Son into our hearts, crying, “Abba! Father!”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 14,
+      "question": "Who is God the Father?",
+      "answer": "God the Father is the eternal Father of our Lord Jesus Christ, Who so loved the world that He gave His only begotten Son, that by faith we might become His little children (1 John 2:1, 12; 3:18) and He our heavenly Father.",
+      "scriptures": [
+        {
+          "reference": "II Cor. 1:3",
+          "translation": "NASB",
+          "text": "Blessed be the God and Father of our Lord Jesus Christ, the Father of mercies and God of all comfort"
+        },
+        {
+          "reference": "1 John 4:14",
+          "translation": "NASB",
+          "text": "We have seen and testify that the Father has sent the Son to be the Savior of the World"
+        },
+        {
+          "reference": "John 3:16",
+          "translation": "KJV",
+          "text": "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life"
+        },
+        {
+          "reference": "John 1:12",
+          "translation": "NASB",
+          "text": "But as many as received Him, to them He gave the right to become children of God, even to those who believe in His name"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 15,
+      "question": "Who is God the Son?",
+      "answer": "God the Son is “the only begotten from the Father,” “the radiance of His glory and the exact representation of His nature,” Who, being the eternal Son of God, became man, and so was, and continues to be, God and man in two distinct natures, and one person, forever.",
+      "scriptures": [
+        {
+          "reference": "John 1:14",
+          "translation": "NASB",
+          "text": "and we saw His glory, glory as of the only begotten from the Father, full of grace and truth"
+        },
+        {
+          "reference": "Heb. 1:3",
+          "translation": "NASB",
+          "text": "And He is the radiance of His glory and the exact representation of His nature . . ."
+        },
+        {
+          "reference": "John 1:14",
+          "translation": "NASB",
+          "text": "And the Word became flesh, and dwelt among us . . ."
+        },
+        {
+          "reference": "Rom. 9:5",
+          "translation": "NASB",
+          "text": "Christ according to the flesh, who is over all, God blessed forever. Amen"
+        },
+        {
+          "reference": "Col. 2:9",
+          "translation": "NASB",
+          "text": "For in Him all the fullness of Deity dwells in bodily form"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 21)"
+    },
+    {
+      "number": 16,
+      "question": "Who is God the Holy Spirit?",
+      "answer": "God the Holy Spirit is the eternal Spirit proceeding from the Father, sent by the Father and the Son, but of one and the same essence, majesty and glory with both; and given me, to make me by a true faith, partaker of Christ and all His benefits, that He may comfort me and abide with me forever.",
+      "scriptures": [
+        {
+          "reference": "Heb. 9:14",
+          "translation": "NASB",
+          "text": "How much more will the blood of Christ, who through the eternal Spirit offered Himself without blemish to God, cleanse your conscience from dead works to serve the living God"
+        },
+        {
+          "reference": "John 15:26",
+          "translation": "NASB",
+          "text": "? When the Helper comes, whom I will send to you from the Father [see John 14:26], that is the Spirit of truth who proceeds from the Father, He will testify about Me"
+        },
+        {
+          "reference": "Matt. 28:19",
+          "translation": "NASB",
+          "text": "baptizing them in the name of the Father and the Son and the Holy Spirit"
+        }
+      ],
+      "attribution": "(Belgic Confession (1561), Article 11; Heidelberg Catechism (1563), Q. 53)"
+    },
+    {
+      "number": 17,
+      "question": "In what sense are the three persons of the Godhead one?",
+      "answer": "The three persons of the Godhead are one in that they are a single, eternal, indivisible Being, the same in substance, equal in power and glory.",
+      "scriptures": [
+        {
+          "reference": "Matt. 28:19",
+          "translation": "NASB",
+          "text": "baptizing them in the name of the Father and the Son and the Holy Spirit"
+        },
+        {
+          "reference": "John 10:30",
+          "translation": "NASB",
+          "text": "I and the Father are one"
+        },
+        {
+          "reference": "II Cor. 13:14",
+          "translation": "NASB",
+          "text": "But Peter said, “Ananias, why has Satan filled your heart to lie to the Holy Spirit? . . . You have not lied to men but to God” (Acts 5:3a, 4b). The grace of the Lord Jesus Christ, and the love of God, and the fellowship of the Holy Spirit, be with you all"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism (1647), Q. 6)"
+    },
+    {
+      "number": 18,
+      "question": "How is God related to all other things?",
+      "answer": "God is related to all other things as their Creator, Sustainer, and Sovereign. He does by them, for them, or upon them whatever He pleases, and in doing so He is most holy in all his counsels, in all His works, and in all His commands.",
+      "scriptures": [
+        {
+          "reference": "Rev. 4:11",
+          "translation": "NASB",
+          "text": "Worthy are you, our Lord and our God, to receive glory and honor and power; for You created all things, and because of Your will they existed and were created"
+        },
+        {
+          "reference": "Col. 1:17; cf. Heb. 1:3",
+          "translation": "NASB",
+          "text": "He [God’s Son] is before all things, and in Him all things hold together"
+        },
+        {
+          "reference": "I Tim. 6:15",
+          "translation": "NASB",
+          "text": "He who is the blessed and only Sovereign, the King of kings and Lord of lords"
+        },
+        {
+          "reference": "Dan. 4:35",
+          "translation": "NASB",
+          "text": "He does according to His will in the host of heaven and among the inhabitants of earth; and no one can ward off His hand or say to Him, “What have you done?”"
+        }
+      ],
+      "attribution": "(Westminster Confession of Faith (1647), II. 2)"
+    },
+    {
+      "number": 19,
+      "question": "What is God’s work of creation?",
+      "answer": "God’s work of creation is His making all things of nothing, by the word of His power, in the space of six [literal] days, and all very good.",
+      "scriptures": [
+        {
+          "reference": "Gen. 1:2",
+          "translation": "NASB",
+          "text": "In the beginning, God created the heavens and the earth"
+        },
+        {
+          "reference": "Rom. 4:17",
+          "translation": "NASB",
+          "text": "God, who gives life to the dead and calls into being that which does not exist"
+        },
+        {
+          "reference": "Heb. 11:3",
+          "translation": "NASB",
+          "text": "By faith we understand that the worlds [ages] were prepared by the word of God, so that what is seen was not made out of things which are visible"
+        },
+        {
+          "reference": "Ex. 20:11",
+          "translation": "NASB",
+          "text": "For in six days the LORD made the heavens and the earth, the sea and all that is in them. . ."
+        },
+        {
+          "reference": "Gen. 1:31-2:1",
+          "translation": "NASB",
+          "text": "God saw all that He had made, and behold, it was very good. And there was evening and there was morning, the sixth day. Thus the heavens and the earth were completed, and all their hosts"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism, Q. 9, with editing)"
+    },
+    {
+      "number": 20,
+      "question": "How did God create man?",
+      "answer": "God created man male and female, after His own image, in knowledge, righteousness, and holiness, with dominion over the creatures.",
+      "scriptures": [
+        {
+          "reference": "Gen. 1:26-28",
+          "translation": "NASB",
+          "text": "Then God said, “Let Us make man in Our image, according to Our likeness; and let them rule over the fish of the sea and over the birds of the sky and over the cattle and over all the earth, and over every creeping thing that creeps on the earth. God created man in His own image, in the image of God He created Him; male and female He created them. God blessed them; and God said to them, “Be fruitful and multiply, and fill the earth, and subdue it; and rule over the fish of the sea and over the birds of the sky and over every living thing that moves on the earth”"
+        },
+        {
+          "reference": "Col. 3:10",
+          "translation": "NASB",
+          "text": "and have put on the new self who is being renewed to a true knowledge according to the image of the One who created him"
+        },
+        {
+          "reference": "Eph. 4:24",
+          "translation": "NASB",
+          "text": "and put on the new self, which in the likeness of God has been created in righteousness and holiness of the truth"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism, Q. 10)"
+    },
+    {
+      "number": 21,
+      "question": "What is marriage of God’s making?",
+      "answer": "Marriage of God’s making is the joining by covenant of one male and one female to become one flesh until parted by death. Note: Male and female are the two genders created by God and multiplied naturally by their sexual union. Male and female He created them. God blessed them; and God said to them, “Be fruitful and multiply” (Gen. 1:27b-28a).",
+      "scriptures": [
+        {
+          "reference": "Gen. 2:22-24",
+          "translation": "NASB",
+          "text": "The LORD God fashioned into a woman the rib which He had taken from the man, and brought her to the man. The man said, “This is now bone of my bones, and flesh of my flesh; she shall be called Woman, because she was taken out of Man. ” For this reason a man shall leave his father and his mother, and be joined to his wife; and they shall become one flesh"
+        },
+        {
+          "reference": "Mal. 2:14",
+          "translation": "NASB",
+          "text": "she is your companion and your wife by covenant"
+        },
+        {
+          "reference": "Matt. 19:6",
+          "translation": "NASB",
+          "text": "So they are no longer two, but one flesh. What therefore God has joined together, let no man separate"
+        },
+        {
+          "reference": "Rom. 7:2",
+          "translation": "NASB",
+          "text": "For the married woman is bound by law to her husband while he is living; but if her husband dies, she is released from the law concerning the husband"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 22,
+      "question": "What is the cause of the death and depravity of man, made in God’s image?",
+      "answer": "The cause of the death and depravity of man made in God’s image, is the fall and disobedience of our first parents, Adam and Eve, so that our nature became so corrupt that we are all conceived and born in sin.",
+      "scriptures": [
+        {
+          "reference": "Gen. 3:6",
+          "translation": "NASB",
+          "text": "When the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was desirable to make one wise, she took from its fruit and ate; and she gave also to her husband with her, and he ate"
+        },
+        {
+          "reference": "Rom. 5:12",
+          "translation": "NASB",
+          "text": "through one man sin entered into the world, and death through sin, and so death spread to all men, because all sinned"
+        }
+      ],
+      "attribution": "(Adapted from the Heidelberg Catechism, Q. 7)"
+    },
+    {
+      "number": 23,
+      "question": "What is the state of sin into which we are all conceived and born?",
+      "answer": "The state of sin into which we are all conceived and born consists in the guilt of Adam’s first sin, the lack of original righteousness, the corruption of our whole nature (commonly called original sin), and all the actual transgressions which proceed from it.",
+      "scriptures": [
+        {
+          "reference": "Rom. 5:19",
+          "translation": "NASB",
+          "text": "Through the one man’s disobedience the many were made sinners"
+        },
+        {
+          "reference": "Rom. 3:10",
+          "translation": "NASB",
+          "text": "THERE IS NONE RIGHTEOUS, NOT EVEN ONE"
+        },
+        {
+          "reference": "Eph. 2:1-3",
+          "translation": "NASB",
+          "text": "Also see Romans 3:10-19. And you were dead in your trespasses and sins, in which you formerly walked according to the course of this world, according to the prince of the power of the air, of the spirit that is now working in the sons of disobedience. Among them we too all formerly lived in the lusts of our flesh, indulging the desires of the flesh and of the mind, and were by nature children of wrath, even as the rest"
+        }
+      ],
+      "attribution": "(Adapted from the Westminster Shorter Catechism, Q. 18)"
+    },
+    {
+      "number": 24,
+      "question": "What is the state of misery into which we are all conceived and born?",
+      "answer": "The state of misery into which we are all conceived and born consists in lost communion with God, life under His wrath and curse, and liability to all miseries in this life, death itself, and the pains of hell forever.",
+      "scriptures": [
+        {
+          "reference": "Eph. 4:18",
+          "translation": "NASB",
+          "text": "darkened in their understanding, excluded from the life of God because of the ignorance that is in them, because of the hardness of their heart"
+        },
+        {
+          "reference": "Eph. 2:3",
+          "translation": "NASB",
+          "text": "by nature children of wrath"
+        },
+        {
+          "reference": "Gal. 3:10",
+          "translation": "NASB",
+          "text": "CURSED IS EVERYONE WHO DOES NOT ABIDE BY ALL THINGS WRITTEN IN THE BOOK OF THE LAW, TO PERFORM THEM"
+        },
+        {
+          "reference": "Rom. 6:23",
+          "translation": "NASB",
+          "text": "The wages of sin is death"
+        },
+        {
+          "reference": "Rev. 20:14b-15",
+          "translation": "NASB",
+          "text": "This is the second death, the lake of fire. And if anyone’s name was not found written in the book of life, he was thrown into the lake of fire"
+        }
+      ],
+      "attribution": "(Adapted from the Westminster Shorter Catechism, Q. 19)"
+    },
+    {
+      "number": 25,
+      "question": "How did the Fall of man made in God’s image affect the rest of earthly creation?",
+      "answer": "The Fall of man made in God’s image affected the rest of earthly creation by subjecting it to God’s curse of futility and slavery to corruption. Futility refers to creation’s inability to fulfill entirely that for which it was created. Animal and vegetable life needed man for their perfecting, even before the Fall (Gen. 1:26; 2:15). But after it, We may think of the whole magnificent theatre of the universe together with all its splendid properties and all the chorus of sub-human life, created to glorify God but unable to do so fully, so long as man the chief actor in the drama of God’s praise fails to contribute his rational part (C. E. B. Cranfield, The Epistle to the Romans).",
+      "scriptures": [
+        {
+          "reference": "Gen. 3:17, 18",
+          "translation": "NASB",
+          "text": "Then to Adam He said . . . “Cursed is the ground because of you . . . . Both thorns and thistles it shall grow for you”"
+        },
+        {
+          "reference": "Rom. 8:20-22",
+          "translation": "NASB",
+          "text": "For the creation was subjected to futility, not willingly, but because of Him who subjected it, in hope that the creation itself also will be set free from its slavery to corruption into the freedom of the glory of the children of God. For we know that the whole creation groans and suffers the pains of childbirth together until now"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 26,
+      "question": "How does all mankind continue to be related to God after the Fall?",
+      "answer": "After the Fall, all mankind continues to be subject to God’s providence and to owe to Him whatever He is pleased to require.",
+      "scriptures": [
+        {
+          "reference": "Dan. 4:35",
+          "translation": "NASB",
+          "text": "All the inhabitants of the earth are accounted as nothing. But He does according to His will in the host of heaven and among the inhabitants of earth; and no one can ward off His hand or say to Him, “What have you done?”"
+        },
+        {
+          "reference": "Jam. 4:15",
+          "translation": "NASB",
+          "text": "See Romans 2:15 combined with I Timothy 1:8-11. Instead, you ought to say, “If the Lord wills, we will live and also do this or that”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 27,
+      "question": "What is God’s providence?",
+      "answer": "God’s providence is His most holy, wise, and powerful preserving and governing of all His creatures and all their actions, to His own glory.",
+      "scriptures": [
+        {
+          "reference": "Ps. 103:19",
+          "translation": "NASB",
+          "text": "The LORD has established His throne in the heavens, and His sovereignty rules over all"
+        },
+        {
+          "reference": "Ps. 135:6",
+          "translation": "NASB",
+          "text": "Whatever the LORD pleases, He does, in heaven and in earth, in the seas and in all deeps"
+        },
+        {
+          "reference": "Matt. 10:29-30",
+          "translation": "NASB",
+          "text": "Are not two sparrows sold for a cent? And yet not one of them will fall to the ground apart from your Father. But the very hairs of your head are all numbered"
+        },
+        {
+          "reference": "Rom. 11:36",
+          "translation": "NASB",
+          "text": "For from Him and through Him and to Him are all things. To Him be the glory forever. Amen"
+        }
+      ],
+      "attribution": "(Adapted from the Westminster Shorter and Larger catechisms, Qs. 11, 18) Providence. Think of the word, provide . Providence concerns all that God provides for His creatures; their circumstances, sustenance, preservation, government, abilities, successes, failures, usefulness, etc."
+    },
+    {
+      "number": 28,
+      "question": "What is the benefit of our knowing about God’s providence?",
+      "answer": "The benefit of our knowing about God’s providence is that it makes us patient in adversity and thankful in prosperity, so that we may place our firm trust in our Heavenly Father concerning everything that befalls us.",
+      "scriptures": [
+        {
+          "reference": "Ps. 57:2",
+          "translation": "NASB",
+          "text": "I will cry to God Most High, to God who accomplishes all things for me"
+        },
+        {
+          "reference": "Matt. 10:29-31",
+          "translation": "NASB",
+          "text": "Are not two sparrows sold for a cent? And yet not one of them will fall to the ground apart from your Father. But the very hairs of your head are all numbered. So do not fear; you are more valuable than many sparrows"
+        },
+        {
+          "reference": "I Thess. 5:18",
+          "translation": "NASB",
+          "text": "In everything give thanks; for this is God’s will for you in Christ Jesus"
+        }
+      ],
+      "attribution": "(Adapted from the Heidelberg Catechism, Q. 28) For deeply reassuring teaching on this subject, read prayerfully John Flavel’s,The Mystery of Divine Providence."
+    },
+    {
+      "number": 29,
+      "question": "What hope has God given that it is possible for us to be redeemed from our state of sin and misery?",
+      "answer": "The hope that God has given that it is possible for us to be redeemed from our state of sin and misery consists in the gracious provisions of His covenants.",
+      "scriptures": [
+        {
+          "reference": "Ps. 103:17-18",
+          "translation": "NASB",
+          "text": "But the lovingkindness of the LORD is from everlasting to everlasting on those who fear Him, and His righteousness to children’s children, to those who keep His covenant and remember His precepts to do them"
+        },
+        {
+          "reference": "Rom. 9:4",
+          "translation": "NASB",
+          "text": "Israelites, to whom belongs the adoption as sons, and the glory and the covenants . . ."
+        },
+        {
+          "reference": "Eph. 2:11a, 12-13",
+          "translation": "NASB",
+          "text": "Remember that formerly you, the Gentiles, . . . were at that time separate from Christ, excluded from the commonwealth of Israel, and strangers to the covenants of promise, having no hope and without God in the world. But now in Christ Jesus, you who formerly were far off have been brought near by the blood of Christ"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 30,
+      "question": "What are God’s covenants that give us hope in our state of sin and misery?",
+      "answer": "God’s covenants that give us hope in our state of sin and misery are the Noahic, the Abrahamic, the Mosaic, the Davidic, and the New.",
+      "scriptures": [
+        {
+          "reference": "Dan. 9:4-5",
+          "translation": "NASB",
+          "text": "I prayed to the LORD my God and confessed and said, “Alas, O Lord, the great and awesome God, who keeps His covenant and lovingkindness for those who love Him and keep His commandments, we have sinned, committed iniquity, acted wickedly and rebelled, even turning aside from Your commandments and ordinances”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 31,
+      "question": "What is the Noahic covenant’s gracious provision?",
+      "answer": "The Noahic covenant’s gracious provision is God’s promise that despite the natural depravity of man’s heart, He will never again destroy the entire earth with a flood. Evil . . . is bred in the bone. . . . Now, one would think it should follow, “Therefore that guilty race shall be wholly extinguished”. . . But God will no more take this severe method. . . . For if he [man] be dealt with according to his deserts, one flood must succeed another till all be destroyed. . . . Man’s nature was as sinful after the deluge as it had been before. . . . [But] God’s goodness takes occasion from man’s sinfulness to magnify itself the more; His reasons of mercy are all drawn from Himself, not from anything in us (Matthew Henry). magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn from Himself, not from anything in us magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn from Himself, not from anything in us from Himself, not from anything in us magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to was as sinful after the deluge as it had been before. . . . magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to was as sinful after the deluge as it had been before. . . . from Himself, not from anything in us was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . God’s goodness takes occasion from man’s sinfulness to magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn magnify itself the more; His reasons of mercy are all drawn God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to God’s goodness takes occasion from man’s sinfulness to was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . . was as sinful after the deluge as it had been before. . . .",
+      "scriptures": [
+        {
+          "reference": "Gen. 8:21",
+          "translation": "NASB",
+          "text": "“I will never again curse the ground on account of man, for the intent of man’s heart is evil from his youth; and I will never again destroy every living thing , as I have done”"
+        },
+        {
+          "reference": "Gen. 9:8-13",
+          "translation": "NASB",
+          "text": "Then God spoke to Noah and to his sons with him, saying, “Now behold, I Myself do establish My covenant with you, and with your descendants after you; and with every living creature that is with you, the birds, the cattle, and every beast of the earth with you; of all that comes out of the ark, even every beast of the earth. I establish My covenant with you; and all flesh shall never again be cut off by the water of the flood, neither shall there again be a flood to destroy the earth. ” God said, “This is the sign of the covenant which I am making between Me and you and every living creature that is with you, for all successive generations; I set my bow in the cloud, and it shall be for a sign of a covenant between Me and the earth”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 32,
+      "question": "What are the Abrahamic covenant’s gracious provisions?",
+      "answer": "The Abrahamic covenant’s gracious provisions are God’s promises concerning (1) Abraham’s physical descendants, especially the nation Israel, (2) his ultimate seed, the Lord Jesus Christ, and (3) God’s blessing through Abraham upon all the families of the earth.",
+      "scriptures": [
+        {
+          "reference": "Gen. 12:2-3",
+          "translation": "NASB",
+          "text": "“And I will make you a great nation, and I will bless you, and make your name great; and so you shall be a blessing; and I will bless those who bless you, and the one who curses you I will curse. And in you all the families of the earth will be blessed”"
+        },
+        {
+          "reference": "Gen. 13:14-15",
+          "translation": "NASB",
+          "text": "“Now lift up your eyes and look from the place where you are, northward and southward and eastward and westward; for all the land which you see, I will give it to you and to your descendants forever ”"
+        },
+        {
+          "reference": "Gen. 15:5",
+          "translation": "NASB",
+          "text": "And He took him outside and said, “Now look toward the heavens, and count the stars, if you are able to count them. ” And He said to Him, “So shall your descendants be”"
+        },
+        {
+          "reference": "Gal. 3:16",
+          "translation": "NASB",
+          "text": "Now the promises were spoken to Abraham and to his seed. He does not say, “And to seeds, ” as referring to many, but rather to one, “And to your seed, ” that is, Christ"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 33,
+      "question": "What are the Mosaic covenant’s gracious provisions?",
+      "answer": "The Mosaic covenant’s gracious provisions are (1) God’s good and holy Law, (2) the knowledge of our sin, and (3) the shadow of Christ’s saving work to come.",
+      "scriptures": [
+        {
+          "reference": "Rom. 7:12",
+          "translation": "NASB",
+          "text": "So then, the Law is holy, and the commandment is holy and righteous and good"
+        },
+        {
+          "reference": "Rom. 3:20b",
+          "translation": "NASB",
+          "text": "For through the Law comes the knowledge of sin"
+        },
+        {
+          "reference": "Rom. 7:7b",
+          "translation": "NASB",
+          "text": "I would not have come to know sin except through the Law"
+        },
+        {
+          "reference": "Heb. 8:4b-5a",
+          "translation": "NASB",
+          "text": "there are those who off er the gifts according to the Law; who serve a copy and shadow of the heavenly things. . ."
+        },
+        {
+          "reference": "Heb. 10:1",
+          "translation": "NASB",
+          "text": "For the Law, since it has only a shadow of the good things to come and not the very form of the things, can never, by the same sacrifices which they off er continually year by year, make perfect those who draw near"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 34,
+      "question": "What are the Davidic covenant’s gracious provisions?",
+      "answer": "The Davidic covenant’s gracious provisions are God’s promises that David’s seed, kingdom, and throne would be established forever, all of which are fulfilled in David’s ultimate descendant, the Lord Jesus Christ.",
+      "scriptures": [
+        {
+          "reference": "II Sam. 7:16",
+          "translation": "NASB",
+          "text": "“Your house and your kingdom shall endure before Me forever; your throne shall be established forever”"
+        },
+        {
+          "reference": "Ps. 89:3-4, 28-29",
+          "translation": "NASB",
+          "text": "“I have made a covenant with My chosen; I have sworn to David My servant, I will establish your seed forever and build up your throne to all generations. . . My lovingkindness I will keep for him forever, and My covenant shall be confirmed to him. So I will establish his descendants forever and his throne as the days of heaven”"
+        },
+        {
+          "reference": "Lk. 1:32-33",
+          "translation": "NASB",
+          "text": "“He will be great and will be called the Son of the Most High; and the Lord God will give Him the throne of His father David; and He will reign over the house of Jacob forever, and His kingdom will have no end”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 35,
+      "question": "What are the New Covenant’s gracious provisions?",
+      "answer": "The New Covenant’s gracious provisions are (1) a heart that is new, (2) a knowledge of the LORD that is personal, (3) a forgiveness of sins that is final and forever, and (4) a restoration of the nation Israel to her promised land that is abundantly blessed.",
+      "scriptures": [
+        {
+          "reference": "I Cor. 11:25",
+          "translation": "NASB",
+          "text": "As applied to any believer (Jeremiah 31:31-34, as quoted by Hebrews 8:8-12). As applied to the nation Israel (Jeremiah 31:31-34; Ezekiel 36:24-38). In the same way He took the cup also after supper, saying, “This cup is the new covenant in My blood; do this, as often as you drink it, in remembrance of Me”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 36,
+      "question": "In what way can we obtain the gracious provisions of God’s covenants?",
+      "answer": "The one way, the only way that we can obtain the gracious provisions of God’s covenants is through the Redeemer, the Lord Jesus Christ.",
+      "scriptures": [
+        {
+          "reference": "I Tim. 2:5",
+          "translation": "KJV",
+          "text": "For there is one God, and one mediator between God and men, the man Christ Jesus"
+        },
+        {
+          "reference": "Tit. 2:13b-14",
+          "translation": "KJV",
+          "text": "the great God and our Saviour Jesus Christ; who gave himself for us, that he might redeem us from all iniquity, and purify unto himself a peculiar people, zealous of good works"
+        },
+        {
+          "reference": "Heb. 9:15",
+          "translation": "NASB",
+          "text": "For this reason He is the mediator of a new covenant, so that, since a death has taken place for the redemption of the transgressions that were committed under the first covenant, those who have been called may receive the promise of the eternal inheritance"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 37,
+      "question": "What offices does Jesus Christ execute as our Redeemer?",
+      "answer": "Jesus Christ executes as our Redeemer the offices of prophet, priest, and king, in both His humiliation and His exaltation.",
+      "scriptures": [
+        {
+          "reference": "Acts 3:22-23",
+          "translation": "NASB",
+          "text": "Moses said, “THE LORD GOD WILL RAISE UP FOR YOU A PROPHET LIKE ME FROM YOUR BRETHREN; TO HIM YOU SHALL GIVE HEED to everything He says to you. And it will be that every soul that does not heed that prophet shall be utterly destroyed from among the people”"
+        },
+        {
+          "reference": "Heb. 5:6",
+          "translation": "NASB",
+          "text": "Just as He says also in another passage, YOU ARE A PRIEST FOREVER ACCORDING TO THE ORDER OF MELCHIZEDEK”"
+        },
+        {
+          "reference": "Psalm 2:4-5a, 6",
+          "translation": "NASB",
+          "text": "He who sits in the heavens laughs, the Lord scoff s at them. Then He will speak to them in His anger . . . “But as for Me, I have installed My King upon Zion, My holy mountain”"
+        }
+      ],
+      "attribution": "(adapted from Westminster Shorter Catechism , Q. 23)"
+    },
+    {
+      "number": 38,
+      "question": "How does Christ execute the office of a prophet?",
+      "answer": "Christ executes the office of a prophet in revealing to us, by His Word and Spirit, the will of God for our salvation.",
+      "scriptures": [
+        {
+          "reference": "Heb. 1:1-2a",
+          "translation": "NASB",
+          "text": "God, after He spoke long ago to the fathers in the prophets in many portions and many ways, in these last days has spoken to us in His Son . . ."
+        },
+        {
+          "reference": "John 1:18",
+          "translation": "NASB",
+          "text": "No one has seen God at any time; the only begotten God who is in the bosom of the Father, He has explained Him"
+        },
+        {
+          "reference": "John 15:15b",
+          "translation": "NASB",
+          "text": "all things that I have heard from My Father I have made known to you"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 24)"
+    },
+    {
+      "number": 39,
+      "question": "How does Christ execute the office of a priest?",
+      "answer": "Christ executes the office of a priest in offering up Himself as the once-for-all sacrifice to satisfy Divine justice and reconcile us to God, and in making continual intercession for us.",
+      "scriptures": [
+        {
+          "reference": "Heb. 2:17",
+          "translation": "NASB",
+          "text": "Therefore, He had to be made like His brethren in all things, so that He might become a merciful and faithful high priest in things pertaining to God, to make propitiation for the sins of the people"
+        },
+        {
+          "reference": "Heb. 10:12",
+          "translation": "NASB",
+          "text": "But He, having off ered one sacrifice for sins for all time, SAT DOWN AT THE RIGHT HAND OF GOD"
+        },
+        {
+          "reference": "Heb. 7:24-25",
+          "translation": "NASB",
+          "text": "But Jesus, . . . because He continues forever, holds His priesthood permanently. Therefore He is able also to save forever those who draw near to God through Him, since He always lives to make intercession for them"
+        }
+      ],
+      "attribution": "(adapted from Westminster Shorter Catechism , Q. 25)"
+    },
+    {
+      "number": 40,
+      "question": "How does Christ execute the office of a king?",
+      "answer": "Christ executes the office of a king in subduing us to Himself, in ruling and defending us, and in restraining and conquering all His and our enemies. ( Westminster Shorter Catechism , Q. 26)",
+      "scriptures": [
+        {
+          "reference": "Is. 45:22-23; see Phil. 2:9-11",
+          "translation": "NASB",
+          "text": "“Turn to Me and be saved, all the ends of the earth; for I am God, and there is no other. I have sworn by Myself, the word has gone forth from My mouth in righteousness and will not turn back, that to Me every knee will bow, every tongue will swear allegiance”"
+        },
+        {
+          "reference": "Ps. 2:12a",
+          "translation": "NASB",
+          "text": "Do homage to the Son. . ."
+        },
+        {
+          "reference": "Ps. 110:1",
+          "translation": "NASB",
+          "text": "The LORD says to my Lord: “Sit at My right hand until I make Your enemies a footstool for Your feet”"
+        },
+        {
+          "reference": "I Cor. 15:25-26",
+          "translation": "NASB",
+          "text": "For He must reign until He has put all His enemies under His feet. The last enemy that will be abolished is death"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 41,
+      "question": "In what did Christ’s humiliation consist?",
+      "answer": "Christ’s humiliation consisted in His being born, and that in a low condition, made under the law, [and] undergoing the miseries of this life. ( Westminster Shorter Catechism , Q. 27)",
+      "scriptures": [
+        {
+          "reference": "Lk. 2:7",
+          "translation": "NASB",
+          "text": "And she gave birth to her firstborn son; and she wrapped Him in cloths, and laid Him in a manger, because there was no room for them in the inn"
+        },
+        {
+          "reference": "Gal. 4:4",
+          "translation": "NASB",
+          "text": "But when the fullness of the time came, God sent forth His Son, born of a woman, born under the Law"
+        },
+        {
+          "reference": "Heb. 4:15",
+          "translation": "NASB",
+          "text": "For we do not have a high priest who cannot sympathize with our weaknesses, but One who has been tempted in all things as we are, yet without sin"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 42,
+      "question": "In what else did Christ’s humiliation consist?",
+      "answer": "Christ’s humiliation consisted also in His undergoing the wrath of God, and the cursed death of the cross; in being buried, and continuing under the power of death for a time. ( Westminster Shorter Catechism , Q. 27)",
+      "scriptures": [
+        {
+          "reference": "Matt. 27:46",
+          "translation": "NASB",
+          "text": "About the ninth hour Jesus cried out with a loud voice, saying, “ ELI, ELI, LAMA SABACHTHANI?” that is, “MY GOD, MY GOD, WHY HAVE YOU FORSAKEN ME?”"
+        },
+        {
+          "reference": "Phil. 2:8",
+          "translation": "NASB",
+          "text": "Being found in appearance as a man, He humbled Himself by becoming obedient to the point of death, even death on a cross"
+        },
+        {
+          "reference": "I Cor. 15:3-4a",
+          "translation": "NASB",
+          "text": "For I delivered to you as of first importance what I also received, that Christ died for our sins according to the Scriptures, and that He was buried"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 43,
+      "question": "In what does Christ’s exaltation consist?",
+      "answer": "Christ’s exaltation consists in His rising from the dead on the third day, ascending up into heaven, receiving the name which is above every name, and sitting down at the right hand of God the Father.",
+      "scriptures": [
+        {
+          "reference": "Acts 2:32-33a, 36",
+          "translation": "NASB",
+          "text": "This Jesus God raised up again, to which we are all witnesses. Therefore having been exalted to the right hand of God. . . . Therefore let all the house of Israel know for certain that God has made Him both Lord and Christ—this Jesus whom you crucified."
+        },
+        {
+          "reference": "Acts 5:30-31",
+          "translation": "NASB",
+          "text": "The God of our fathers raised up Jesus, whom you had put to death by hanging Him on a cross. He is the one whom God exalted to His right hand as a Prince and a Savior, to grant repentance to Israel, and forgiveness of sins"
+        },
+        {
+          "reference": "Phil. 2:9-11",
+          "translation": "NASB",
+          "text": "For this reason also, God highly exalted Him, and bestowed on Him the name which is above every name [Lord], so that at the name of Jesus EVERY KNEE WILL BOW, of those who are in heaven and on earth and under the earth, and that every tongue will confess that Jesus Christ is Lord, to the glory of God the Father"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 44,
+      "question": "In what else will Christ’s exaltation consist?",
+      "answer": "Execution of the righteous wrath of God . . . . . . . . . . . . . . . . . .Rev. 6-19 Glorious return to rule the world . . . . Mtt. 25:31-34; Rev. 19:11-20:10 Judgment of all mankind . . . . . . . . . . . . . . . . . . John 5:22; Rev. 20:11-15 Conquest of every enemy . . . . . . . . . . . . . . . . . I Cor. 15:25-26; Rev. 21:4 Christ’s exaltation will consist also in (1) His bodily return to raise and rapture His own, (2) His execution of the righteous wrath of God, (3) His glorious return to rule the world, (4) His judgment of all mankind from a great, white throne, and (5) His ultimate conquest of every enemy, concluding with even the everlasting abolishment of death. even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.even the everlasting abolishment of death.",
+      "scriptures": [
+        {
+          "reference": "I Thess. 4:16-17",
+          "translation": "NASB",
+          "text": "For the Lord Himself will descend from heaven with a shout, with the voice of the archangel and with the trumpet of God, and the dead in Christ will rise first. Then we who are alive and remain will be caught up together with them in the clouds to meet the Lord in the air, and so we shall always be with the Lord"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 45,
+      "question": "How do we become partakers of Christ’s redemption?",
+      "answer": "We become partakers of Christ’s redemption by the effectual application of it to us by His Holy Spirit.",
+      "scriptures": [
+        {
+          "reference": "Tit. 3:5-6",
+          "translation": "NASB",
+          "text": "He saved us, not on the basis of deeds which we have done in righteousness, but according to His mercy, by the washing of regeneration and renewing by the Holy Spirit, whom He poured out upon us richly through Jesus Christ our Savior"
+        },
+        {
+          "reference": "I Cor. 12:3",
+          "translation": "NASB",
+          "text": "No one can say, “Jesus is Lord, ” except by the Holy Spirit"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 29) (Note: What neither the light of nature, nor the law could do, that God performs by the operation of the Holy Spirit through the Word or ministry of reconciliation, which is the glad tidings concerning the Messiah, by means whereof it hath pleased God to save such as believe, as well under the Old, as under the New Testament (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) believe, as well under the Old, as under the New Testament (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).) ment (Canons of Dort, Chapters 3 and 4, Article 6).)"
+    },
+    {
+      "number": 46,
+      "question": "How does the Holy Spirit apply Christ’s redemption to us?",
+      "answer": "The Holy Spirit applies Christ’s redemption to us by working faith in us, and thereby uniting us to Christ in our effectual calling.",
+      "scriptures": [
+        {
+          "reference": "Rom. 10:17",
+          "translation": "NASB",
+          "text": "See John 16:7-11; I Thess. 1:4-5 So faith comes from hearing, and hearing by the word of Christ"
+        },
+        {
+          "reference": "Acts 16:14",
+          "translation": "NASB",
+          "text": "A woman named Lydia, from the city of Thyatira, a seller of purple fabrics, a worshiper of God, was listening; and the Lord opened her heart to respond to the things spoken by Paul"
+        },
+        {
+          "reference": "Eph. 2:8-9",
+          "translation": "NASB",
+          "text": "For by grace you have been saved through faith; and that not of yourselves, it is the gift of God; not as a result of works, so that no one may boast"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 30)"
+    },
+    {
+      "number": 47,
+      "question": "What is effectual calling?",
+      "answer": "Effectual calling is God’s speaking in such a way, through the human communication of the gospel, that sinners respond willingly with saving faith. Speak with the voice that wakes the dead. . . (“Revive Thy Work, O Lord,” Albert Midlane). I know not how this saving faith to me He did impart, Nor how believing in His Word wrought peace within my heart (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle).",
+      "scriptures": [
+        {
+          "reference": "Rom. 8:30",
+          "translation": "NASB",
+          "text": "And these whom He predestined, He also called; and these whom he called, He also justified; and these whom He justified, He also glorified"
+        },
+        {
+          "reference": "John 6:44-45",
+          "translation": "NASB",
+          "text": "No one can come to Me unless the Father who sent Me draws him; and I will raise him up on the last day. It is written in the prophets, ‘AND THEY SHALL ALL BE TAUGHT OF GOD. ’ Everyone who has heard and learned from the Father, comes to Me"
+        },
+        {
+          "reference": "I Cor. 1:23-24",
+          "translation": "NASB",
+          "text": "But we preach Christ crucified, to Jews a stumbling block and to Gentiles foolishness, but to those who are the called, both Jews and Greeks, Christ the power of God and the wisdom of God. . ."
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 48,
+      "question": "How does the Holy Spirit work faith in us?",
+      "answer": "The Holy Spirit works faith in us by (1) convincing us of our sin and misery, (2) enlightening our minds in the knowledge of Christ, and (3) renewing our wills. About a quarter before nine, while he was describing the change which God works in the heart through faith in Christ, I felt my heart strangely warmed. I felt I did trust in Christ, Christ alone for salvation; and an assurance was given me that He had taken away my sins, even mine, and saved me from the law of sin and death (John Wesley, Journal, May 24, 1738). I know not how the Spirit moves, convincing men of sin, Revealing Jesus through His Word, creating faith in Him (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). Revealing Jesus through His Word, creating faith in Him Revealing Jesus through His Word, creating faith in Him (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). Revealing Jesus through His Word, creating faith in Him Revealing Jesus through His Word, creating faith in Him Revealing Jesus through His Word, creating faith in Him (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle). Revealing Jesus through His Word, creating faith in Him Revealing Jesus through His Word, creating faith in Him (“I Know Whom I Have Believed,” Daniel W. Whittle). (“I Know Whom I Have Believed,” Daniel W. Whittle).",
+      "scriptures": [
+        {
+          "reference": "I Cor. 2:14",
+          "translation": "NASB",
+          "text": "But a natural man does not accept the things of the Spirit of God, for they are foolishness to him; and he cannot understand them, because they are spiritually [i.e. Spiritually] appraised"
+        },
+        {
+          "reference": "John 16:8-9",
+          "translation": "NASB",
+          "text": "And He, when He comes, will convict the world concerning sin and righteousness and judgment; concerning sin, because they do not believe in Me. . ."
+        },
+        {
+          "reference": "Phil. 2:13",
+          "translation": "NASB",
+          "text": "For it is God who is at work in you, both to will [lit. the to be willing] and to work [lit. the to be working] for His good pleasure"
+        },
+        {
+          "reference": "I Thess. 1:4-5a",
+          "translation": "NASB",
+          "text": "(Note: If this Divine enablement is necessary for believers to do God’s pleasure, how much more so is it for unbelievers?) . . . knowing, brethren, beloved of God, His choice of you; for our gospel did not come to you in word only, but also in power and in the Holy Spirit and with full conviction. . ."
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 49,
+      "question": "How does the Holy Spirit complete the working of faith in us?",
+      "answer": "The Holy Spirit completes the working of faith in us by persuading and enabling us to embrace Jesus Christ, freely offered to us in the gospel.",
+      "scriptures": [
+        {
+          "reference": "John 16:8",
+          "translation": "NASB",
+          "text": "And He, when He comes, will convict the world concerning sin and righteousness and judgment"
+        },
+        {
+          "reference": "Acts 5:32",
+          "translation": "NASB",
+          "text": "And we are witnesses of these things; and so is the Holy Spirit, whom God has given to those who obey Him"
+        },
+        {
+          "reference": "I Thess. 1:4-5a",
+          "translation": "NASB",
+          "text": "Knowing, brethren beloved by God, His choice of you; for our gospel did not come to you in word only, but also in power and in the Holy Spirit and with full conviction. . ."
+        }
+      ],
+      "attribution": "(Drawn, in part, from Westminster Shorter Catechism, Q. 31)"
+    },
+    {
+      "number": 50,
+      "question": "What benefits do those who are effectually called partake of in this life?",
+      "answer": "Those who are effectually called partake in this life of justification, sonship, sanctification, and all Spiritual blessings which in this life either accompany or flow from them.",
+      "scriptures": [
+        {
+          "reference": "Rom. 8:30",
+          "translation": "NASB",
+          "text": "And these whom He predestined, He also called; and these whom He called, He also justified. . ."
+        },
+        {
+          "reference": "I Cor. 1:2",
+          "translation": "NASB",
+          "text": "See how great a love the Father has bestowed on us, that we should be called children of God; and such we are. . . ( NASB; I John 3:1). To the church of God which is at Corinth, to those who have been sanctified in Christ Jesus, saints by calling, with all who in every place call on the name of our Lord Jesus Christ, their Lord and ours"
+        },
+        {
+          "reference": "Eph. 1:3",
+          "translation": "NASB",
+          "text": "Blessed be the God and Father of our Lord Jesus Christ, who has blessed us with every spiritual blessing in the heavenly places in Christ"
+        }
+      ],
+      "attribution": "(Drawn, in part, from Westminster Shorter Catechism, Q. 32) God deals very liberally and kindly with his people that answer his call. . . . Their present possessions are more valuable than crowns and scepters in this world; but what they have a title to [in the next world] is what eye has not seen, nor ear heard, nor has it entered into the heart of man to conceive (Thomas Boston). heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive heard, nor has it entered into the heart of man to conceive"
+    },
+    {
+      "number": 51,
+      "question": "What is justification?",
+      "answer": "Justification is God’s righteous declaration that we, though ungodly in ourselves, stand entirely righteous before Him.",
+      "scriptures": [
+        {
+          "reference": "Ps. 143:2",
+          "translation": "KJV",
+          "text": "And enter not into judgment with thy servant: for in thy sight shall no man living be justified"
+        },
+        {
+          "reference": "Rom. 4:5",
+          "translation": "NASB",
+          "text": "But to the one who does not work, but believes in Him who justifies the ungodly, his faith is credited as righteousness"
+        },
+        {
+          "reference": "Rom. 5:1-2a",
+          "translation": "NASB",
+          "text": "Therefore, having been justified by faith, we have peace with God through our Lord Jesus Christ, through whom also we have obtained our introduction by faith into this grace in which we stand . . ."
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 52,
+      "question": "Upon what righteous basis may God justify the ungodly?",
+      "answer": "The only righteous basis upon which God may justify the ungodly is by imputing unto them Christ’s very own sinless righteousness. It is not simply because of this righteousness that Jehovah justifies; but by legally transferring it to us, so that we can use it, and plead it, and appear before God in it, just as if it were wholly our own. . . . The transaction is not one of borrowing. The perfection made over to us is given, not lent, by God. It becomes ours in law; ours for all legal ends; ours as efficaciously as if it had been from first to last our own in very deed. ~Horatius Bonar, The Everlasting Righteousness ~Horatius Bonar, been from first to last our own in very deed. been from first to last our own in very deed. The Everlasting Righteousness ~Horatius Bonar, The Everlasting Righteousness ~Horatius Bonar, The Everlasting Righteousness ~Horatius Bonar, ~Horatius Bonar, been from first to last our own in very deed. ~Horatius Bonar, been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. The Everlasting Righteousness The Everlasting Righteousness The Everlasting Righteousness The Everlasting Righteousness been from first to last our own in very deed. ~Horatius Bonar, The Everlasting Righteousness The Everlasting Righteousness The Everlasting Righteousness ~Horatius Bonar, been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. ~Horatius Bonar, ~Horatius Bonar, ~Horatius Bonar, ~Horatius Bonar, ~Horatius Bonar, been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed. been from first to last our own in very deed.",
+      "scriptures": [
+        {
+          "reference": "Rom. 4:5",
+          "translation": "NASB",
+          "text": "But to the one who does not work, but believes in Him who justifies the ungodly, his faith is credited as righteousness"
+        },
+        {
+          "reference": "II Cor. 5:21",
+          "translation": "NASB",
+          "text": "He made Him who knew no sin to be sin on our behalf, so that we might become the righteousness of God in Him"
+        },
+        {
+          "reference": "Rom. 3:26",
+          "translation": "NASB",
+          "text": "For the demonstration, I say, of His righteousness at the present time, so that He would be just and the justifier of the one who has faith in Jesus"
+        },
+        {
+          "reference": "Phil. 3:8-9",
+          "translation": "NASB",
+          "text": "More than that, I count all things to be loss in view of the surpassing value of knowing Christ Jesus my Lord, for whom I have suff ered the loss of all things, and count them but rubbish so that I may gain Christ, and may be found in Him, not having a righteousness of my own derived from the Law, but that which is through faith in Christ, the righteousness which comes from God on the basis of faith"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 53,
+      "question": "What is sonship?",
+      "answer": "Sonship is our entirely safe and eternally secure inclusion among the children of the Heavenly Father.",
+      "scriptures": [
+        {
+          "reference": "John 1:12-13",
+          "translation": "NASB",
+          "text": "But as many as received Him, to them He gave the right to become children of God, even to those who believe in His name, who were born, not of blood nor of the will of the flesh nor of the will of man, but of God"
+        },
+        {
+          "reference": "I John 3:1-2",
+          "translation": "NASB",
+          "text": "See how great a love the Father has bestowed on us, that we would be called the children of God; and such we are. For this reason the world does not know us, because it did not know Him. Beloved, now we are children of God, and it has not appeared as yet what we will be. We know that when He appears, we will be like Him, because we will see Him just as He is"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 54,
+      "question": "What is sanctification?",
+      "answer": "Sanctification is the renewal of our entire inner man after the image of God, so that we are enabled more and more to die unto sin and to live unto righteousness.",
+      "scriptures": [
+        {
+          "reference": "I Thess. 5:23-24",
+          "translation": "NASB",
+          "text": "Now may the God of peace Himself sanctify you entirely; and may your spirit and soul and body be preserved complete, without blame at the coming of our Lord Jesus Christ. Faithful is He who calls you, and He also will bring it to pass"
+        },
+        {
+          "reference": "Rom. 6:19b",
+          "translation": "NASB",
+          "text": "For just as you presented your members as slaves to impurity and to lawlessness, resulting in further lawlessness, so now present your members as slaves to righteousness, resulting in sanctification"
+        },
+        {
+          "reference": "Heb. 12:14",
+          "translation": "NASB",
+          "text": "Pursue peace with all men, and the sanctification without which no one will see the Lord"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 55,
+      "question": "What benefits in this life either accompany or flow from justification, sonship, and sanctification?",
+      "answer": "The benefits in this life which either accompany or flow from justification, sonship, and sanctification include pardon for sin, peace with God, joy unspeakable, daily grace, and God’s safe keeping.",
+      "scriptures": [
+        {
+          "reference": "Eph. 1:7",
+          "translation": "NASB",
+          "text": "In Him we have redemption through His blood, the forgiveness of our trespasses , according to the riches of His grace"
+        },
+        {
+          "reference": "Rom. 5:1",
+          "translation": "NASB",
+          "text": "Therefore, having been justified by faith, we have peace with God through our Lord Jesus Christ"
+        },
+        {
+          "reference": "I Pet. 1:8",
+          "translation": "NASB",
+          "text": "And though you have not seen Him, you love Him, and though you do not see Him now, but believe in Him, you greatly rejoice with joy unspeakable and full of glory"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 56,
+      "question": "What are the benefits believers receive from Christ at death?",
+      "answer": "The benefits believers receive from Christ at death include their souls’ immediate perfecting in holiness, their being at home with the Lord, and their bodies resting in union with Christ until the resurrection.",
+      "scriptures": [
+        {
+          "reference": "Heb. 12:23",
+          "translation": "NASB",
+          "text": "the spirits of the righteous made perfect"
+        },
+        {
+          "reference": "II Cor. 5:8",
+          "translation": "NASB",
+          "text": "We are of good courage, I say, and prefer rather to be absent from the body and to be at home with the Lord"
+        },
+        {
+          "reference": "I Thess. 4:14, 16b",
+          "translation": "NASB",
+          "text": "For if we believe that Jesus died and rose again, even so God will bring with Him those who have fallen asleep in Jesus . . . and the dead in Christ will rise first"
+        }
+      ],
+      "attribution": "(Adapted from Westminster Shorter Catechism , Q. 37)"
+    },
+    {
+      "number": 57,
+      "question": "What are the benefits believers receive from Christ at the resurrection?",
+      "answer": "The benefits believers receive from Christ at the resurrection include the raising of their bodies to be reunited with their souls, incorruptible, immortal, glorious, and forever with the Lord.",
+      "scriptures": [
+        {
+          "reference": "I Cor. 15:53",
+          "translation": "KJV",
+          "text": "For this corruptible must put on incorruption, and this mortal must put on immortality"
+        },
+        {
+          "reference": "Phil. 3:20-21",
+          "translation": "NASB",
+          "text": "For our citizenship is in heaven, from which also we eagerly wait for a Savior, the Lord Jesus Christ; who will transform the body of our humble state into conformity with the body of His glory, by the exertion of the power that He has even to subject all things to Himself"
+        },
+        {
+          "reference": "I Thess. 4:17b",
+          "translation": "KJV",
+          "text": "and so shall we ever be with the Lord"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 58,
+      "question": "What is the duty which God requires of mankind?",
+      "answer": "The duty which God requires of mankind is obedience to His revealed will.",
+      "scriptures": [
+        {
+          "reference": "Micah 6:8",
+          "translation": "NASB",
+          "text": "He has told you, O man, what is good; and what does the LORD require of you but to do justice, to love kindness, and to walk humbly with your God"
+        },
+        {
+          "reference": "I Sam. 15:22-23a",
+          "translation": "NASB",
+          "text": "Samuel said, “Has the LORD as much delight in burnt offerings and sacrifices as in obeying the voice of the LORD? Behold, to obey is better than sacrifice, and to heed than the fat of rams. For rebellion is as the sin of divination, and insubordination is as iniquity and idolatry”"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism , Q. 39) It is man’s duty to obey God. The reason for this is that God is the creator and man is a mere creature. Because God created man, He therefore has “a right” to require what He will from man. Because man is only a creature, he has “no right” to “go his own way and do his own will.” No, the only “right” for man is to obey God (G. I. Williamson)."
+    },
+    {
+      "number": 59,
+      "question": "What is God’s revealed will for mankind’s obedience?",
+      "answer": "God’s revealed will for mankind’s obedience is His moral law.",
+      "scriptures": [
+        {
+          "reference": "Rom. 2:14-15",
+          "translation": "NASB",
+          "text": "For when Gentiles who do not have the Law do instinctively the things of the Law, these, not having the Law, are a law to themselves, in that they show the work of the Law written in their hearts, their conscience bearing witness and their thoughts alternately accusing or else defending them"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 60,
+      "question": "Where is God’s moral law summarized?",
+      "answer": "God’s moral law is summarized in the ten commandments.",
+      "scriptures": [
+        {
+          "reference": "Matthew 19:17",
+          "translation": "NASB",
+          "text": "And He said to him, “Why are you asking Me about what is good? There is only One who is good; but if you wish to enter into life, keep the commandments”"
+        }
+      ],
+      "attribution": "(Adapted from Westminster Shorter Catechism, Q. 41) When we had miserably defaced the law of nature originally written in our hearts, so that many of its commands were no longer legible, it seemed good to his infinite wisdom and mercy to transcribe and copy out that law in the sacred tables of the Scriptures. . . . And the Decalogue, or Ten Commandments, is a summary, or brief epitome of the law, written by the immediate finger of God, and contracted into an abridgment not only to ease our memories but to gain our veneration; for . . . commands best befit majesty (Ezekiel Hopkins, an Exposition of the Ten Commandments)."
+    },
+    {
+      "number": 61,
+      "question": "What is the summary of the ten commandments?",
+      "answer": "The summary of the ten commandments is, To love the Lord our God with all our heart, with all our soul, with all our strength, and with all our mind; and our neighbor as ourselves.",
+      "scriptures": [
+        {
+          "reference": "Matthew 22:37-40",
+          "translation": "NASB",
+          "text": "And he said to him, “ ‘YOU SHALL LOVE THE LORD YOUR GOD WITH ALL YOUR HEART, AND WITH ALL YOUR SOUL, AND WITH ALL YOUR MIND. ’ This is the great and foremost commandment. The second is like it, ‘YOU SHALL LOVE YOUR NEIGHBOR AS YOURSELF. ’ On these two commandments depend the whole Law and the Prophets”"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism, Q. 42)"
+    },
+    {
+      "number": 62,
+      "question": "Is any man able to keep the commandments of God perfectly?",
+      "answer": "No mere man since the fall is able in this life to keep the commandments of God perfectly, but breaks them daily in thought, word, and deed.",
+      "scriptures": [
+        {
+          "reference": "Ecclesiastes 7:20",
+          "translation": "NASB",
+          "text": "Indeed, there is not a righteous man on earth who continually does good and who never sins"
+        },
+        {
+          "reference": "I John 1:8",
+          "translation": "NASB",
+          "text": "If we say that we have no sin, we are deceiving ourselves and the truth is not in us"
+        },
+        {
+          "reference": "I John 1:10",
+          "translation": "NASB",
+          "text": "If we say that we have not sinned, we make Him a liar and His word is not in us"
+        }
+      ],
+      "attribution": "(Adapted from Westminster Shorter Catechism, Q. 82)"
+    },
+    {
+      "number": 63,
+      "question": "Are all transgressions of the law equally heinous?",
+      "answer": "Some sins in themselves, and by reason of several aggravations, are more heinous in the sight of God than others.",
+      "scriptures": [
+        {
+          "reference": "Ezekiel 8:6, 13, 15",
+          "translation": "NASB",
+          "text": "“But yet you will see still greater abominations. . . . Yet you will see still greater abominations which they are committing. . . . Yet you will see still greater abominations than these”"
+        },
+        {
+          "reference": "Matthew 12:31",
+          "translation": "NASB",
+          "text": "“Therefore I say to you, any sin and blasphemy shall be forgiven people, but blasphemy against the Spirit shall not be forgiven”"
+        },
+        {
+          "reference": "Matthew 23:23",
+          "translation": "NASB",
+          "text": "“Woe to you, scribes and Pharisees, hypocrites! For you tithe mint and dill and cummin, and have neglected the weightier provisions of the law: justice and mercy and faithfulness” . . ."
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism, Q. 83)"
+    },
+    {
+      "number": 64,
+      "question": "What does every sin deserve?",
+      "answer": "Every sin deserves God’s wrath and curse, both in this life, and that which is to come.",
+      "scriptures": [
+        {
+          "reference": "Gal. 3:10b",
+          "translation": "NASB",
+          "text": "“CURSED IS EVERYONE WHO DOES NOT ABIDE BY ALL THINGS WRITTEN IN THE BOOK OF THE LAW, TO PERFORM THEM”"
+        },
+        {
+          "reference": "Matthew 25:41",
+          "translation": "NASB",
+          "text": "“Then He will also say to those on His left, ‘Depart from Me, accursed ones, into the eternal fire which has been prepared for the devil and his angels’ “"
+        },
+        {
+          "reference": "James 2:10",
+          "translation": "NASB",
+          "text": "For whoever keeps the whole law and yet stumbles in one point, he has become guilty of all"
+        }
+      ],
+      "attribution": "(Westminster Shorter Catechism, Q. 84) Although every sin deserves God’s wrath and curse, it may now be proper to remark . . . there never has been, since the fall of our first parents, an individual . . . of whom it could be said, after he became capable of moral action, that he had committed but one sin. The penalty of the divine law, therefore, will in fact be inflicted only on those whose sins are multitudinous ( Ashbel Green, Lectures on the Shorter Catechism)."
+    },
+    {
+      "number": 65,
+      "question": "How may we escape God’s wrath and curse?",
+      "answer": "We may escape God’s wrath and curse by belief on the Lord Jesus Christ (trusting in His blood and righteousness alone) accompanied by repentance unto life.",
+      "scriptures": [
+        {
+          "reference": "John  3:16",
+          "translation": "KJV",
+          "text": "God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life"
+        },
+        {
+          "reference": "Acts 11:18b",
+          "translation": "NASB",
+          "text": "“ . . . God has granted to the Gentiles also the repentance that leads to life”"
+        },
+        {
+          "reference": "Acts 20:21",
+          "translation": "KJV",
+          "text": "Testifying both to the Jews, and also to the Greeks, repentance toward God, and faith toward our Lord Jesus Christ"
+        }
+      ],
+      "attribution": "(Adapted from C. H. Spurgeon’s, A Catechism, Q. 68.)"
+    },
+    {
+      "number": 66,
+      "question": "What is belief on the Lord Jesus Christ?",
+      "answer": "Belief on the Lord Jesus Christ is the faith by which we receive and rest upon Him alone for salvation, just as He is set forth in the gospel.",
+      "scriptures": [
+        {
+          "reference": "Hebrews 10:39",
+          "translation": "KJV",
+          "text": "We are not of them who draw back unto perdition; but of them that believe to the saving of the soul"
+        },
+        {
+          "reference": "John 1:12",
+          "translation": "KJV",
+          "text": "As many as received him, to them gave he power to become the sons of God, even to them that believe on his name"
+        },
+        {
+          "reference": "Philippians 3:9",
+          "translation": "NASB",
+          "text": "And may be found in Him, not having a righteousness of my own derived from the Law, but that which is through faith in Christ, the righteousness which comes from God on the basis of faith"
+        }
+      ],
+      "attribution": "(Adapted from C. H. Spurgeon’s, A Catechism, Q. 69)"
+    },
+    {
+      "number": 67,
+      "question": "What is repentance unto life?",
+      "answer": "Repentance unto life is the change of heart whereby out of a genuine grief and hatred of our sin, we turn unto God with the earnest intent to strive after new obedience.",
+      "scriptures": [
+        {
+          "reference": "Acts 11:18b",
+          "translation": "NASB",
+          "text": "Well then, God has granted to the Gentiles also the repentance that leads to life”"
+        },
+        {
+          "reference": "Acts 2:37-38",
+          "translation": "NASB",
+          "text": "Now when they heard this , they were pierced to the heart, and said to Peter and the rest of the apostles, “Brethren, what shall we do?” Peter said to them, “Repent, and each of you be baptized in the name of Jesus Christ for the forgiveness of your sins; and you will receive the gift of the Holy Spirit"
+        },
+        {
+          "reference": "II Cor. 7:10",
+          "translation": "NASB",
+          "text": "For the sorrow that is according to the will of God produces a repentance without regret, leading to salvation, but the sorrow of the world produces death"
+        }
+      ],
+      "attribution": "(Adapted from C. H. Spurgeon’s, A Catechism, Q. 70)"
+    },
+    {
+      "number": 68,
+      "question": "What are the ordinary outward means by which the Holy Spirit communicates the benefits of redemption to us?",
+      "answer": "The ordinary outward means by which the Holy Spirit communicates the benefits of redemption to us are God’s Word (read, memorized, preached, and taught), Baptism, the Lord’s Table, prayer, and the fellowship of spiritually-minded believers.",
+      "scriptures": [
+        {
+          "reference": "James 1:18a",
+          "translation": "NASB",
+          "text": "In the exercise of His will He brought us forth by the word of truth. . ."
+        },
+        {
+          "reference": "Acts 2:41a, 42",
+          "translation": "NASB",
+          "text": "So then, those who had received his word were baptized; . . . They were continually devoting themselves to the apostles’ teaching and to fellowship, to the breaking of bread and to prayer"
+        }
+      ],
+      "attribution": "(Adapted from C. H. Spurgeon’s, A Catechism, Q. 71)"
+    },
+    {
+      "number": 69,
+      "question": "How is God’s Word made effectual to salvation?",
+      "answer": "The Spirit of God makes the reading, but especially the preaching of the Word, an effectual means of convincing and converting sinners and of building them up in holiness and comfort.",
+      "scriptures": [
+        {
+          "reference": "Ps. 19:7a",
+          "translation": "KJV",
+          "text": "The law of the LORD is perfect, converting the soul"
+        },
+        {
+          "reference": "Acts 16:14",
+          "translation": "NASB",
+          "text": "A woman named Lydia, . . . and the Lord opened her heart to respond to the things spoken by Paul"
+        }
+      ],
+      "attribution": "(Adapted from C. H. Spurgeon’s, A Catechism, Q. 89) Is this conviction still alive and well in the hearts of preachers today (Ferguson) ?"
+    },
+    {
+      "number": 70,
+      "question": "How is God’s Word to be read and heard?",
+      "answer": "God’s Word is to be read and heard with preparation, prayer, and diligence. It is to be received with faith and love. It is to be laid up in our hearts and practiced in our lives.",
+      "scriptures": [
+        {
+          "reference": "I Pet. 2:1-2",
+          "translation": "NASB",
+          "text": "Therefore, putting aside all malice and all deceit and hypocrisy and envy and all slander, like newborn babes, long for the pure milk of the word, so that by it you may grow in respect to salvation"
+        },
+        {
+          "reference": "Ps. 119:18",
+          "translation": "NASB",
+          "text": "Open my eyes, that I may behold wonderful things from Your law"
+        },
+        {
+          "reference": "Heb. 4:2",
+          "translation": "NASB",
+          "text": "Prov. 2:1-5 For indeed we have had good news preached to us, just as they also; but the word they heard did not profit them, because it was not united by faith in those who heard"
+        }
+      ],
+      "attribution": "(Adapted from Westminster Shorter Catechism, Q. 90)"
+    },
+    {
+      "number": 71,
+      "question": "According to God’s Word, what is the Church universal?",
+      "answer": "According to God’s Word, the Church universal is the body and bride of the Lord Jesus Christ, the household of God, the pillar and support of the truth.",
+      "scriptures": [
+        {
+          "reference": "Eph. 1:22-23",
+          "translation": "NASB",
+          "text": "And He put all things in subjection under His feet, and gave Him as head over all things to the church , 23 which is His body , the fullness of Him who fills all in all"
+        },
+        {
+          "reference": "Eph. 5:31-32",
+          "translation": "NASB",
+          "text": "FOR THIS REASON A MAN SHALL LEAVE HIS FATHER AND MOTHER AND SHALL BE JOINED TO HIS WIFE, AND THE TWO SHALL BECOME ONE FLESH. 32 This mystery is great; but I am speaking with reference to Christ and the church"
+        },
+        {
+          "reference": "I Tim. 3:15",
+          "translation": "NASB",
+          "text": "I write so that you will know how one ought to conduct himself in the household of God , which is the church of the living God, the pillar and support of the truth"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 72,
+      "question": "According to God’s Word, what is a local church?",
+      "answer": "According to God’s Word, a local church is an assembly of mutually acknowledged Christians, organized in one locale under scriptural leadership, for the purposes of worship, apostolic instruction, prayer, fellowship, evangelism, service, and the observance of the ordinances.",
+      "scriptures": [
+        {
+          "reference": "Rev. 2:1, 8, 12, 18; 3:1, 7, 14",
+          "translation": "NASB",
+          "text": "the church in Ephesus . . . the church in Smyrna . . . the church in Pergamum . . . the church in Thyatira . . . the church in Sardis . . . the church in Philadelphia . . . the church in Laodicea"
+        },
+        {
+          "reference": "Acts 20:17, 28a",
+          "translation": "NASB",
+          "text": "From Miletus he sent to Ephesus and called to him the elders of the church . . . . Be on guard among yourselves and for all the flock, among which the Holy Spirit has made you overseers"
+        },
+        {
+          "reference": "Phil. 1:1b",
+          "translation": "NASB",
+          "text": "To all the saints in Christ Jesus who are in Philippi, including the overseers and deacons"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 73,
+      "question": "According to God’s Word, what are a local church’s scriptural leaders?",
+      "answer": "According to God’s Word, a local church’s scriptural leaders are elders, who oversee and shepherd (pastor), and deacons, who assist them. An able and faithful ministry, next to the sanctifying operations of the Spirit, is the greatest benefit that can be conferred upon a people (Samuel Miller, in his inaugural address at the founding of Princeton Theological Seminary in 1812).",
+      "scriptures": [
+        {
+          "reference": "Phil. 1:1b",
+          "translation": "NASB",
+          "text": "To all the saints in Christ Jesus who are in Philippi, including the overseers and deacons"
+        },
+        {
+          "reference": "Acts 20:17; 28",
+          "translation": "NASB",
+          "text": "From Miletus he sent to Ephesus and called to him the elders of the church. . . . Be on guard among yourselves and for all the flock, among whom the Holy Spirit has made you overseers, to shepherd the church of God which He purchased with His own blood"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 74,
+      "question": "What are the ordinances a local church is to observe?",
+      "answer": "The ordinances a local church is to observe are baptism and the Lord’s table. An ordinance is a practice ordained by Jesus Christ in which His people are to use physical actions (immersion, eating, and drinking) and materials (water, bread, and the fruit of the vine) both to signify and to identify themselves with the spiritual realities of His redemptive work on their behalf .",
+      "scriptures": [
+        {
+          "reference": "Matthew 28:19",
+          "translation": "NASB",
+          "text": "Go therefore and make disciples of all the nations, baptizing them in the name of the Father and the Son and the Holy Spirit"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 75,
+      "question": "What is the ordinance of baptism?",
+      "answer": "The ordinance of baptism is the immersion in water of a new Christian, in the name of the Father, and the Son, and the Holy Spirit.",
+      "scriptures": [
+        {
+          "reference": "Matthew 28:19",
+          "translation": "NASB",
+          "text": "Go therefore and make disciples of all the nations, baptizing them in the name of the Father and the Son and the Holy Spirit"
+        },
+        {
+          "reference": "Acts 8:12",
+          "translation": "NASB",
+          "text": "But when they believed Philip preaching the good news about the kingdom of God and the name of Jesus Christ, they were baptized, men and women alike"
+        },
+        {
+          "reference": "Acts 8:36, 38",
+          "translation": "NASB",
+          "text": "As they went along the road they came to some water; and the eunuch said, “Look! Water! What prevents me from being baptized?” And he ordered the chariot to stop; and they both went down into the water, Philip as well as the eunuch, and he baptized him"
+        },
+        {
+          "reference": "Acts 10:47-48a",
+          "translation": "NASB",
+          "text": "“Surely no one can refuse the water for these to be baptized who have received the Holy Spirit just as we did, can he?” And he ordered them to be baptized in the name of Jesus Christ"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 76,
+      "question": "What does baptism signify?",
+      "answer": "Baptism signifies our spiritual union with our Savior in His death, burial, and resurrection for the forgiveness of our sins.",
+      "scriptures": [
+        {
+          "reference": "Romans 6:3-5",
+          "translation": "NASB",
+          "text": "Or do you not know that all of us who have been baptized into Christ Jesus have been baptized into His death? 4Therefore we have been buried with Him through baptism into death, so that as Christ was raised from the dead through the glory of the Father, so we too might walk in newness of life. 5For if we have become united with Him in the likeness of His death, certainly we shall also be in the likeness of His resurrection"
+        },
+        {
+          "reference": "Colossians 2:12",
+          "translation": "NASB",
+          "text": "Having been buried with Him in baptism, in which you were also raised up with Him through faith in the working of God, who raised Him from the dead"
+        },
+        {
+          "reference": "Acts 2:38",
+          "translation": "NASB",
+          "text": "Peter said to them, “Repent, and each of you be baptized in the name of Jesus Christ for the forgiveness of your sins; and you will receive the gift of the Holy Spirit”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 77,
+      "question": "What is the ordinance of the Lord’s Table?",
+      "answer": "The ordinance of the Lord’s Table is our eating and drinking of bread and the fruit of the vine in fellowship together, in order to proclaim the Lord’s death, and to testify to our own individual partaking of all its saving benefits.",
+      "scriptures": [
+        {
+          "reference": "Matthew 26:26-28",
+          "translation": "NASB",
+          "text": "While they were eating, Jesus took some bread, and after a blessing, He broke it and gave it to the disciples, and said, “Take, eat; this is My body. ” 27 And when He had taken a cup and given thanks, He gave it to them, saying, “Drink from it, all of you; 28 for this is My blood of the covenant, which is poured out for many for forgiveness of sins"
+        },
+        {
+          "reference": "I Cor. 10:16",
+          "translation": "NASB",
+          "text": "Is not the cup of blessing which we bless a sharing in the blood of Christ? Is not the bread which we break a sharing in the body of Christ"
+        },
+        {
+          "reference": "I Cor. 11:26",
+          "translation": "NASB",
+          "text": "? For as often as you eat this bread and drink the cup, you proclaim the Lord’s death until He comes"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 78,
+      "question": "Who may partake of the Lord’s Table?",
+      "answer": "Those who may partake of the Lord’s Table are those baptized believers, who have examined themselves to ensure that they have confessed to their Lord all known sin, and have purposed anew to live in all loving obedience to Him.",
+      "scriptures": [
+        {
+          "reference": "Romans 6:3-4",
+          "translation": "NASB",
+          "text": "Or do you not know that all of us who have been baptized into Christ Jesus have been baptized into His death? 4Therefore we have been buried with Him through baptism into death, so that as Christ was raised from the dead through the glory of the Father, so we too might walk in newness of life"
+        },
+        {
+          "reference": "I Corinthians 11:27-31",
+          "translation": "NASB",
+          "text": "Therefore whoever eats the bread or drinks the cup of the Lord in an unworthy manner, shall be guilty of the body and the blood of the Lord. 28 But a man must examine himself, and in so doing he is to eat of the bread and drink of the cup. 29 For he who eats and drinks, eats and drinks judgment to himself if he does not judge the body rightly. 30 For this reason many among you are weak and sick, and a number sleep. 31 But if we judged ourselves rightly, we would not be judged"
+        },
+        {
+          "reference": "I John 1:9-10",
+          "translation": "NASB",
+          "text": "If we confess our sins, He is faithful and righteous to forgive us our sins and to cleanse us from all unrighteousness. 10 If we say that we have not sinned, we make Him a liar and His word is not in us"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 79,
+      "question": "What is meant by the words, until He comes, which are used by the Apostle Paul when observing the Lord’s Table?",
+      "answer": "The words, until He comes, teach us indisputably that our Lord Jesus Christ will come a second time. This is the joy and blessed hope of all believers.",
+      "scriptures": [
+        {
+          "reference": "I Cor. 11:26",
+          "translation": "NASB",
+          "text": "For as often as you eat this bread and drink the cup, you proclaim the Lord’s death until He comes"
+        },
+        {
+          "reference": "Tit. 2:13",
+          "translation": "NASB",
+          "text": "looking for the blessed hope and the appearing of the glory of our great God and Savior, Christ Jesus"
+        }
+      ],
+      "attribution": "(Adapted from C.H. Spurgeon’s, A Catechism with Proofs, Q. 82)"
+    },
+    {
+      "number": 80,
+      "question": "In what manner will our Lord come?",
+      "answer": "Our Lord will come personally, bodily, visibly, and gloriously.",
+      "scriptures": [
+        {
+          "reference": "I Thess. 4:16",
+          "translation": "NASB",
+          "text": "For the Lord Himself will descend from heaven . . ."
+        },
+        {
+          "reference": "Acts 1:10-11",
+          "translation": "NASB",
+          "text": "And as they were gazing into the sky while He was going, behold, two men in white clothing stood beside them. They also said, “Men of Galilee, why do you stand looking into the sky? This Jesus who has been taken from you into heaven, will come in just the same way as you have watched Him go into heaven”"
+        },
+        {
+          "reference": "I John 3:2b",
+          "translation": "NASB",
+          "text": "We know that when He appears, we will be like Him, because we will see Him just as He is"
+        },
+        {
+          "reference": "Tit. 2:13",
+          "translation": "NASB",
+          "text": "looking for the blessed hope and the appearing of the glory of our great God and Savior, Christ Jesus"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 81,
+      "question": "When will our Lord come?",
+      "answer": "Our Lord will come at an hour that you do not expect, to keep you from the hour of testing which is about to come upon the whole world, because God has not destined us for wrath in the day of the Lord.",
+      "scriptures": [
+        {
+          "reference": "Lk. 12:40",
+          "translation": "NASB",
+          "text": "“You too, be ready; for the Son of Man is coming at an hour that you do not expect”"
+        },
+        {
+          "reference": "Revelation  3:10-11",
+          "translation": "NASB",
+          "text": "“Because you have kept the word of My perseverance, I also will keep you from the hour of testing, that hour which is about to come upon the whole world, to test those who dwell upon the earth. 11 I am coming quickly; hold fast what you have, in order that no one take your crown”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 82,
+      "question": "When will our Lord return to earth again?",
+      "answer": "Our Lord will return to earth again immediately after a great tribulation, such as has not occurred since the beginning of the world until now, nor ever will.",
+      "scriptures": [
+        {
+          "reference": "Matt. 24:21, 29a, 30b",
+          "translation": "NASB",
+          "text": "“For then there will be a great tribulation, such as has not occurred since the beginning of the world until now, nor ever will. . . . immediately after the tribulation of those days . . . they will see the SON OF MAN COMING ON THE CLOUDS OF THE SKY with power and great glory”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 83,
+      "question": "What will we experience when our Lord comes?",
+      "answer": "When our Lord comes (1) those of us asleep in Jesus will return with Him to be rejoined forever to our resurrected bodies, (2) those of us still living will be raptured with them to meet Him in the air, where (3) we all will be imperishably, immortally glorified when we see Him as He is.",
+      "scriptures": [
+        {
+          "reference": "I Thess. 4:14b-17",
+          "translation": "NASB",
+          "text": "God will bring with Him those who have fallen asleep in Jesus. 15 For this we say to you by the word of the Lord, that we who are alive and remain until the coming of the Lord, will not precede those who have fallen asleep. 16 For the Lord Himself will descend from heaven with a shout, with the voice of the archangel and with the trumpet of God, and the dead in Christ will rise first. 17 Then we who are alive and remain will be caught up together with them in the clouds to meet the Lord in the air, and so we shall always be with the Lord"
+        },
+        {
+          "reference": "I John 3:2b",
+          "translation": "NASB",
+          "text": "I Corinthians 15:51-53 We know that when He appears, we will be like Him, because we will see Him just as He is"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 84,
+      "question": "What will follow our glorification?",
+      "answer": "Following our glorification, we must all appear before the judgment seat of Christ.",
+      "scriptures": [
+        {
+          "reference": "II Corinthians 5:9-10",
+          "translation": "NASB",
+          "text": "Therefore we also have as our ambition, whether at home or absent, to be pleasing to Him. 10 For we must all appear before the judgment seat of Christ, so that each one may be recompensed for his deeds in the body, according to what he has done, whether good or bad"
+        },
+        {
+          "reference": "I Corinthians 3:11-15",
+          "translation": "NASB",
+          "text": "For no man can lay a foundation other than the one which is laid, which is Jesus Christ. 12 Now if any man builds on the foundation with gold, silver, precious stones, wood, hay, straw, 13 each man’s work will become evident; for the day will show it because it is to be revealed with fire, and the fire itself will test the quality of each man’s work. 14 If any man’s work which he has built on it remains, he will receive a reward. 15 If any man’s work is burned up, he will suffer loss; but he himself will be saved, yet so as through fire"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 85,
+      "question": "What will happen to those left behind after we are raptured?",
+      "answer": "Those left behind after we are raptured will enter into a period of seven literal years of terrifying, catastrophic ordeals of the wrath of God and of the Lamb.",
+      "scriptures": [
+        {
+          "reference": "Revelation 3:10",
+          "translation": "NASB",
+          "text": "“Because you have kept the word of My perseverance, I also will keep you from the hour of testing, that hour which is about to come upon the whole world, to test those who dwell upon the earth”"
+        },
+        {
+          "reference": "Revelation 6:15-16",
+          "translation": "NASB",
+          "text": "Then the kings of the earth and the great men and the commanders and the rich and the strong and every slave and free man hid themselves in the caves and among the rocks of the mountains; and they said to the mountains and to the rocks, “Fall on us and hide us from the presence of Him who sits on the throne, and from the wrath of the Lamb”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 86,
+      "question": "How will the seven years of God’s wrath terminate?",
+      "answer": "The seven years of God’s wrath will terminate with our Lord’s return to earth to rule and reign.",
+      "scriptures": [
+        {
+          "reference": "Matt. 24:21, 29a, 30b",
+          "translation": "NASB",
+          "text": "“For then there will be a great tribulation, such as has not occurred since the beginning of the world until now, nor ever will. . . . immediately after the tribulation of those days . . . they will see the Son of Man coMing on the cloudS of the Sky with power and great glory”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 87,
+      "question": "How long will our Lord rule and reign upon the earth?",
+      "answer": "Our Lord will rule and reign upon the earth for a thousand literal years. “Thy kingdom come!” This is the burden of our cries. Weary of man’s rule, we long for God’s. Sick at heart with this world’s scenes of evil,—man spoiling man; man enslaving man; man wounding man; man defrauding man; man treading upon man;—we long for the setting up of the righteous throne. Oh, what a world will this be, when man’s will as well as man’s rule shall be exchanged for Christ’s rule and will; when God’s “will shall be done on earth even as it is done in heaven!” (Horatius Bonar, The Morning of Joy)",
+      "scriptures": [
+        {
+          "reference": "Rev. 20:4-6",
+          "translation": "NASB",
+          "text": "Then I saw thrones, and they sat on them, and judgment was given to them. And I saw the souls of those who had been beheaded because of their testimony of Jesus and because of the word of God, and those who had not worshiped the beast or his image, and had not received the mark on their forehead and on their hand; and they came to life and reigned with Christ for a thousand years . 5 The rest of the dead did not come to life until the thousand years were completed. This is the first resurrection. 6 Blessed and holy is the one who has a part in the first resurrection; over these the second death has no power, but they will be priests of God and of Christ and will reign with Him for a thousand years"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 88,
+      "question": "What will follow our Lord’s thousand year reign upon the earth?",
+      "answer": "Following our Lord’s thousandyear reign upon the earth, the Devil and his angels, and all whose names are not written in the book of life will be cast into the Lake of Fire forever.",
+      "scriptures": [
+        {
+          "reference": "Matthew 25:41",
+          "translation": "NASB",
+          "text": "the eternal fire which has been prepared for the devil and his angels"
+        },
+        {
+          "reference": "Rev. 20:10",
+          "translation": "NASB",
+          "text": "And the devil who deceived them was thrown into the lake of fire and brimstone, where the beast and the false prophet are also; and they will be tormented day and night forever and ever"
+        },
+        {
+          "reference": "Rev. 20:15",
+          "translation": "NASB",
+          "text": "And if anyone’s name was not found written in the book of life, he was thrown into the lake of fire"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 89,
+      "question": "What will be the eternal future for those whose names are written in the book of life?",
+      "answer": "The eternal future for those whose names are written in the book of life will be sinless, sorrowless, painless, tearless, deathless, inexpressibly glorious life in a new heaven and a new earth and a beautifully adorned, holy city, the new Jerusalem!",
+      "scriptures": [
+        {
+          "reference": "Revelation 21:1-5",
+          "translation": "NASB",
+          "text": "1 Then I saw a new heaven and a new earth; for the first heaven and the first earth passed away, and there is no longer any sea. 2 And I saw the holy city, new Jerusalem, coming down out of heaven from God, made ready as a bride adorned for her husband. 3 And I heard a loud voice from the throne, saying, “Behold, the tabernacle of God is among men, and He will dwell among them, and they shall be His people, and God Himself will be among them, 4 and He will wipe away every tear from their eyes; and there will no longer be any death; there will no longer be any mourning, or crying, or pain; the first things have passed away. ” 5 And He who sits on the throne said, “Behold, I am making all things new. ” And He said, “Write, for these words are faithful and true. ”"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 90,
+      "question": "Since we are looking for a new heaven and a new earth, what should we be doing?",
+      "answer": "Since we are looking for a new heaven and a new earth, we should be making every effort so that we will be found by our Lord to be without spot or blemish, and at peace.",
+      "scriptures": [
+        {
+          "reference": "II Peter 3:13-15",
+          "translation": "ESV",
+          "text": "13 But according to his promise we are waiting for new heavens and a new earth in which righteousness dwells. 14 Therefore, beloved, since you are waiting for these, be diligent to be found by him without spot or blemish, and at peace. 15 And count the patience of our Lord as salvation, just as our beloved brother Paul also wrote to you according to the wisdom given him"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": 91,
+      "question": "Finally, Christians, what shall be the eternal end?",
+      "answer": "The eternal end shall be that God shall be all in all, that the Lamb shall be served by us who see His face, and that these Divine Persons shall receive from every created thing blessing and honor, glory and power, dominion and praise forever and ever. Amen, and Amen.",
+      "scriptures": [
+        {
+          "reference": "I Corinthians 15:26",
+          "translation": "NASB",
+          "text": "When all things are subjected to Him, then the Son Himself also will be subjected to the One who subjected all things to Him, so that God may be all in all"
+        },
+        {
+          "reference": "Revelation 22:3-4",
+          "translation": "NASB",
+          "text": "There will no longer be any curse; and the throne of God and of the Lamb will be in it, and His bond-servants will serve Him; they will see His face, and His name will be on their foreheads"
+        },
+        {
+          "reference": "Revelation 5:13-14",
+          "translation": "NASB",
+          "text": "And every created thing which is in heaven and on the earth and under the earth and on the sea, and all things in them, I heard saying, “To Him who sits on the throne, and to the Lamb, be blessing and honor and glory and dominion forever and ever. ” And the four living creatures kept saying, “Amen. ” And the elders fell down and worshipped"
+        }
+      ],
+      "attribution": ""
+    },
+    {
+      "number": "thanksgiving",
+      "question": "What shall I continually offer up to God for all His benefits to me?",
+      "answer": "For all His benefits to me, I shall continually offer up to God, through Christ, a sacrifice of praise, the fruit of lips that give thanks to His name.",
+      "scriptures": [
+        {
+          "reference": "Hebrews 13:15",
+          "translation": "NASB",
+          "text": "Through Him then, let us continually offer up a sacrifice of praise to God, that is, the fruit of lips that give thanks to His name."
+        }
+      ],
+      "attribution": ""
+    }
+  ]
+}
