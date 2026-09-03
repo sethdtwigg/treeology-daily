@@ -8,12 +8,16 @@
 <meta name="apple-mobile-web-app-title" content="Treeology Daily">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png" type="image/png">
 <meta name="theme-color" content="#152a18">
+<meta name="description" content="Daily catechism review from Mount Calvary Baptist — one question at a time, offline and on your own schedule.">
 <title>Treeology Daily</title>
 <link rel="manifest" href="./manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<!-- Fonts are self-hosted: a cross-origin no-cors stylesheet returns an
+     opaque response the service worker cannot cache, which dropped the app
+     to Georgia offline. Local files also remove the only render-blocking
+     third-party request. -->
+<link rel="stylesheet" href="./fonts/fonts.css">
 
 <style>
   :root {
@@ -25,13 +29,15 @@
     --leaf:        #5a9e60;   /* mid accent */
     --leaf-bright: #8dcf8a;   /* active / highlight */
     --leaf-pale:   #c6e8c2;   /* muted text on green */
+    --leaf-on-dark:#86c483;   /* accent text on any green surface — 4.7:1+ */
 
     /* ── Cream panel — top half of PDF cards ── */
     --cream-bg:    #f5f0e6;   /* question panel background */
     --cream-border:#d6ccb4;   /* cream panel border */
     --ink:         #1e3d22;   /* dark green text on cream */
     --ink-mid:     #3d6642;   /* body text on cream */
-    --ink-mute:    #7a9e7e;   /* muted text on cream */
+    --ink-mute:    #4f7554;   /* muted text on cream — 4.6:1 */
+    --ink-accent:  #357a3d;   /* green accent text on cream — 4.6:1 */
 
     /* ── Answer panel — bottom half of PDF cards ── */
     --answer-bg:   #1e3d22;   /* deep green answer bg */
@@ -40,12 +46,31 @@
 
     /* ── Utility ── */
     --danger:      #7a2020;
+    --danger-text: #f09a9a;   /* readable red on green — 4.5:1+ */
     --radius:      12px;
     --safe-top:    env(safe-area-inset-top, 0px);
     --safe-bot:    env(safe-area-inset-bottom, 0px);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  /* Keyboard focus. The tap highlight is suppressed above and the file had no
+     focus styling at all, so every control needs an explicit ring. */
+  :focus-visible {
+    outline: 2px solid var(--leaf-bright);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* The real checkbox is a 0x0 box, so its ring has to be drawn on the slider. */
+  .toggle input:focus-visible + .toggle-slider {
+    outline: 2px solid var(--leaf-bright);
+    outline-offset: 2px;
+  }
+
+  /* On the cream panel the bright ring washes out. */
+  .today-header :focus-visible,
+  .card :focus-visible { outline-color: var(--ink-accent); }
 
   html, body {
     height: 100%;
@@ -64,6 +89,9 @@
     height: 100%;
     max-width: 480px;
     margin: 0 auto;
+    /* Top inset belongs on the shell, not on nav: the install banner renders
+       above nav, so putting it there left the banner under the notch. */
+    padding-top: var(--safe-top);
   }
 
   /* ── Nav bar ── */
@@ -71,7 +99,6 @@
     display: flex;
     background: var(--forest-dark);
     border-bottom: 1px solid var(--forest3);
-    padding-top: var(--safe-top);
     flex-shrink: 0;
     position: relative;
     z-index: 10;
@@ -81,7 +108,7 @@
     flex: 1;
     background: none;
     border: none;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     font-family: 'EB Garamond', serif;
     font-size: 13px;
     letter-spacing: 0.1em;
@@ -119,13 +146,17 @@
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: calc(16px + var(--safe-bot));
   }
 
   .screen.active { display: flex; flex-direction: column; }
 
+  /* Bottom inset goes on whichever element actually scrolls in each screen.
+     It cannot live on .screen: every screen also carries an id selector, and
+     an id + `padding` shorthand outranks it and resets the value. */
+  #screen-today,
+  #screen-settings { padding: 0 0 calc(16px + var(--safe-bot)); }
+
   /* ── TODAY screen ── */
-  #screen-today { padding: 0; }
 
   /* Header strip — cream coloured like the top panel of the PDF */
   .today-header {
@@ -163,7 +194,7 @@
 
   .today-progress-label {
     font-size: 11px;
-    color: var(--leaf);
+    color: var(--ink-accent);
     letter-spacing: 0.06em;
   }
 
@@ -259,6 +290,8 @@
   }
 
   /* Mode toggle */
+  .mode-toggle-wrap { padding: 14px 16px 0; }
+
   .mode-toggle {
     display: flex;
     background: var(--forest2);
@@ -275,7 +308,7 @@
     border: none;
     border-radius: 6px;
     background: none;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     font-family: 'EB Garamond', serif;
     font-size: 14px;
     letter-spacing: 0.06em;
@@ -334,13 +367,13 @@
 
   .answer-reveal-hint {
     font-size: 13px;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     font-style: italic;
     margin-top: 2px;
   }
 
   .answer-chevron {
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     transition: transform 0.3s;
     flex-shrink: 0;
   }
@@ -376,10 +409,14 @@
 
   /* Reading mode — answer shown inside its own green card */
   #answer-reading {
-    background: var(--answer-bg) !important;
-    border-color: var(--forest3) !important;
+    background: var(--answer-bg);
+    border-color: var(--forest3);
     position: relative;
     overflow: hidden;
+    /* Clearance for the ::after tree band. Belongs on the container, not on
+       .reading-answer — the attribution comes after that element, so the
+       padding opened a gap and then dropped the attribution into the band. */
+    padding-bottom: 60px;
   }
 
   #answer-reading::after {
@@ -392,7 +429,6 @@
   }
 
   #answer-reading .card-label { color: var(--leaf-pale); opacity: 0.6; }
-  #answer-reading .reading-answer { padding-bottom: 60px; }
 
   .reading-answer { padding-top: 4px; }
 
@@ -475,14 +511,15 @@
   .mark-btn.unreviewed {
     background: var(--forest);
     color: #fff;
+    border: 1px solid transparent;   /* match .reviewed's border box */
   }
 
   .mark-btn.unreviewed:active { opacity: 0.8; }
 
   .mark-btn.reviewed {
     background: var(--cream-bg);
-    color: var(--leaf);
-    border: 1px solid var(--leaf);
+    color: var(--ink-accent);
+    border: 1px solid var(--ink-accent);
   }
 
   .mark-btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -517,7 +554,7 @@
   /* ── Ornament ── */
   .ornament {
     text-align: center;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     font-size: 18px;
     padding: 4px 0;
     letter-spacing: 0.3em;
@@ -547,7 +584,12 @@
     color: var(--ink-mute);
   }
 
-  .browse-list { flex: 1; overflow-y: auto; }
+  .browse-list {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(16px + var(--safe-bot));
+  }
 
   .browse-item {
     display: flex;
@@ -574,7 +616,7 @@
   .browse-num {
     font-family: 'Playfair Display', serif;
     font-size: 17px;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     min-width: 28px;
     text-align: right;
     flex-shrink: 0;
@@ -598,8 +640,7 @@
   .browse-badge {
     font-size: 11px;
     letter-spacing: 0.06em;
-    color: var(--leaf);
-    opacity: 0.7;
+    color: var(--leaf-on-dark);
   }
 
   .browse-item.is-today .browse-badge { color: var(--leaf-bright); opacity: 1; }
@@ -613,7 +654,6 @@
   }
 
   /* ── SETTINGS screen ── */
-  #screen-settings { padding: 0; }
 
   .settings-header {
     padding: 18px 20px 12px;
@@ -635,7 +675,7 @@
     font-size: 10px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     margin-bottom: 10px;
   }
 
@@ -652,22 +692,51 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
-    border-bottom: 1px solid var(--forest3);
     gap: 12px;
   }
 
-  .settings-row:last-child { border-bottom: none; }
+  .settings-row.is-hidden { display: none; }
+
+  /* Separator above every visible row but the first. `:last-child` cannot do
+     this job: the two reminder rows are hidden by default, so the last
+     *visible* row kept its border and drew it against the group's own. */
+  .settings-row:not(.is-hidden) ~ .settings-row:not(.is-hidden) {
+    border-top: 1px solid var(--forest3);
+  }
+
+  .settings-row--stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .settings-row-note { font-style: italic; }
+
+  /* The flex item is this wrapper, not the label inside it — `flex: 1` on the
+     label was inert, letting long labels wrap early on narrow screens. */
+  .settings-row-text { flex: 1; }
+
+  .notif-control {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .settings-group--plain {
+    overflow: visible;
+    background: none;
+    border: none;
+  }
 
   .settings-row-label {
     font-size: 16px;
     color: var(--leaf-pale);
-    flex: 1;
   }
 
   .settings-row-sub {
     font-size: 13px;
-    color: var(--leaf);
-    opacity: 0.7;
+    color: var(--leaf-on-dark);
     margin-top: 2px;
   }
 
@@ -680,6 +749,7 @@
 
   .stepper-btn {
     width: 34px; height: 34px;
+    position: relative;
     border: 1px solid var(--forest3);
     border-radius: 8px;
     background: var(--forest-dark);
@@ -693,6 +763,9 @@
     transition: all 0.15s;
   }
 
+  /* 44px touch target without changing the 34px visual. */
+  .stepper-btn::after { content: ''; position: absolute; inset: -5px; }
+
   .stepper-btn:active { background: var(--forest); }
 
   .stepper-val {
@@ -703,7 +776,7 @@
     text-align: center;
   }
 
-  input[type="date"], input[type="number"] {
+  input[type="date"] {
     background: var(--forest-dark);
     border: 1px solid var(--forest3);
     border-radius: 8px;
@@ -717,26 +790,17 @@
     cursor: pointer;
   }
 
-  input[type="number"] { width: 70px; text-align: center; }
-
-  select {
-    background: var(--forest-dark);
-    border: 1px solid var(--forest3);
-    border-radius: 8px;
-    color: #fff;
-    font-family: 'EB Garamond', serif;
-    font-size: 16px;
-    padding: 6px 10px;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-  }
 
   /* Toggle switch */
   .toggle {
     position: relative;
     width: 46px; height: 26px;
     flex-shrink: 0;
+    /* Vertical padding via a transparent border keeps the 26px track while
+       giving the label a 44px-tall hit area. */
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    box-sizing: content-box;
   }
 
   .toggle input { opacity: 0; width: 0; height: 0; }
@@ -773,7 +837,7 @@
     border: 1px solid var(--danger);
     border-radius: var(--radius);
     background: transparent;
-    color: #e06060;
+    color: var(--danger-text);
     font-family: 'EB Garamond', serif;
     font-size: 16px;
     letter-spacing: 0.06em;
@@ -786,14 +850,13 @@
 
   .settings-info {
     font-size: 13px;
-    color: var(--leaf);
-    opacity: 0.7;
+    color: var(--leaf-on-dark);
     line-height: 1.5;
     padding: 0 16px 20px;
   }
 
   /* ── Loading / Empty states ── */
-  .loading, .empty {
+  .loading {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -812,7 +875,7 @@
 
   .loading-sub {
     font-size: 15px;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     line-height: 1.5;
   }
 
@@ -829,6 +892,11 @@
 
   /* ── Thanksgiving banner ── */
   .thanksgiving-banner {
+    display: block;
+    width: calc(100% - 32px);
+    text-align: left;
+    font: inherit;
+    color: inherit;
     margin: 0 16px;
     padding: 14px 16px;
     background: var(--forest2);
@@ -866,8 +934,8 @@
   }
 
   .notif-status.on      { background: rgba(90,158,96,0.25); color: var(--leaf-bright); border: 1px solid var(--leaf); }
-  .notif-status.off     { background: var(--forest-dark); color: var(--leaf); border: 1px solid var(--forest3); }
-  .notif-status.blocked { background: rgba(122,32,32,0.2); color: #e06060; border: 1px solid var(--danger); }
+  .notif-status.off     { background: var(--forest-dark); color: var(--leaf-on-dark); border: 1px solid var(--forest3); }
+  .notif-status.blocked { background: rgba(122,32,32,0.2); color: var(--danger-text); border: 1px solid var(--danger); }
 
   .notif-status-dot {
     width: 6px; height: 6px;
@@ -932,10 +1000,11 @@
     flex-shrink: 0;
     background: none;
     border: none;
-    color: var(--leaf);
+    color: var(--leaf-on-dark);
     font-size: 20px;
     cursor: pointer;
-    padding: 0 0 0 4px;
+    padding: 12px;
+    margin: -12px;   /* 44px hit area without moving the glyph */
     line-height: 1;
   }
 
@@ -955,7 +1024,7 @@
     background: var(--forest2);
     border: 1px solid var(--forest3);
     border-radius: 16px 16px 0 0;
-    padding: 24px 24px 40px;
+    padding: 24px 24px calc(24px + var(--safe-bot));
     width: 100%;
     max-width: 480px;
     animation: slideUp 0.25s ease;
@@ -1009,9 +1078,9 @@
   </div>
 
   <!-- iOS INSTALL SHEET -->
-  <div id="ios-sheet">
+  <div id="ios-sheet" role="dialog" aria-modal="true" aria-labelledby="ios-sheet-title">
     <div class="ios-sheet-inner">
-      <div class="ios-sheet-title">Add to Home Screen</div>
+      <h2 class="ios-sheet-title" id="ios-sheet-title">Add to Home Screen</h2>
       <div class="ios-step">
         <div class="ios-step-num">1</div>
         <div class="ios-step-text">Tap the <strong>Share button</strong> at the bottom of Safari (the box with an arrow pointing up)</div>
@@ -1029,16 +1098,16 @@
   </div>
 
   <!-- NAV -->
-  <nav>
-    <button class="active" data-screen="today" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+  <nav aria-label="Main">
+    <button class="active" data-screen="today" type="button" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
         <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
       </svg>
       Today
     </button>
     <button data-screen="browse" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
         <line x1="8" y1="18" x2="21" y2="18"/>
         <circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/>
@@ -1047,7 +1116,7 @@
       Browse
     </button>
     <button data-screen="settings" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
@@ -1073,7 +1142,7 @@
       </div>
 
       <!-- Mode toggle -->
-      <div style="padding: 14px 20px 0;">
+      <div class="mode-toggle-wrap">
         <div class="mode-toggle">
           <button class="mode-btn" id="mode-quiz" type="button">Quiz Mode</button>
           <button class="mode-btn" id="mode-read" type="button">Reading Mode</button>
@@ -1084,7 +1153,7 @@
         <!-- Question card -->
         <div class="card">
           <div class="card-label">Question</div>
-          <div class="question-text" id="q-text"></div>
+          <h1 class="question-text" id="q-text"></h1>
         </div>
 
         <!-- Answer (quiz mode) -->
@@ -1137,10 +1206,10 @@
       </button>
 
       <!-- Thanksgiving -->
-      <div id="thanksgiving-banner" class="thanksgiving-banner" style="display:none; margin-top:4px;">
+      <button type="button" id="thanksgiving-banner" class="thanksgiving-banner" style="display:none; margin-top:4px;">
         <div class="thanksgiving-label">🍂 Thanksgiving</div>
         <div class="thanksgiving-text">View the special Thanksgiving catechism</div>
-      </div>
+      </button>
 
       <div style="height:8px;"></div>
     </div>
@@ -1150,7 +1219,7 @@
       <div class="loading-title">catechisms.json not found</div>
       <div class="loading-sub">
         Run the Python scraper first:<br><br>
-        <code style="background:var(--bg3);padding:4px 8px;border-radius:6px;font-size:14px;">python scraper.py</code><br><br>
+        <code style="background:var(--forest-dark);padding:4px 8px;border-radius:6px;font-size:14px;">python scraper.py</code><br><br>
         Then place <strong>catechisms.json</strong> in the same folder as <strong>index.html</strong>.
       </div>
     </div>
@@ -1159,7 +1228,7 @@
   <!-- BROWSE -->
   <div id="screen-browse" class="screen">
     <div class="browse-header">
-      <div class="browse-title">All Catechisms</div>
+      <h1 class="browse-title">All Catechisms</h1>
       <div class="browse-subtitle" id="browse-subtitle">91 questions</div>
     </div>
     <div class="browse-list" id="browse-list"></div>
@@ -1168,66 +1237,66 @@
   <!-- SETTINGS -->
   <div id="screen-settings" class="screen">
     <div class="settings-header">
-      <div class="settings-title">Settings</div>
+      <h1 class="settings-title">Settings</h1>
     </div>
 
     <div class="settings-section">
-      <div class="settings-section-label">Schedule</div>
+      <h2 class="settings-section-label" id="sec-schedule">Schedule</h2>
       <div class="settings-group">
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Days per catechism</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-days">Days per catechism</div>
             <div class="settings-row-sub">How many days before advancing</div>
           </div>
           <div class="settings-control">
-            <button type="button" class="stepper-btn" id="days-minus">−</button>
-            <span class="stepper-val" id="days-val">3</span>
-            <button type="button" class="stepper-btn" id="days-plus">+</button>
+            <button type="button" class="stepper-btn" id="days-minus" aria-label="Fewer days per catechism">−</button>
+            <span class="stepper-val" id="days-val" aria-live="polite" aria-atomic="true">3</span>
+            <button type="button" class="stepper-btn" id="days-plus" aria-label="More days per catechism">+</button>
           </div>
         </div>
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Start date</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-start-date">Start date</div>
             <div class="settings-row-sub">When did you begin?</div>
           </div>
           <div class="settings-control">
-            <input type="date" id="start-date-input">
+            <input type="date" id="start-date-input" aria-labelledby="lbl-start-date">
           </div>
         </div>
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Start from catechism #</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-startq">Start from catechism #</div>
             <div class="settings-row-sub">Skip ahead if needed</div>
           </div>
           <div class="settings-control">
-            <button type="button" class="stepper-btn" id="startq-minus">−</button>
-            <span class="stepper-val" id="start-q-val">1</span>
-            <button type="button" class="stepper-btn" id="startq-plus">+</button>
+            <button type="button" class="stepper-btn" id="startq-minus" aria-label="Start from an earlier catechism">−</button>
+            <span class="stepper-val" id="start-q-val" aria-live="polite" aria-atomic="true">1</span>
+            <button type="button" class="stepper-btn" id="startq-plus" aria-label="Start from a later catechism">+</button>
           </div>
         </div>
       </div>
     </div>
 
     <div class="settings-section">
-      <div class="settings-section-label">Display</div>
+      <h2 class="settings-section-label">Display</h2>
       <div class="settings-group">
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Default to reading mode</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-read-mode">Default to reading mode</div>
             <div class="settings-row-sub">Show answer immediately</div>
           </div>
           <label class="toggle">
-            <input type="checkbox" id="default-read-toggle">
+            <input type="checkbox" id="default-read-toggle" aria-labelledby="lbl-read-mode">
             <span class="toggle-slider"></span>
           </label>
         </div>
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Show scriptures expanded</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-scripture-open">Show scriptures expanded</div>
             <div class="settings-row-sub">Open scripture list by default</div>
           </div>
           <label class="toggle">
-            <input type="checkbox" id="show-scripture-toggle">
+            <input type="checkbox" id="show-scripture-toggle" aria-labelledby="lbl-scripture-open">
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -1235,43 +1304,43 @@
     </div>
 
     <div class="settings-section">
-      <div class="settings-section-label">Reminders</div>
+      <h2 class="settings-section-label">Reminders</h2>
       <div class="settings-group">
         <div class="settings-row">
-          <div>
-            <div class="settings-row-label">Daily reminder</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-reminder">Daily reminder</div>
             <div class="settings-row-sub">Notify me to review each day</div>
           </div>
-          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+          <div class="notif-control">
             <span class="notif-status off" id="notif-status-pill">
               <span class="notif-status-dot"></span>
               <span id="notif-status-text">Off</span>
             </span>
             <label class="toggle">
-              <input type="checkbox" id="notif-toggle">
+              <input type="checkbox" id="notif-toggle" aria-labelledby="lbl-reminder">
               <span class="toggle-slider"></span>
             </label>
           </div>
         </div>
-        <div class="settings-row" id="notif-time-row" style="display:none;">
-          <div>
-            <div class="settings-row-label">Reminder time</div>
+        <div class="settings-row is-hidden" id="notif-time-row">
+          <div class="settings-row-text">
+            <div class="settings-row-label" id="lbl-reminder-time">Reminder time</div>
             <div class="settings-row-sub">What time should we remind you?</div>
           </div>
           <div class="settings-control">
-            <input type="time" id="notif-time-input" value="07:00">
+            <input type="time" id="notif-time-input" value="07:00" aria-labelledby="lbl-reminder-time">
           </div>
         </div>
-        <div class="settings-row" id="notif-info-row" style="display:none; flex-direction:column; align-items:flex-start; gap:4px;">
-          <div class="settings-row-sub" id="notif-info-text" style="font-style:italic;"></div>
+        <div class="settings-row settings-row--stacked is-hidden" id="notif-info-row">
+          <div class="settings-row-sub settings-row-note" id="notif-info-text"></div>
         </div>
       </div>
     </div>
 
     <div class="settings-section">
-      <div class="settings-section-label">Progress</div>
+      <h2 class="settings-section-label">Progress</h2>
       <div class="settings-group">
-        <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:6px;">
+        <div class="settings-row settings-row--stacked">
           <div class="settings-row-label">Completion estimate</div>
           <div class="settings-row-sub" id="completion-estimate">—</div>
         </div>
@@ -1279,8 +1348,8 @@
     </div>
 
     <div class="settings-section">
-      <div class="settings-section-label">Reset</div>
-      <div class="settings-group" style="overflow:visible; background:none; border:none;">
+      <h2 class="settings-section-label">Reset</h2>
+      <div class="settings-group settings-group--plain">
         <button class="danger-btn" id="reset-progress" type="button">Reset All Progress</button>
         <button class="danger-btn" id="reset-all" type="button">Reset Everything (factory reset)</button>
       </div>
@@ -1291,55 +1360,74 @@
 
 </div>
 
+<script src="schedule.js"></script>
 <script>
 // ══════════════════════════════════════════════════
 //  State & Storage
 // ══════════════════════════════════════════════════
+// Every accessor is guarded: localStorage throws outright in Safari Private
+// Browsing and in storage-blocked embedded browsers, and an unguarded write
+// would abort whatever caller triggered it.
 const STORE = {
   get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
-  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
-  del: k => localStorage.removeItem(k)
+  set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  del: k => { try { localStorage.removeItem(k); } catch { /* nothing to do */ } }
 };
+
+const SETTINGS_KEY = 'settings';
+
+// Legacy per-key names, read once to migrate installs from before settings
+// were stored as a single object.
+const LEGACY_KEYS = ['daysPerCatechism', 'startDate', 'startFromQ', 'defaultMode',
+                     'scriptureOpen', 'reviewedDates', 'notifEnabled', 'notifTime'];
 
 let catechisms = [];   // loaded from catechisms.json
 let settings = {};
 let todayKey = '';     // YYYY-MM-DD (local)
 let viewingOverride = null;  // set while the user views a non-today card
 
-function localDateKey(d) {
-  return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
+const localDateKey = Schedule.localDateKey;
+
+function refreshTodayKey() {
+  todayKey = localDateKey(new Date());
+  return todayKey;
 }
 
 function loadSettings() {
-  todayKey = localDateKey(new Date());
+  refreshTodayKey();
+
+  // Single-object storage, falling back to the legacy per-key layout.
+  let stored = STORE.get(SETTINGS_KEY);
+  if (!stored || typeof stored !== 'object') {
+    stored = {};
+    for (const k of LEGACY_KEYS) {
+      const v = STORE.get(k);
+      if (v !== null) stored[k] = v;
+    }
+  }
 
   const cutoff = localDateKey(new Date(Date.now() - 400 * 86400000));
-  const reviewed = STORE.get('reviewedDates') ?? {};
+  const reviewed = (stored.reviewedDates && typeof stored.reviewedDates === 'object')
+    ? stored.reviewedDates : {};
 
   settings = {
-    daysPerCatechism: STORE.get('daysPerCatechism') ?? 3,
-    startDate:        STORE.get('startDate') ?? todayKey,
-    startFromQ:       STORE.get('startFromQ') ?? 1,
-    defaultMode:      STORE.get('defaultMode') ?? 'quiz',
-    scriptureOpen:    STORE.get('scriptureOpen') ?? false,
+    daysPerCatechism: stored.daysPerCatechism ?? 3,
+    startDate:        stored.startDate ?? todayKey,
+    startFromQ:       stored.startFromQ ?? 1,
+    defaultMode:      stored.defaultMode ?? 'quiz',
+    scriptureOpen:    stored.scriptureOpen ?? false,
     reviewedDates:    Object.fromEntries(
       Object.entries(reviewed).filter(([k]) => k >= cutoff)),
-    notifEnabled:     STORE.get('notifEnabled') ?? false,
-    notifTime:        STORE.get('notifTime') ?? '07:00',
+    notifEnabled:     stored.notifEnabled ?? false,
+    notifTime:        stored.notifTime ?? '07:00',
+    lastNotifDate:    stored.lastNotifDate ?? null,
   };
 }
 
+// One key, one write — a partial failure can no longer leave settings
+// half-updated the way eight sequential writes could.
 function saveSettings() {
-  STORE.set('daysPerCatechism', settings.daysPerCatechism);
-  STORE.set('startDate', settings.startDate);
-  STORE.set('startFromQ', settings.startFromQ);
-  STORE.set('defaultMode', settings.defaultMode);
-  STORE.set('scriptureOpen', settings.scriptureOpen);
-  STORE.set('reviewedDates', settings.reviewedDates);
-  STORE.set('notifEnabled', settings.notifEnabled);
-  STORE.set('notifTime', settings.notifTime);
+  return STORE.set(SETTINGS_KEY, settings);
 }
 
 // ══════════════════════════════════════════════════
@@ -1360,30 +1448,22 @@ async function loadData() {
 // ══════════════════════════════════════════════════
 //  Schedule logic
 // ══════════════════════════════════════════════════
+// Thin bindings over schedule.js — the math itself lives there so it can be
+// unit-tested without a DOM.
 function daysSinceStart() {
-  const start = new Date(settings.startDate + 'T00:00:00');
-  const now   = new Date(todayKey + 'T00:00:00');
-  return Math.max(0, Math.floor((now - start) / 86400000));
+  return Schedule.daysSinceStart(settings.startDate, todayKey);
 }
 
 function todaysCatechismIndex() {
-  const days  = daysSinceStart();
-  const dpq   = Math.max(1, settings.daysPerCatechism);
-  const startQ = Math.max(1, settings.startFromQ) - 1; // 0-indexed
-  const regular = catechisms.filter(c => c.number !== 'thanksgiving');
-  const idx = startQ + Math.floor(days / dpq);
-  return Math.min(idx, regular.length - 1);
+  return Schedule.todaysCatechismIndex(settings, todayKey, regularCatechisms().length);
 }
 
 function todaysCatechism() {
-  const regular = catechisms.filter(c => c.number !== 'thanksgiving');
-  return regular[todaysCatechismIndex()];
+  return regularCatechisms()[todaysCatechismIndex()];
 }
 
 function dayOfCycle() {
-  const days = daysSinceStart();
-  const dpq  = Math.max(1, settings.daysPerCatechism);
-  return (days % dpq) + 1;
+  return Schedule.dayOfCycle(settings, todayKey);
 }
 
 function isReviewedToday() {
@@ -1406,9 +1486,14 @@ let currentScreen = 'today';
 function showScreen(name) {
   currentScreen = name;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');   // the .active class alone tells a screen reader nothing
+  });
   document.getElementById('screen-' + name).classList.add('active');
-  document.querySelector(`nav button[data-screen="${name}"]`).classList.add('active');
+  const navBtn = document.querySelector(`nav button[data-screen="${name}"]`);
+  navBtn.classList.add('active');
+  navBtn.setAttribute('aria-current', 'page');
 
   if (name === 'browse') renderBrowse();
   if (name === 'settings') renderSettings();
@@ -1420,6 +1505,12 @@ function showScreen(name) {
 let answerVisible = false;
 let scripturesVisible = false;
 let currentMode = 'quiz';
+
+// The Thanksgiving card's `number` is the string 'thanksgiving', not an
+// integer — every user-facing label has to special-case it.
+function catLabel(cat) {
+  return cat.number === 'thanksgiving' ? 'Thanksgiving Special' : `Question ${cat.number}`;
+}
 
 function renderToday(cat) {
   if (!cat) return;
@@ -1439,9 +1530,7 @@ function renderToday(cat) {
   document.getElementById('today-day-label').textContent =
     dpq > 1 ? `Day ${dayN} of ${dpq}` : '';
 
-  const numLabel = cat.number === 'thanksgiving'
-    ? 'Thanksgiving Special'
-    : `Question ${cat.number}`;
+  const numLabel = catLabel(cat);
   const qNumEl = document.getElementById('today-q-number');
   qNumEl.textContent = numLabel;
   qNumEl.setAttribute('data-num', cat.number === 'thanksgiving' ? '🍂' : cat.number);
@@ -1506,7 +1595,7 @@ function renderToday(cat) {
   const vBanner = document.getElementById('viewing-banner');
   if (viewingOverride) {
     document.getElementById('viewing-label').textContent =
-      `Viewing Question ${cat.number} · scheduled for another day`;
+      `Viewing ${catLabel(cat)} · scheduled for another day`;
     vBanner.style.display = 'flex';
   } else {
     vBanner.style.display = 'none';
@@ -1523,7 +1612,9 @@ function renderToday(cat) {
   // Apply mode
   setMode(currentMode);
 
-  // Apply scripture state
+  // Apply reveal state — both of these have to run on every render, or the
+  // previous card's open/closed DOM carries over onto the new one.
+  updateAnswer();
   updateScriptures();
 
   document.getElementById('today-loading').style.display = 'none';
@@ -1546,6 +1637,10 @@ function setMode(mode) {
 
 function toggleAnswer() {
   answerVisible = !answerVisible;
+  updateAnswer();
+}
+
+function updateAnswer() {
   document.getElementById('answer-body').classList.toggle('visible', answerVisible);
   document.getElementById('answer-chevron').classList.toggle('open', answerVisible);
   document.getElementById('answer-tap').setAttribute('aria-expanded', String(answerVisible));
@@ -1624,8 +1719,9 @@ function renderBrowse() {
     if (isToday) badge = '📖 Today';
     else if (isDone) badge = '✓ Completed';
     else {
-      // estimate when
-      const daysUntil = (i - todayIdx) * settings.daysPerCatechism;
+      // estimate when — counts the current cycle's elapsed days, so on the
+      // last day of a cycle the next card correctly reads "Coming tomorrow"
+      const daysUntil = Schedule.daysUntilIndex(settings, todayKey, i, todayIdx);
       const future = new Date(todayKey + 'T12:00:00');
       future.setDate(future.getDate() + daysUntil);
       badge = 'Coming ' + future.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -1712,8 +1808,8 @@ function renderSettings() {
 
   // Completion estimate
   const regular = regularCatechisms();
-  const remaining = regular.length - todaysCatechismIndex();
-  const daysLeft = remaining * settings.daysPerCatechism;
+  const daysLeft = Schedule.daysUntilComplete(
+    settings, todayKey, regular.length, todaysCatechismIndex());
   const endDate = new Date(todayKey + 'T12:00:00');
   endDate.setDate(endDate.getDate() + daysLeft);
   const endStr = endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -1727,26 +1823,34 @@ function renderSettings() {
   renderNotifStatus();
 }
 
-function changeDays(delta) {
-  settings.daysPerCatechism = Math.max(1, Math.min(30, settings.daysPerCatechism + delta));
+// Anything that moves the schedule has to re-render Today as well as
+// Settings — showScreen() only re-renders Browse and Settings, so without
+// this the Today card keeps the pre-change question until a reload. Clearing
+// viewingOverride first stops today's own card rendering as "scheduled for
+// another day" with its Mark button disabled.
+function applyScheduleChange() {
+  viewingOverride = null;
   saveSettings();
   renderSettings();
+  renderToday(todaysCatechism());
+}
+
+function changeDays(delta) {
+  settings.daysPerCatechism = Math.max(1, Math.min(30, settings.daysPerCatechism + delta));
+  applyScheduleChange();
 }
 
 function changeStartQ(delta) {
   const regular = regularCatechisms();
   settings.startFromQ = Math.max(1, Math.min(regular.length, settings.startFromQ + delta));
-  saveSettings();
-  renderSettings();
+  applyScheduleChange();
 }
 
 function saveStartDate() {
   const val = document.getElementById('start-date-input').value;
   if (val) {
     settings.startDate = val;
-    saveSettings();
-    renderSettings();
-    renderToday(todaysCatechism());
+    applyScheduleChange();
   }
 }
 
@@ -1803,7 +1907,8 @@ function renderNotifStatus() {
     pillText.textContent = 'Not supported';
     toggle.disabled = true;
     toggle.checked = false;
-    infoRow.style.display = 'flex';
+    timeRow.classList.add('is-hidden');
+    infoRow.classList.remove('is-hidden');
     infoText.textContent = 'Notifications are not supported in this browser. Try installing the app to your home screen first.';
     return;
   }
@@ -1815,8 +1920,8 @@ function renderNotifStatus() {
     pillText.textContent = 'Blocked';
     toggle.disabled = true;
     toggle.checked = false;
-    timeRow.style.display = 'none';
-    infoRow.style.display = 'flex';
+    timeRow.classList.add('is-hidden');
+    infoRow.classList.remove('is-hidden');
     infoText.textContent = 'Notifications are blocked. To enable them, go to your browser or phone Settings → Notifications and allow this site.';
     return;
   }
@@ -1826,8 +1931,8 @@ function renderNotifStatus() {
     pillText.textContent = 'On · ' + formatNotifTime(settings.notifTime);
     toggle.checked = true;
     toggle.disabled = false;
-    timeRow.style.display = 'flex';
-    infoRow.style.display = 'flex';
+    timeRow.classList.remove('is-hidden');
+    infoRow.classList.remove('is-hidden');
     infoText.textContent = 'Best-effort reminder around ' + formatNotifTime(settings.notifTime) + '. It fires when the app is open or recently active — phones may delay or drop background reminders, especially on iPhone.';
     return;
   }
@@ -1837,8 +1942,8 @@ function renderNotifStatus() {
   pillText.textContent = 'Off';
   toggle.checked = false;
   toggle.disabled = false;
-  timeRow.style.display = 'none';
-  infoRow.style.display = 'none';
+  timeRow.classList.add('is-hidden');
+  infoRow.classList.add('is-hidden');
 }
 
 function formatNotifTime(t) {
@@ -1862,7 +1967,7 @@ async function toggleNotifications() {
   }
 
   // Turning on — request permission if needed
-  if (Notification.permission === 'default') {
+  if (notifPermission() === 'default') {
     const result = await Notification.requestPermission();
     if (result !== 'granted') {
       toggle.checked = false;
@@ -1871,7 +1976,7 @@ async function toggleNotifications() {
     }
   }
 
-  if (Notification.permission === 'granted') {
+  if (notifPermission() === 'granted') {
     settings.notifEnabled = true;
     saveSettings();
     scheduleNotification();
@@ -1896,7 +2001,7 @@ function scheduleNotification() {
   // Cancel any existing scheduled notification
   cancelScheduledNotification();
 
-  if (!settings.notifEnabled || Notification.permission !== 'granted') return;
+  if (!settings.notifEnabled || notifPermission() !== 'granted') return;
 
   const now = new Date();
   const [targetH, targetM] = (settings.notifTime || '07:00').split(':').map(Number);
@@ -1907,15 +2012,27 @@ function scheduleNotification() {
 
   // If target time already passed today, schedule for tomorrow
   if (target <= now) {
+    // Today's slot is gone. Timers do not survive a backgrounded tab, so it
+    // may never have fired — but firing it now, at a user who already has
+    // the app open, helps nobody. Record the day as handled instead.
+    markNotifHandled();
     target.setDate(target.getDate() + 1);
   }
 
   const msUntilNotif = target - now;
 
-  notifTimeoutId = setTimeout(async () => {
-    await fireNotification();
-    scheduleNotification();
+  notifTimeoutId = setTimeout(() => {
+    // Re-arm from finally(): fireNotification awaits serviceWorker.ready,
+    // which never rejects and never resolves when registration failed, so
+    // anything less would let the daily chain die silently.
+    fireNotification().finally(scheduleNotification);
   }, msUntilNotif);
+}
+
+function markNotifHandled() {
+  if (settings.lastNotifDate === todayKey) return;
+  settings.lastNotifDate = todayKey;
+  saveSettings();
 }
 
 function cancelScheduledNotification() {
@@ -1926,39 +2043,61 @@ function cancelScheduledNotification() {
 }
 
 async function fireNotification() {
-  if (Notification.permission !== 'granted') return;
+  if (notifPermission() !== 'granted') return;
+
+  // This runs off a timer, with no visibilitychange or pageshow behind it, so
+  // todayKey can still hold yesterday's date — refresh before picking the
+  // question or the reminder names the wrong one.
+  rolloverIfNewDay();
 
   const cat = todaysCatechism();
-  const qNum = cat ? `Question ${cat.number}` : 'Daily Catechism';
+  const qNum = cat ? catLabel(cat) : 'Daily Catechism';
   const qText = cat ? cat.question : 'Time for your daily catechism review.';
 
-  // Prefer service worker showNotification (works when app is backgrounded)
-  if ('serviceWorker' in navigator) {
-    const reg = await navigator.serviceWorker.ready;
-    await reg.showNotification('📖 ' + qNum, {
-      body: qText,
-      icon: './icon-192.png',
-      badge: './icon-192.png',
-      tag: 'daily-catechism',       // replaces previous notification
-      renotify: true,
-      data: { url: location.href }
-    });
-  } else {
-    // Fallback to basic Notification API
-    new Notification('📖 ' + qNum, { body: qText });
+  try {
+    // Prefer service worker showNotification (works when app is backgrounded)
+    if ('serviceWorker' in navigator) {
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('service worker not ready')), 5000))
+      ]);
+      await reg.showNotification('📖 ' + qNum, {
+        body: qText,
+        icon: './icon-192.png',
+        badge: './icon-192.png',
+        tag: 'daily-catechism',       // replaces previous notification
+        renotify: true,
+        data: { url: location.href }
+      });
+    } else {
+      // Fallback to basic Notification API
+      new Notification('📖 ' + qNum, { body: qText });
+    }
+    markNotifHandled();
+  } catch {
+    // Best-effort by design — a failed reminder must not break the chain.
   }
 }
 
 
+// Re-point the app at the current calendar day. Returns true if the day
+// actually changed. Shared by the resume handlers and by the reminder timer,
+// which fires without either of them.
+function rolloverIfNewDay() {
+  const prevKey = todayKey;
+  refreshTodayKey();
+  if (todayKey === prevKey) return false;
+
+  viewingOverride = null;
+  if (catechisms.length) renderToday(todaysCatechism());
+  return true;
+}
+
 function refreshOnResume() {
   if (!catechisms.length) return;
 
-  const newKey = localDateKey(new Date());
-  if (newKey !== todayKey) {
-    todayKey = newKey;
-    viewingOverride = null;
-    renderToday(todaysCatechism());
-  }
+  rolloverIfNewDay();
   if (settings.notifEnabled && notifPermission() === 'granted') {
     scheduleNotification();
   }
@@ -2028,12 +2167,44 @@ function closeInstallBanner() {
   document.getElementById('install-banner').classList.remove('visible');
 }
 
+// The sheet is a modal dialog: focus moves into it, stays inside while it is
+// open, and returns to whatever opened it on close.
+let iosSheetReturnFocus = null;
+
 function openIosSheet() {
-  document.getElementById('ios-sheet').classList.add('visible');
+  const sheet = document.getElementById('ios-sheet');
+  iosSheetReturnFocus = document.activeElement;
+  sheet.classList.add('visible');
+  document.getElementById('ios-close').focus();
+  document.addEventListener('keydown', iosSheetKeydown, true);
 }
 
 function closeIosSheet() {
-  document.getElementById('ios-sheet').classList.remove('visible');
+  const sheet = document.getElementById('ios-sheet');
+  if (!sheet.classList.contains('visible')) return;
+  sheet.classList.remove('visible');
+  document.removeEventListener('keydown', iosSheetKeydown, true);
+  if (iosSheetReturnFocus && iosSheetReturnFocus.isConnected) iosSheetReturnFocus.focus();
+  iosSheetReturnFocus = null;
+}
+
+function iosSheetKeydown(e) {
+  if (e.key === 'Escape') { closeIosSheet(); return; }
+  if (e.key !== 'Tab') return;
+
+  // Only one control inside, but trap generically so this keeps working if
+  // the sheet gains more.
+  const focusables = document.querySelectorAll(
+    '#ios-sheet button, #ios-sheet a[href], #ios-sheet input, #ios-sheet [tabindex]:not([tabindex="-1"])');
+  if (!focusables.length) return;
+  const first = focusables[0];
+  const last  = focusables[focusables.length - 1];
+
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault(); first.focus();
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -2106,7 +2277,7 @@ async function boot() {
   }
 
   // Re-schedule notification if it was previously enabled
-  if (settings.notifEnabled && Notification.permission === 'granted') {
+  if (settings.notifEnabled && notifPermission() === 'granted') {
     scheduleNotification();
   }
 }
