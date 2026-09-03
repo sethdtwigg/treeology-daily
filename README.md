@@ -23,6 +23,9 @@ All catechism content is the property of Mount Calvary Baptist Church. This app 
 - ✅ **Daily review tracking** — mark each day as reviewed
 - ⚙️ **Fully configurable** — set how many days to spend on each catechism, where to start, and display preferences
 - 📋 **Browse all 91** — scroll the full list with completion status and upcoming dates
+- ⬅️➡️ **Step between catechisms** — prev/next arrows on the card, in either mode
+- 🔗 **Linkable questions** — every card has its own URL, and the back button works
+- 💾 **Backup and restore** — export your progress to a file and move it to another device
 - 🍂 **Thanksgiving special** — bonus catechism surfaced automatically in November
 - 📻 **Best-effort daily reminder** — optional local notification at your chosen time
 - 📡 **Works offline** — service worker caches everything after first load
@@ -164,9 +167,56 @@ All settings are stored locally on your device (`localStorage`). Nothing is sent
 | Days per catechism | 3 | How many days before advancing to the next question |
 | Start date | Today | The day you began — used to calculate which catechism is current |
 | Start from # | 1 | Jump into the series at any question number |
+| Backup | — | Export/restore settings and review history as a JSON file |
 | Default to reading mode | Off | Show answer immediately instead of requiring a tap |
 | Show scriptures expanded | Off | Open the scripture list by default |
 | Daily reminder | Off | Best-effort local notification at a chosen time — see below |
+
+### Backing up your progress
+
+Everything lives in this browser's `localStorage`. Clearing site data, switching
+phones, or reinstalling **destroys your progress with no recovery** — so
+Settings → Backup is worth using before any of those.
+
+- **Save a Backup File** downloads `treeology-backup-<date>.json`.
+- **Copy Backup to Clipboard** does the same via the clipboard. Use this on an
+  installed iPhone app, where Safari tends to open a downloaded JSON in a viewer
+  rather than saving it.
+- **Restore from a Backup** replaces your current settings and history, after a
+  confirmation naming both counts.
+
+```json
+{
+  "version": 1,
+  "exportedAt": "2026-09-03T16:37:06.410Z",
+  "settings": {
+    "daysPerCatechism": 5, "startDate": "2026-01-15", "startFromQ": 12,
+    "defaultMode": "read", "scriptureOpen": true,
+    "notifEnabled": false, "notifTime": "07:00"
+  },
+  "reviewedDates": { "2026-09-01": true, "2026-09-02": true }
+}
+```
+
+Two honest limits. Review history older than **400 days** is pruned on import,
+and the app reports how many entries it dropped. And a backup cannot carry
+notification *permission* — if you had reminders on, you may need to re-grant
+permission on the new device.
+
+### Linking to a question
+
+| URL | Opens |
+|---|---|
+| `#today` | today's scheduled catechism |
+| `#browse` | the full list |
+| `#settings` | settings |
+| `#q=40` | catechism 40 |
+| `#q=thanksgiving` | the Thanksgiving card |
+
+Opening a specific question is a **temporary view** — it shows a "Back to Today"
+banner and never changes your place in the schedule. An unknown question or an
+unrecognised route falls back to today. Because each view is a real history
+entry, the Android back button steps back through the app instead of leaving it.
 
 ### How the daily catechism is calculated
 
@@ -174,6 +224,8 @@ All settings are stored locally on your device (`localStorage`). Nothing is sent
 current_question = startFromQ + floor(daysSinceStart ÷ daysPerCatechism)
 ```
 
+`startFromQ` is a catechism **number**, resolved to a position in the sorted list
+at lookup time, so the schedule stays correct even if the data ever gains a gap.
 `daysSinceStart` is counted in whole calendar days through `Date.UTC`, so it is
 unaffected by daylight-saving transitions. Simple, deterministic, and entirely
 offline — no server, no account, no sync.
