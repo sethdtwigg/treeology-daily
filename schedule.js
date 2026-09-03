@@ -31,12 +31,19 @@ const Schedule = (() => {
     return Math.max(0, Math.round((now - start) / 86400000));
   }
 
-  // 0-based index into the regular (non-thanksgiving) catechism list.
-  function todaysCatechismIndex(settings, todayKey, regularCount) {
-    const days   = daysSinceStart(settings.startDate, todayKey);
-    const dpq    = Math.max(1, settings.daysPerCatechism);
-    const startQ = Math.max(1, settings.startFromQ) - 1;
-    const idx    = startQ + Math.floor(days / dpq);
+  // 0-based ordinal into the regular (non-thanksgiving) catechism list.
+  //
+  // `startOrdinal` is where the sequence begins. Callers that address
+  // catechisms by number resolve it themselves and pass it in; omitting it
+  // falls back to reading settings.startFromQ as a 1-based position, which is
+  // only equivalent while the numbers are dense, sorted and 1-indexed.
+  function todaysCatechismIndex(settings, todayKey, regularCount, startOrdinal) {
+    const days  = daysSinceStart(settings.startDate, todayKey);
+    const dpq   = Math.max(1, settings.daysPerCatechism);
+    const start = Number.isInteger(startOrdinal) && startOrdinal >= 0
+      ? startOrdinal
+      : Math.max(1, settings.startFromQ) - 1;
+    const idx   = start + Math.floor(days / dpq);
     return Math.min(idx, regularCount - 1);
   }
 

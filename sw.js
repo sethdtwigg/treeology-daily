@@ -1,5 +1,5 @@
 // ── Bump this version number with every deploy to force cache refresh ──
-const CACHE_VERSION = 4;
+const CACHE_VERSION = 5;
 const CACHE_NAME = `catechism-v${CACHE_VERSION}`;
 
 const ASSETS = [

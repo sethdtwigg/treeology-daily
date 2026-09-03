@@ -71,6 +71,41 @@ test('startFromQ offsets the starting card', () => {
   assert.equal(S.todaysCatechismIndex(s, '2026-01-04', REGULAR), 50);
 });
 
+test('an explicit startOrdinal overrides the startFromQ position', () => {
+  const s = settings({ daysPerCatechism: 3, startFromQ: 1 });
+  // Callers that address by number resolve the ordinal themselves.
+  assert.equal(S.todaysCatechismIndex(s, '2026-01-01', REGULAR, 49), 49);
+  assert.equal(S.todaysCatechismIndex(s, '2026-01-04', REGULAR, 49), 50);
+});
+
+test('startOrdinal 0 is honoured, not treated as absent', () => {
+  // A falsy-but-valid ordinal must not fall through to the startFromQ path.
+  const s = settings({ daysPerCatechism: 3, startFromQ: 50 });
+  assert.equal(S.todaysCatechismIndex(s, '2026-01-01', REGULAR, 0), 0);
+});
+
+test('a bad startOrdinal falls back to the startFromQ position', () => {
+  const s = settings({ daysPerCatechism: 3, startFromQ: 10 });
+  for (const bad of [undefined, null, -1, 1.5, NaN, 'x']) {
+    assert.equal(S.todaysCatechismIndex(s, '2026-01-01', REGULAR, bad), 9,
+                 `startOrdinal ${String(bad)} should fall back`);
+  }
+});
+
+test('a gap in the numbering does not shift the schedule', () => {
+  // Numbers 1,2,4,5 -> catechism 4 sits at ordinal 2. Resolving by number
+  // keeps the start correct where a 1-based position would be off by one.
+  const numbers = [1, 2, 4, 5];
+  const ordinalOf = n => numbers.indexOf(n);
+  const s = settings({ daysPerCatechism: 1, startFromQ: 4 });
+
+  assert.equal(ordinalOf(4), 2);
+  assert.equal(S.todaysCatechismIndex(s, '2026-01-01', numbers.length, ordinalOf(4)), 2);
+  assert.equal(numbers[S.todaysCatechismIndex(s, '2026-01-02', numbers.length, ordinalOf(4))], 5);
+  // The old positional reading would have started at index 3 — catechism 5.
+  assert.equal(S.todaysCatechismIndex(s, '2026-01-01', numbers.length), 3);
+});
+
 test('todaysCatechismIndex clamps at the end of the list', () => {
   const s = settings({ daysPerCatechism: 1, startDate: '2020-01-01' });
   assert.equal(S.todaysCatechismIndex(s, '2026-01-01', REGULAR), REGULAR - 1);

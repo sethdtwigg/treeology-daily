@@ -322,6 +322,40 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
 
+  /* Prev/next between catechisms — sits in .card-area, works in both modes */
+  .card-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-nav-btn {
+    padding: 8px 14px;
+    border: 1px solid var(--forest3);
+    border-radius: 8px;
+    background: var(--forest2);
+    color: var(--leaf-on-dark);
+    font-family: 'EB Garamond', serif;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .card-nav-btn:active { background: var(--forest-dark); }
+
+  .card-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .card-nav-pos {
+    font-size: 13px;
+    color: var(--leaf-on-dark);
+    letter-spacing: 0.06em;
+  }
+
   /* Answer card — deep green bottom panel, like the PDF */
   .answer-card {
     background: var(--answer-bg);
@@ -831,6 +865,23 @@
     background: var(--leaf-bright);
   }
 
+  .plain-btn {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--forest3);
+    border-radius: var(--radius);
+    background: var(--forest2);
+    color: var(--leaf-pale);
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+
+  .plain-btn:active { background: var(--forest-dark); }
+
   .danger-btn {
     width: 100%;
     padding: 14px;
@@ -1191,6 +1242,15 @@
           <div class="scripture-list" id="scripture-list"></div>
         </div>
 
+        <!-- A group, not a <nav>: the bare `nav` / `nav button` rules that
+             style the top tab bar would otherwise stretch and uppercase these,
+             and a second navigation landmark adds noise for screen readers. -->
+        <div class="card-nav" role="group" aria-label="Catechism navigation">
+          <button type="button" class="card-nav-btn" id="prev-cat">‹ Prev</button>
+          <span class="card-nav-pos" id="cat-position" aria-live="polite"></span>
+          <button type="button" class="card-nav-btn" id="next-cat">Next ›</button>
+        </div>
+
         <div class="ornament">✦ ✦ ✦</div>
       </div>
 
@@ -1348,6 +1408,20 @@
     </div>
 
     <div class="settings-section">
+      <h2 class="settings-section-label">Backup</h2>
+      <div class="settings-group settings-group--plain">
+        <button class="plain-btn" id="export-backup" type="button">Save a Backup File</button>
+        <button class="plain-btn" id="copy-backup" type="button">Copy Backup to Clipboard</button>
+        <button class="danger-btn" id="import-backup" type="button">Restore from a Backup</button>
+        <input type="file" id="import-file" accept="application/json,.json" hidden>
+        <div class="settings-row-sub settings-row-note" id="backup-status">
+          Everything is stored only on this device. A backup is the only way to move
+          your progress to another phone or recover it after clearing site data.
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
       <h2 class="settings-section-label">Reset</h2>
       <div class="settings-group settings-group--plain">
         <button class="danger-btn" id="reset-progress" type="button">Reset All Progress</button>
@@ -1384,7 +1458,10 @@ const LEGACY_KEYS = ['daysPerCatechism', 'startDate', 'startFromQ', 'defaultMode
 let catechisms = [];   // loaded from catechisms.json
 let settings = {};
 let todayKey = '';     // YYYY-MM-DD (local)
-let viewingOverride = null;  // set while the user views a non-today card
+// The catechism `number` (or 'thanksgiving') being viewed off-schedule,
+// or null when showing today's own card. An id, not an object, because
+// this is what the hash carries.
+let viewingId = null;
 
 const localDateKey = Schedule.localDateKey;
 
@@ -1439,6 +1516,7 @@ async function loadData() {
     if (!res.ok) throw new Error('not found');
     const data = await res.json();
     catechisms = data.catechisms || data;
+    indexCatechisms();
     return true;
   } catch {
     return false;
@@ -1446,20 +1524,60 @@ async function loadData() {
 }
 
 // ══════════════════════════════════════════════════
+//  Addressing
+// ══════════════════════════════════════════════════
+// Catechisms are addressed by their `number`, not by array position. A number
+// is what goes in a URL, what an arrow steps through, and what stays correct if
+// the data ever gains a gap or arrives out of order. Ordinals (position within
+// the sorted regular list) remain the unit of the *schedule*, because the
+// schedule advances by position in the sequence rather than by numeric value.
+let regularList = [];        // the 91 numbered cards, sorted by number
+let byNumber = new Map();    // number -> catechism, including 'thanksgiving'
+let ordinalByNumber = new Map();
+
+function indexCatechisms() {
+  regularList = catechisms
+    .filter(c => c.number !== 'thanksgiving')
+    .sort((a, b) => a.number - b.number);
+
+  byNumber = new Map(catechisms.map(c => [String(c.number), c]));
+  ordinalByNumber = new Map(regularList.map((c, i) => [String(c.number), i]));
+}
+
+// Accepts a number or its string form, so hash values need no coercion.
+function catechismByNumber(n) {
+  return byNumber.get(String(n));
+}
+
+function ordinalOfNumber(n) {
+  const o = ordinalByNumber.get(String(n));
+  return o === undefined ? -1 : o;
+}
+
+function regularCatechisms() {
+  return regularList;
+}
+
+function thanksgivingCatechism() {
+  return byNumber.get('thanksgiving');
+}
+
+// ══════════════════════════════════════════════════
 //  Schedule logic
 // ══════════════════════════════════════════════════
 // Thin bindings over schedule.js — the math itself lives there so it can be
 // unit-tested without a DOM.
-function daysSinceStart() {
-  return Schedule.daysSinceStart(settings.startDate, todayKey);
-}
-
-function todaysCatechismIndex() {
-  return Schedule.todaysCatechismIndex(settings, todayKey, regularCatechisms().length);
+function todaysCatechismOrdinal() {
+  // startFromQ is a catechism *number*, resolved to an ordinal here. It falls
+  // back to the old position-based reading only if that number is absent.
+  const start = ordinalOfNumber(settings.startFromQ);
+  return Schedule.todaysCatechismIndex(
+    settings, todayKey, regularList.length,
+    start >= 0 ? start : undefined);
 }
 
 function todaysCatechism() {
-  return regularCatechisms()[todaysCatechismIndex()];
+  return regularList[todaysCatechismOrdinal()];
 }
 
 function dayOfCycle() {
@@ -1470,20 +1588,17 @@ function isReviewedToday() {
   return !!settings.reviewedDates[todayKey];
 }
 
-function regularCatechisms() {
-  return catechisms.filter(c => c.number !== 'thanksgiving');
-}
-
-function thanksgivingCatechism() {
-  return catechisms.find(c => c.number === 'thanksgiving');
-}
-
 // ══════════════════════════════════════════════════
 //  Screens
 // ══════════════════════════════════════════════════
 let currentScreen = 'today';
 
+const SCREENS = ['today', 'browse', 'settings'];
+
 function showScreen(name) {
+  // Guard the whitelist: a hand-typed or stale URL used to throw here on
+  // getElementById('screen-' + name).classList.
+  if (!SCREENS.includes(name)) name = 'today';
   currentScreen = name;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => {
@@ -1505,6 +1620,9 @@ function showScreen(name) {
 let answerVisible = false;
 let scripturesVisible = false;
 let currentMode = 'quiz';
+// Once the reader picks a mode it sticks for the session. Without this,
+// renderToday resets to settings.defaultMode on every card change.
+let modeLocked = false;
 
 // The Thanksgiving card's `number` is the string 'thanksgiving', not an
 // integer — every user-facing label has to special-case it.
@@ -1515,7 +1633,7 @@ function catLabel(cat) {
 function renderToday(cat) {
   if (!cat) return;
 
-  currentMode = settings.defaultMode || 'quiz';
+  if (!modeLocked) currentMode = settings.defaultMode || 'quiz';
   scripturesVisible = settings.scriptureOpen || false;
   answerVisible = false;
 
@@ -1525,10 +1643,13 @@ function renderToday(cat) {
   });
   document.getElementById('today-date-label').textContent = dateLabel;
 
+  // "Day 2 of 3" and the dots describe today's cycle, not the card being
+  // shown, so they are meaningless while viewing another catechism.
+  const onToday = viewingId === null;
   const dpq = settings.daysPerCatechism;
   const dayN = dayOfCycle();
   document.getElementById('today-day-label').textContent =
-    dpq > 1 ? `Day ${dayN} of ${dpq}` : '';
+    (onToday && dpq > 1) ? `Day ${dayN} of ${dpq}` : '';
 
   const numLabel = catLabel(cat);
   const qNumEl = document.getElementById('today-q-number');
@@ -1538,7 +1659,7 @@ function renderToday(cat) {
   // Progress dots
   const dots = document.getElementById('progress-dots');
   dots.textContent = '';
-  if (dpq > 1 && dpq <= 30) {
+  if (onToday && dpq > 1 && dpq <= 30) {
     for (let i = 1; i <= dpq; i++) {
       const d = document.createElement('div');
       d.className = 'dot' + (i < dayN ? ' done' : i === dayN ? ' today' : '');
@@ -1593,7 +1714,7 @@ function renderToday(cat) {
 
   // Viewing override banner
   const vBanner = document.getElementById('viewing-banner');
-  if (viewingOverride) {
+  if (viewingId !== null) {
     document.getElementById('viewing-label').textContent =
       `Viewing ${catLabel(cat)} · scheduled for another day`;
     vBanner.style.display = 'flex';
@@ -1609,6 +1730,8 @@ function renderToday(cat) {
   const isThanksgiving = isThanksgivingPeriod();
   tBanner.style.display = isThanksgiving && thanksgivingCatechism() ? 'block' : 'none';
 
+  updateCardNav(cat);
+
   // Apply mode
   setMode(currentMode);
 
@@ -1623,6 +1746,44 @@ function renderToday(cat) {
 
 function isThanksgivingPeriod() {
   return new Date(todayKey + 'T12:00:00').getMonth() === 10; // November
+}
+
+// The toggle buttons go through here so the choice survives navigation;
+// renderToday calls setMode directly, which must not lock.
+function chooseMode(mode) {
+  modeLocked = true;
+  setMode(mode);
+}
+
+function updateCardNav(cat) {
+  const nav = document.querySelector('.card-nav');
+  const total = regularCatechisms().length;
+  const ord = ordinalOfNumber(cat.number);
+
+  if (ord < 0 || total === 0) {
+    nav.style.display = 'none';       // Thanksgiving: outside the rotation
+    return;
+  }
+
+  nav.style.display = 'flex';
+  document.getElementById('prev-cat').disabled = ord === 0;
+  document.getElementById('next-cat').disabled = ord === total - 1;
+  document.getElementById('cat-position').textContent = `${ord + 1} of ${total}`;
+}
+
+function stepCatechism(delta) {
+  const cat = viewingId !== null ? catechismByNumber(viewingId) : todaysCatechism();
+  if (!cat) return;
+
+  const ord = ordinalOfNumber(cat.number);
+  if (ord < 0) return;
+
+  const regular = regularCatechisms();
+  const next = ord + delta;
+  if (next < 0 || next >= regular.length) return;
+
+  // Route like every other navigation, so the back button retraces the path.
+  openCatechism(regular[next]);
 }
 
 function setMode(mode) {
@@ -1664,7 +1825,7 @@ function updateMarkBtn() {
   const reviewed = isReviewedToday();
   btn.className = 'mark-btn ' + (reviewed ? 'reviewed' : 'unreviewed');
   btn.textContent = reviewed ? '✓ Reviewed Today' : '✓ Mark as Reviewed Today';
-  btn.disabled = !!viewingOverride;
+  btn.disabled = viewingId !== null;
 }
 
 function toggleReviewed() {
@@ -1679,10 +1840,7 @@ function toggleReviewed() {
 }
 
 function openThanksgiving() {
-  const t = thanksgivingCatechism();
-  if (!t) return;
-  viewingOverride = t;
-  renderToday(t);
+  openCatechism(thanksgivingCatechism());
 }
 
 // ══════════════════════════════════════════════════
@@ -1692,9 +1850,8 @@ function renderBrowse() {
   const list = document.getElementById('browse-list');
   list.textContent = '';
 
-  const todayIdx = todaysCatechismIndex();
+  const todayIdx = todaysCatechismOrdinal();
   const regular  = regularCatechisms();
-  const startQ   = Math.max(1, settings.startFromQ) - 1;
 
   document.getElementById('browse-subtitle').textContent =
     `${regular.length} questions · ${settings.daysPerCatechism} day${settings.daysPerCatechism > 1 ? 's' : ''} each`;
@@ -1702,15 +1859,11 @@ function renderBrowse() {
   regular.forEach((cat, i) => {
     const isToday = i === todayIdx;
     const isDone  = i < todayIdx;
-    const isAhead = i > todayIdx;
 
     const item = document.createElement('button');
     item.type = 'button';
     item.className = 'browse-item' + (isToday ? ' is-today' : '') + (isDone ? ' is-done' : '');
-    item.addEventListener('click', () => {
-      renderTodayWithCat(cat);
-      showScreen('today');
-    });
+    item.addEventListener('click', () => openCatechism(cat));
 
     const q = cat.question || `Question ${cat.number}`;
     const preview = q.length > 80 ? q.slice(0, 80) + '…' : q;
@@ -1759,7 +1912,7 @@ function renderBrowse() {
     const item = document.createElement('button');
     item.type = 'button';
     item.className = 'browse-item';
-    item.addEventListener('click', () => { renderTodayWithCat(t); showScreen('today'); });
+    item.addEventListener('click', () => openCatechism(t));
 
     const numEl = document.createElement('div');
     numEl.className = 'browse-num';
@@ -1782,18 +1935,71 @@ function renderBrowse() {
   }
 }
 
-function renderTodayWithCat(cat) {
-  viewingOverride = cat;
-  answerVisible = false;
-  scripturesVisible = settings.scriptureOpen || false;
-  renderToday(cat);
+// ══════════════════════════════════════════════════
+//  Routing
+// ══════════════════════════════════════════════════
+// Routes: #today · #browse · #settings · #q=<number|thanksgiving>
+//
+// Every navigation goes through navigate(), which sets location.hash and lets
+// the hashchange handler do the work. A nav tap, a browse tap, an arrow, a
+// shared link and the back button therefore all follow one code path.
+
+function parseHash(raw) {
+  const h = (raw || '').replace(/^#/, '');
+  if (!h) return { screen: 'today', id: null };
+
+  const m = /^q=(.+)$/.exec(h);
+  if (m) {
+    const id = decodeURIComponent(m[1]);
+    // An unknown card falls back to today rather than rendering blank.
+    return { screen: 'today', id: catechismByNumber(id) ? id : null };
+  }
+  return { screen: SCREENS.includes(h) ? h : 'today', id: null };
+}
+
+function navigate(hash) {
+  if (location.hash === hash) { applyHash(); return; }
+  location.hash = hash;          // pushes history; hashchange applies it
+}
+
+function openCatechism(cat) {
+  if (cat) navigate('#q=' + encodeURIComponent(cat.number));
 }
 
 function backToToday() {
-  viewingOverride = null;
-  answerVisible = false;
-  scripturesVisible = settings.scriptureOpen || false;
-  renderToday(todaysCatechism());
+  navigate('#today');
+}
+
+let applyingHash = false;
+
+function applyHash() {
+  if (applyingHash || !catechisms.length) return;
+  applyingHash = true;
+  try {
+    const { screen, id } = parseHash(location.hash);
+
+    if (id !== null) {
+      const todayCat = todaysCatechism();
+      // Landing on today's own scheduled card is "today", not an override —
+      // otherwise the banner shows and Mark stays disabled on the right card.
+      viewingId = (todayCat && String(todayCat.number) === String(id)) ? null : id;
+      showScreen('today');
+      renderToday(catechismByNumber(id));
+    } else {
+      if (screen === 'today') viewingId = null;
+      showScreen(screen);
+      if (screen === 'today') renderToday(todaysCatechism());
+    }
+  } finally {
+    applyingHash = false;
+  }
+}
+
+// Replace rather than push: this is a correction, not a user navigation.
+function resetHashToToday() {
+  if (/^#q=/.test(location.hash)) {
+    history.replaceState(null, '', location.pathname + location.search + '#today');
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -1809,7 +2015,7 @@ function renderSettings() {
   // Completion estimate
   const regular = regularCatechisms();
   const daysLeft = Schedule.daysUntilComplete(
-    settings, todayKey, regular.length, todaysCatechismIndex());
+    settings, todayKey, regular.length, todaysCatechismOrdinal());
   const endDate = new Date(todayKey + 'T12:00:00');
   endDate.setDate(endDate.getDate() + daysLeft);
   const endStr = endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -1826,10 +2032,11 @@ function renderSettings() {
 // Anything that moves the schedule has to re-render Today as well as
 // Settings — showScreen() only re-renders Browse and Settings, so without
 // this the Today card keeps the pre-change question until a reload. Clearing
-// viewingOverride first stops today's own card rendering as "scheduled for
+// viewingId first stops today's own card rendering as "scheduled for
 // another day" with its Mark button disabled.
 function applyScheduleChange() {
-  viewingOverride = null;
+  viewingId = null;
+  resetHashToToday();
   saveSettings();
   renderSettings();
   renderToday(todaysCatechism());
@@ -1841,8 +2048,14 @@ function changeDays(delta) {
 }
 
 function changeStartQ(delta) {
+  // Step through the numbers that actually exist rather than clamping to the
+  // list length, so this stays right if the data ever gains a gap.
   const regular = regularCatechisms();
-  settings.startFromQ = Math.max(1, Math.min(regular.length, settings.startFromQ + delta));
+  if (!regular.length) return;
+  const here = ordinalOfNumber(settings.startFromQ);
+  const from = here >= 0 ? here : Math.max(1, settings.startFromQ) - 1;
+  const next = Math.max(0, Math.min(regular.length - 1, from + delta));
+  settings.startFromQ = regular[next].number;
   applyScheduleChange();
 }
 
@@ -1856,12 +2069,142 @@ function saveStartDate() {
 
 function saveDefaultMode() {
   settings.defaultMode = document.getElementById('default-read-toggle').checked ? 'read' : 'quiz';
+  modeLocked = false;          // an explicit new default outranks the session choice
   saveSettings();
+  setMode(settings.defaultMode);
 }
 
 function saveScriptureDefault() {
   settings.scriptureOpen = document.getElementById('show-scripture-toggle').checked;
   saveSettings();
+}
+
+// ══════════════════════════════════════════════════
+//  BACKUP — export / import
+// ══════════════════════════════════════════════════
+// Everything lives in localStorage, so clearing site data or switching phones
+// destroys the schedule with no recovery. This is the only way out.
+
+const BACKUP_VERSION = 1;
+
+// lastNotifDate is deliberately excluded — scheduling bookkeeping, not user data.
+const BACKUP_FIELDS = ['daysPerCatechism', 'startDate', 'startFromQ',
+                       'defaultMode', 'scriptureOpen', 'notifEnabled', 'notifTime'];
+
+function buildBackup() {
+  const out = {};
+  for (const k of BACKUP_FIELDS) out[k] = settings[k];
+  return {
+    version: BACKUP_VERSION,
+    exportedAt: new Date().toISOString(),
+    settings: out,
+    reviewedDates: { ...settings.reviewedDates }
+  };
+}
+
+function backupStatus(msg) {
+  document.getElementById('backup-status').textContent = msg;
+}
+
+function exportBackup() {
+  const json = JSON.stringify(buildBackup(), null, 2);
+  const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `treeology-backup-${todayKey}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // Revoke on the next tick so the download has taken the reference.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  backupStatus(`Backup saved with ${Object.keys(settings.reviewedDates).length} reviewed days.`);
+}
+
+// iOS standalone often opens a downloaded JSON in a viewer instead of saving
+// it, so the clipboard is the path that actually works there.
+async function copyBackup() {
+  const json = JSON.stringify(buildBackup(), null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    backupStatus('Backup copied. Paste it somewhere safe — a note, an email to yourself.');
+  } catch {
+    backupStatus('Could not reach the clipboard. Use "Save a Backup File" instead.');
+  }
+}
+
+// Never trust the file's shape: coerce every field against the known defaults
+// rather than assigning wholesale.
+function coerceBackup(raw) {
+  if (!raw || typeof raw !== 'object') throw new Error('not a backup file');
+  if (raw.version !== BACKUP_VERSION) {
+    throw new Error(`unsupported backup version ${raw.version ?? '(missing)'}`);
+  }
+  const s = raw.settings;
+  const r = raw.reviewedDates;
+  if (!s || typeof s !== 'object') throw new Error('missing settings');
+  if (!r || typeof r !== 'object') throw new Error('missing review history');
+
+  const num = (v, min, max, dflt) =>
+    (Number.isFinite(v) && v >= min && v <= max) ? Math.round(v) : dflt;
+
+  return {
+    settings: {
+      daysPerCatechism: num(s.daysPerCatechism, 1, 30, 3),
+      startDate: /^\d{4}-\d{2}-\d{2}$/.test(s.startDate) ? s.startDate : todayKey,
+      startFromQ: num(s.startFromQ, 1, 9999, 1),
+      defaultMode: s.defaultMode === 'read' ? 'read' : 'quiz',
+      scriptureOpen: !!s.scriptureOpen,
+      notifEnabled: !!s.notifEnabled,
+      notifTime: /^\d{2}:\d{2}$/.test(s.notifTime) ? s.notifTime : '07:00'
+    },
+    reviewedDates: Object.fromEntries(
+      Object.keys(r).filter(k => /^\d{4}-\d{2}-\d{2}$/.test(k)).map(k => [k, true]))
+  };
+}
+
+async function importBackup(file) {
+  let parsed;
+  try {
+    parsed = coerceBackup(JSON.parse(await file.text()));
+  } catch (e) {
+    backupStatus(`That file could not be restored: ${e.message}.`);
+    return;
+  }
+
+  const have = Object.keys(settings.reviewedDates).length;
+  const incoming = Object.keys(parsed.reviewedDates).length;
+  if (!confirm(`Replace ${have} reviewed day${have === 1 ? '' : 's'} with ` +
+               `${incoming} from this backup? Your current progress will be lost.`)) {
+    backupStatus('Restore cancelled — nothing changed.');
+    return;
+  }
+
+  const cutoff = localDateKey(new Date(Date.now() - 400 * 86400000));
+  const kept = Object.fromEntries(
+    Object.entries(parsed.reviewedDates).filter(([k]) => k >= cutoff));
+  const pruned = incoming - Object.keys(kept).length;
+
+  Object.assign(settings, parsed.settings);
+  settings.reviewedDates = kept;
+  settings.lastNotifDate = null;
+  if (!saveSettings()) {
+    backupStatus('Restored, but this browser refused to save it. Progress will not persist.');
+  }
+
+  // A backup cannot carry notification permission, so only arm the timer if
+  // this browser actually grants it; renderSettings refreshes the pill.
+  if (settings.notifEnabled && notifPermission() === 'granted') scheduleNotification();
+  else cancelScheduledNotification();
+
+  viewingId = null;
+  resetHashToToday();
+  renderSettings();
+  renderToday(todaysCatechism());
+  if (currentScreen === 'browse') renderBrowse();
+
+  const restored = incoming - pruned;
+  backupStatus(`Restored ${restored} reviewed day${restored === 1 ? '' : 's'}` +
+    (pruned > 0 ? `; ${pruned} older than 400 days were dropped.` : '.'));
 }
 
 function resetProgress() {
@@ -1873,8 +2216,11 @@ function resetProgress() {
 }
 
 function resetAll() {
-  if (!confirm('Reset EVERYTHING including settings and start date?')) return;
-  localStorage.clear();
+  if (!confirm('Reset EVERYTHING including settings and start date? ' +
+               'Save a backup first if you might want this progress back.')) return;
+  try { localStorage.clear(); } catch { /* storage may be blocked entirely */ }
+  try { sessionStorage.clear(); } catch { /* ditto */ }
+  location.hash = '';
   location.reload();
 }
 
@@ -2089,7 +2435,8 @@ function rolloverIfNewDay() {
   refreshTodayKey();
   if (todayKey === prevKey) return false;
 
-  viewingOverride = null;
+  viewingId = null;
+  resetHashToToday();
   if (catechisms.length) renderToday(todaysCatechism());
   return true;
 }
@@ -2212,7 +2559,7 @@ function iosSheetKeydown(e) {
 // ══════════════════════════════════════════════════
 function wireEvents() {
   document.querySelectorAll('nav button[data-screen]').forEach(b =>
-    b.addEventListener('click', () => showScreen(b.dataset.screen)));
+    b.addEventListener('click', () => navigate('#' + b.dataset.screen)));
 
   document.getElementById('install-btn').addEventListener('click', () => {
     if (isIOS()) {
@@ -2229,14 +2576,16 @@ function wireEvents() {
     .addEventListener('click', e => e.stopPropagation());
   document.getElementById('ios-close').addEventListener('click', closeIosSheet);
 
-  document.getElementById('mode-quiz').addEventListener('click', () => setMode('quiz'));
-  document.getElementById('mode-read').addEventListener('click', () => setMode('read'));
+  document.getElementById('mode-quiz').addEventListener('click', () => chooseMode('quiz'));
+  document.getElementById('mode-read').addEventListener('click', () => chooseMode('read'));
 
   document.getElementById('answer-tap').addEventListener('click', toggleAnswer);
   document.getElementById('scripture-toggle').addEventListener('click', toggleScriptures);
   document.getElementById('mark-btn').addEventListener('click', toggleReviewed);
   document.getElementById('thanksgiving-banner').addEventListener('click', openThanksgiving);
   document.getElementById('back-to-today-btn').addEventListener('click', backToToday);
+  document.getElementById('prev-cat').addEventListener('click', () => stepCatechism(-1));
+  document.getElementById('next-cat').addEventListener('click', () => stepCatechism(1));
 
   document.getElementById('days-minus').addEventListener('click', () => changeDays(-1));
   document.getElementById('days-plus').addEventListener('click', () => changeDays(1));
@@ -2248,6 +2597,16 @@ function wireEvents() {
   document.getElementById('show-scripture-toggle').addEventListener('change', saveScriptureDefault);
   document.getElementById('notif-toggle').addEventListener('change', toggleNotifications);
   document.getElementById('notif-time-input').addEventListener('change', saveNotifTime);
+
+  document.getElementById('export-backup').addEventListener('click', exportBackup);
+  document.getElementById('copy-backup').addEventListener('click', copyBackup);
+  document.getElementById('import-backup')
+    .addEventListener('click', () => document.getElementById('import-file').click());
+  document.getElementById('import-file').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    if (f) importBackup(f);
+    e.target.value = '';        // let the same file be picked again
+  });
 
   document.getElementById('reset-progress').addEventListener('click', resetProgress);
   document.getElementById('reset-all').addEventListener('click', resetAll);
@@ -2268,7 +2627,11 @@ async function boot() {
     return;
   }
 
-  renderToday(todaysCatechism());
+  // The router decides the initial view, so a deep link or a reload on
+  // #q=40 lands on that card instead of always on today's.
+  window.addEventListener('hashchange', applyHash);
+  applyHash();
+
   setupInstallBanner();
 
   // Register service worker
