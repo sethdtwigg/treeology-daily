@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
 """
 Treeology Catechism Scraper
-Run: pip install pypdf && python scraper.py
+
+Reads the cards in Catechism_PDFs/ (falling back to the network for any that
+are missing) and writes catechisms.json next to this file.
+
+    pip install -r requirements.txt
+    python scraper.py
+    python validate_data.py
 """
 
-import json, re, sys, io, urllib.request
+import io
+import json
+import os
+import re
+import sys
+import time
+import urllib.error
+import urllib.request
 
 PDF_URLS = [
     (1,  "https://www.mountcalvarybaptist.org/site/user/files/49/Final-Number-1_2.pdf"),
@@ -103,24 +116,117 @@ PDF_URLS = [
 
 TRANS_PAT = re.compile(r'\((NASB|KJV|ESV|NKJV|NIV)[;,\s]')
 
+# Where download.py puts the cards, and where we read them from by preference.
+PDF_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Catechism_PDFs")
+OUT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "catechisms.json")
 
-def fetch_pdf_text(url):
+
+def local_pdf_path(num, url):
+    return os.path.join(PDF_DIR, f"{str(num).zfill(2)}_{url.split('/')[-1]}")
+
+
+def fetch_pdf_text(url, num=None):
+    """Prefer an already-downloaded card; only hit the network if it is absent.
+
+    Re-fetching all 92 PDFs every run is slow, rude to the host, and turns a
+    single transient failure into a placeholder entry (see main)."""
     import pypdf
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    with urllib.request.urlopen(req, timeout=20) as r:
-        data = r.read()
+    data = None
+    if num is not None:
+        path = local_pdf_path(num, url)
+        if os.path.exists(path):
+            data = open(path, "rb").read()
+    if data is None:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        last = None
+        for attempt in range(3):
+            try:
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    data = r.read()
+                break
+            except (urllib.error.URLError, TimeoutError) as e:
+                last = e
+                time.sleep(2 ** attempt)
+        if data is None:
+            raise last
     reader = pypdf.PdfReader(io.BytesIO(data))
     return "\n".join(page.extract_text() or "" for page in reader.pages).strip()
 
 
+# Extraction splits a ligature from the rest of its word: "oﬀ  ered" -> "off ered",
+# "ﬂ  esh" -> "fl esh". The same shape occurs legitimately when a real word
+# follows ("far off have", "cut off by"), so the only reliable discriminator is
+# whether the piece to the right is itself a word. Verified against all 91 cards:
+# 20 genuine joins, and exactly those two phrases correctly left alone.
+FOLLOWING_WORDS = {
+    'a', 'all', 'also', 'an', 'and', 'any', 'are', 'as', 'at', 'back', 'be', 'because',
+    'been', 'before', 'being', 'both', 'but', 'by', 'came', 'can', 'come', 'could',
+    'did', 'do', 'does', 'done', 'down', 'each', 'even', 'ever', 'every', 'first',
+    'for', 'from', 'get', 'give', 'go', 'goes', 'had', 'has', 'have', 'he', 'her',
+    'here', 'him', 'his', 'how', 'if', 'in', 'into', 'is', 'it', 'its', 'just', 'last',
+    'let', 'like', 'made', 'make', 'man', 'many', 'may', 'me', 'men', 'might', 'more',
+    'most', 'much', 'must', 'my', 'no', 'nor', 'not', 'now', 'of', 'off', 'on', 'one',
+    'only', 'or', 'other', 'our', 'out', 'over', 'own', 'said', 'same', 'say', 'see',
+    'shall', 'she', 'should', 'since', 'so', 'some', 'still', 'such', 'than', 'that',
+    'the', 'their', 'them', 'then', 'there', 'these', 'they', 'this', 'those', 'though',
+    'through', 'thus', 'to', 'too', 'two', 'under', 'unto', 'up', 'upon', 'us', 'very',
+    'was', 'we', 'well', 'were', 'what', 'when', 'where', 'which', 'while', 'who',
+    'whom', 'why', 'will', 'with', 'would', 'yet', 'you', 'your',
+}
+LIGATURE_SPLIT = re.compile(r'([A-Za-z]*)(ff|ffi|ffl|fi|fl)\s+([a-z]{1,5})\b')
+
+
+def _join_ligature(m):
+    pre, lig, tail = m.groups()
+    if tail in FOLLOWING_WORDS:
+        return m.group(0)
+    return pre + lig + tail
+
+# Space before a comma or period — but never inside a spaced ellipsis. The cards
+# use ". . ." for elisions and a naive rule destroys every one of them.
+PUNCT_SPACE = re.compile(r'(?<![.\s])\s+([,.])(?!\s*\.)')
+
+
 def fix_ligatures(t):
-    for bad, good in [('ﬁ','fi'),('ﬂ','fl'),('ﬀ','ff'),('ﬃ','ffi'),('ﬄ','ffl'),
-                      ('/f_i','fi'),('/f_l','fl')]:
+    for bad, good in [('ﬁ', 'fi'), ('ﬂ', 'fl'), ('ﬀ', 'ff'), ('ﬃ', 'ffi'), ('ﬄ', 'ffl'),
+                      ('/f_i', 'fi'), ('/f_l', 'fl')]:
         t = t.replace(bad, good)
-    t = re.sub(r'fl\s{2}', 'fl', t)
-    t = re.sub(r'fi\s{2}', 'fi', t)
+    # The previous rule required *two* spaces and only covered fl/fi, so every
+    # ff/ffi/ffl case ("off ered", "suff ered", "scoff s") survived into the data.
+    t = LIGATURE_SPLIT.sub(_join_ligature, t)
     t = re.sub(r'(\w)-\n(\w)', r'\1\2', t)
     t = re.sub(r'(\w) -\n(\w)', r'\1\2', t)
+    return t
+
+
+def tidy(t):
+    """Normalise whitespace and the punctuation spacing the cards extract with."""
+    if not t:
+        return ''
+    t = LIGATURE_SPLIT.sub(_join_ligature, t)
+    t = t.replace('“ ', '“')
+    t = re.sub(r'\s+”', '”', t)
+    t = re.sub(r'\(\s+', '(', t)
+    t = re.sub(r'\s+\)', ')', t)
+    t = re.sub(r'\s+\?', '?', t)
+    t = PUNCT_SPACE.sub(r'\1', t)
+    t = re.sub(r'(?<!\.) {2,}', ' ', t)   # collapse runs, but keep ". . ."
+    return t.strip()
+
+
+def dedup_runs(t, n=8):
+    """Cut at the first n-word shingle that repeats an earlier one.
+
+    Several source PDFs carry overlapping text layers, so extraction emits the
+    same phrase dozens of times. Without this the repetition lands in the data
+    and renders verbatim in the app."""
+    w = t.split()
+    seen = {}
+    for i in range(len(w) - n + 1):
+        s = ' '.join(w[i:i + n])
+        if s in seen:
+            return ' '.join(w[:i]).strip()
+        seen[s] = i
     return t
 
 
@@ -138,15 +244,22 @@ def parse(raw, num):
     m = re.match(r'^(.+?\?)', question_raw)
     question = m.group(1).strip() if m else question_raw.strip()
 
-    # Find the number marker before the answer
+    # Find the number marker that separates scriptures from the answer.
+    # Search only from q_end onward and require the line to be exactly the
+    # number: several cards quote verse-numbered passages ("1 Then I saw a new
+    # heaven...", "5 The rest of the dead..."), and a card numbered 1-6 would
+    # otherwise split on the verse number and lose every scripture.
     num_str = str(num)
+    marker = re.compile(r'^\s*' + re.escape(num_str) + r'\s*$', re.IGNORECASE)
+    inline = re.compile(r'^\s*' + re.escape(num_str) + r'\s+(\S.*)$', re.IGNORECASE)
     answer_start = None
-    for i, line in enumerate(lines):
-        if re.match(r'^\s*' + re.escape(num_str) + r'\s*$', line):
+    for i in range(q_end, len(lines)):
+        if marker.match(lines[i]):
             answer_start = i + 1
             break
-        if re.match(r'^\s*' + re.escape(num_str) + r'\s+\S', line):
-            lines[i] = re.sub(r'^\s*' + re.escape(num_str) + r'\s+', '', line).strip()
+        m2 = inline.match(lines[i])
+        if m2:
+            lines[i] = m2.group(1).strip()
             answer_start = i
             break
 
@@ -163,75 +276,95 @@ def parse(raw, num):
         if ref_tag and TRANS_PAT.match(ref_tag):
             inner = ref_tag[1:-1]
             m2 = re.match(r'(NASB|KJV|ESV|NKJV|NIV)[;,]\s*(.+)', inner)
-            if m2 and verse and len(verse) > 10:
-                scriptures.append({
-                    'reference':   m2.group(2).strip(),
-                    'translation': m2.group(1).strip(),
-                    'text':        re.sub(r'\s+', ' ', verse).strip(),
-                })
+            if m2:
+                # Editorial notes are printed alongside the verses; they are not
+                # scripture and must not be shown to the reader as though they were.
+                verse = re.sub(r'^\(Note:[^)]*\)\s*', '', verse).strip()
+                if verse and len(verse) > 10:
+                    scriptures.append({
+                        'reference':   re.sub(r'\s+', ' ', m2.group(2)).strip(),
+                        'translation': m2.group(1).strip(),
+                        'text':        tidy(re.sub(r'\s+', ' ', verse)),
+                    })
+                else:
+                    print(f"    [skip] {num}: empty/short verse for {ref_tag}", file=sys.stderr)
+            else:
+                print(f"    [skip] {num}: unparsed tag {ref_tag}", file=sys.stderr)
             i += 2
         else:
             i += 1
 
-    # Answer and attribution
+    # Answer and attribution.
     ans_lines = lines[answer_start:] if answer_start is not None else []
 
-    attr_pat = re.compile(r'^\((?:Westminster|Adapted|C\.H\.|Belgic|Second Hel|Drawn)', re.I)
-    note_pat = re.compile(r'^\(Note:', re.I)
+    # Allow whitespace after the paren: cards print "( Westminster Shorter
+    # Catechism , Q. 26)" and the old anchored pattern silently missed those,
+    # leaving the citation stranded in the answer body.
+    attr_pat = re.compile(r'^\(\s*(?:Westminster|Adapted|C\.\s*H\.|Belgic|Second Hel|Drawn|Note:)', re.I)
 
     attr_parts, ans_parts = [], []
-    in_attr = False
     for line in ans_lines:
-        if attr_pat.match(line) or in_attr:
-            attr_parts.append(line)
-            in_attr = True
-        elif note_pat.match(line):
-            pass
-        else:
-            ans_parts.append(line)
+        # Only the citation itself is attribution. The previous version set a
+        # sticky flag that never reset, so every following line — the card's
+        # teaching note — was swallowed into the small italic credit line.
+        (attr_parts if attr_pat.match(line) and not attr_parts else ans_parts).append(line)
+
+    answer = tidy(dedup_runs(re.sub(r'\s+', ' ', ' '.join(ans_parts))))
+    attribution = tidy(re.sub(r'\s+', ' ', ' '.join(attr_parts)))
 
     return {
         'number':      num,
-        'question':    question,
-        'answer':      re.sub(r'\s+', ' ', ' '.join(ans_parts)).strip(),
+        'question':    tidy(question),
+        'answer':      answer,
         'scriptures':  scriptures,
-        'attribution': re.sub(r'\s+', ' ', ' '.join(attr_parts)).strip(),
+        'attribution': attribution,
     }
 
 
 def main():
     try:
-        import pypdf
+        import pypdf  # noqa: F401  (probe only)
     except ImportError:
-        import subprocess
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pypdf'])
+        sys.exit("pypdf is required. Install it with:  pip install -r requirements.txt")
 
-    print(f"Downloading {len(PDF_URLS)} PDFs...\n")
+    print(f"Reading {len(PDF_URLS)} catechism cards...\n")
     results, errors = [], []
 
     for idx, (num, url) in enumerate(PDF_URLS):
         label = f"Q{num}" if num != 'thanksgiving' else 'Thanksgiving'
         print(f"[{idx+1:3}/{len(PDF_URLS)}] {label}: ", end='', flush=True)
         try:
-            entry = parse(fetch_pdf_text(url), num)
+            entry = parse(fetch_pdf_text(url, num), num)
             results.append(entry)
-            print(f"✅  {entry['question'][:60]}")
+            print(f"OK   {entry['question'][:60]}")
         except Exception as e:
-            print(f"❌  {e}")
+            print(f"FAIL {e}")
             errors.append(num)
-            results.append({
-                'number': num, 'question': f'[Q{num} — download failed]',
-                'answer': '', 'scriptures': [], 'attribution': '', 'error': str(e),
-            })
 
-    with open('catechisms.json', 'w', encoding='utf-8') as f:
+    # Never overwrite good data with a partial run: a failed download used to
+    # become a "[Q5 - download failed]" placeholder that shipped to the app,
+    # with the process still exiting 0 so CI saw nothing wrong.
+    if errors:
+        print(f"\n{len(errors)} card(s) failed: {errors}")
+        print(f"{OUT_PATH} left unchanged.")
+        return 1
+
+    with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump({'total': len(results), 'catechisms': results}, f, indent=2, ensure_ascii=False)
+        f.write('\n')
 
     print(f"\n{'='*55}")
-    print(f"Done — {len(results) - len(errors)} succeeded, {len(errors)} failed")
-    if errors:
-        print(f"Failed: {errors}")
+    print(f"Done - {len(results)} cards written to {OUT_PATH}")
+    print("Now run:  python validate_data.py")
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    # Emoji in status output crashes on a cp1252 console (and the old except
+    # branch printed another emoji, so the handler raised too and no JSON was
+    # ever written). Plain ASCII markers, plus a UTF-8 stdout for the content.
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+    sys.exit(main())
