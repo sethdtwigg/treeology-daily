@@ -1,0 +1,9 @@
+# Pinned so the pipeline is reproducible. Text extraction varies between pypdf
+# releases: re-parsing the same cards with 6.16.2 yields 220 scriptures where
+# the committed catechisms.json has 249, and Q30/Q60/Q61/Q86 come back with
+# none at all. Do not regenerate catechisms.json without diffing the result
+# entry by entry -- see the "Regenerating the data" note in README.md.
+pypdf==6.16.2
+
+# download.py only
+requests>=2.31
